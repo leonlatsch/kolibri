@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Olivia</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Login -->
+    <string name="email">E-Mail Address</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="register_now">Register Now</string>
+
+</resources>
