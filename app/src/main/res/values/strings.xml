@@ -11,4 +11,7 @@
     <string name="register">Register</string>
     <string name="register_now">Register Now</string>
 
+    <!-- Intent Keys -->
+    <string name="loginEmail">login_email</string>
+
 </resources>
