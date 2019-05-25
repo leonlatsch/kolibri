@@ -1,6 +1,16 @@
 package de.leonlatsch.olivia.transfer;
 
-public interface TransferObject {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-    String toJson();
+public abstract class TransferObject {
+
+    public String toJson() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
 }

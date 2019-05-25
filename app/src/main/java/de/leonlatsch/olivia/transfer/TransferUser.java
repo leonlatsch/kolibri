@@ -1,9 +1,6 @@
 package de.leonlatsch.olivia.transfer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class TransferUser implements TransferObject {
+public class TransferUser extends TransferObject {
 
     private int uid;
     private String username;
@@ -59,15 +56,5 @@ public class TransferUser implements TransferObject {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
-    }
-
-    @Override
-    public String toJson() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
     }
 }
