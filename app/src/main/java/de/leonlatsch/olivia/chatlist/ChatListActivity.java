@@ -1,4 +1,4 @@
-package de.leonlatsch.olivia.activity;
+package de.leonlatsch.olivia.chatlist;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import de.leonlatsch.olivia.R;
 
-public class ChatsActivity extends AppCompatActivity {
+public class ChatListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
