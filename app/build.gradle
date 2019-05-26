@@ -27,12 +27,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    // https://mvnrepository.com/artifact/com.loopj.android/android-async-http
-    implementation group: 'com.loopj.android', name: 'android-async-http', version: '1.4.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
 
-    // Jackson JSON
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
-
+    // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-jackson
+    implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.5.0'
 }
