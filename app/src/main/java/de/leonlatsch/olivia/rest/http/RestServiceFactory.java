@@ -14,16 +14,13 @@ public class RestServiceFactory {
     private static final String API_KEY = "6eb77586c6fbfd1280412db3bf0e103f";
 
     public static UserRestService createUserService() {
-        OkHttpClient client = Unsafe
+        OkHttpClient client = OliviaHttpClient.getOliviaHttpClient();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
         return retrofit.create(UserRestService.class);
-    }
-
-    private static String getAbsoluteUrl(String url) {
-        return BASE_URL + url;
     }
 }
