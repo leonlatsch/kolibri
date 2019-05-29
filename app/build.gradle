@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "de.leonlatsch.olivia"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -29,5 +29,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.loopj.android/android-async-http
     implementation group: 'com.loopj.android', name: 'android-async-http', version: '1.4.4'
+
+    // Jackson JSON
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
 }
