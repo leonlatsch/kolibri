@@ -13,6 +13,7 @@ public class RestServiceFactory {
     private static final String API_TOKEN = "bfdc99b120cd49e0e1a18dc8267afa3e";
     private static final String API_KEY = "6eb77586c6fbfd1280412db3bf0e103f";
 
+	//TODO: create a service with a repository that cas just be used without creating a thread o.ä.
     public static UserRestService createUserService() {
         OkHttpClient client = OliviaHttpClient.getOliviaHttpClient();
         Retrofit retrofit = new Retrofit.Builder()
