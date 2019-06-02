@@ -1,4 +1,4 @@
-package de.leonlatsch.olivia.rest.service
+package de.leonlatsch.olivia.rest.service;
 
 public class UserService {
     
