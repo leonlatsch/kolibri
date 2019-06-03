@@ -1,11 +1,11 @@
-package de.leonlatsch.olivia.transfer;
+package de.leonlatsch.olivia.dto;
 
-public class UserAuthenticator extends TransferObject {
+public class UserAuthDTO extends BaseDTO {
 
     private String email;
     private String passwordHash;
 
-    public UserAuthenticator(String email, String passwordHash) {
+    public UserAuthDTO(String email, String passwordHash) {
         this.email = email;
         this.passwordHash = passwordHash;
     }

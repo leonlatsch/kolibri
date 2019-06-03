@@ -3,8 +3,8 @@ package de.leonlatsch.olivia.rest.repository;
 import java.util.List;
 
 import de.leonlatsch.olivia.entity.User;
-import de.leonlatsch.olivia.transfer.TransferUser;
-import de.leonlatsch.olivia.transfer.UserAuthenticator;
+import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.dto.UserAuthDTO;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -15,16 +15,16 @@ import retrofit2.http.Path;
 public interface UserRestRepository {
 
     @GET("users")
-    Call<List<TransferUser>> getAll();
+    Call<List<UserDTO>> getAll();
 
     @GET("users/getByUid/{uid}")
-    Call<TransferUser> getbyUid(@Path("name") int uid);
+    Call<UserDTO> getbyUid(@Path("name") int uid);
 
     @GET("users(getByEmail/{email}")
-    Call<TransferUser> getByEmail(@Path("email") String email);
+    Call<UserDTO> getByEmail(@Path("email") String email);
 
     @GET("users/getByUsername/{username}")
-    Call<TransferUser> getByUsername(@Path("username") String username);
+    Call<UserDTO> getByUsername(@Path("username") String username);
 
     @PUT("users/update")
     Call<String> update(@Body User user);
@@ -39,5 +39,5 @@ public interface UserRestRepository {
     Call<String> checkEmail(@Path("email") String email);
 
     @GET("users/auth")
-    Call<String> auth(@Body UserAuthenticator authenticator);
+    Call<String> auth(@Body UserAuthDTO authenticator);
 }

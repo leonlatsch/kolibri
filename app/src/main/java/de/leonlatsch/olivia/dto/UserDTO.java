@@ -1,6 +1,6 @@
-package de.leonlatsch.olivia.transfer;
+package de.leonlatsch.olivia.dto;
 
-public class TransferUser extends TransferObject {
+public class UserDTO extends BaseDTO {
 
     private int uid;
     private String username;
@@ -8,9 +8,9 @@ public class TransferUser extends TransferObject {
     private String passwordHash;
     private String profilePic;
 
-    public TransferUser() {}
+    public UserDTO() {}
 
-    public TransferUser(int uid, String username, String email, String passwordHash, String profilePic) {
+    public UserDTO(int uid, String username, String email, String passwordHash, String profilePic) {
         this.uid = uid;
         this.username = username;
         this.email = email;
