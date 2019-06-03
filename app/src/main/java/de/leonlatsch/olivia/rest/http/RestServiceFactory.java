@@ -3,7 +3,7 @@ package de.leonlatsch.olivia.rest.http;
 import java.io.IOException;
 
 import de.leonlatsch.olivia.rest.repository.UserRestRepository;
-import de.leonlatsch.olivia.rest.service.UserService;
+import de.leonlatsch.olivia.rest.service.UserRestService;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -21,7 +21,7 @@ public class RestServiceFactory {
     private static final String API_KEY = "6eb77586c6fbfd1280412db3bf0e103f";
 
 	//TODO: create a service with a repository that cas just be used without creating a thread o.ä.
-    public static UserService createUserService() {
+    public static UserRestService createUserService() {
         OkHttpClient client = OliviaHttpClient.getOliviaHttpClient();
         client.interceptors().add(new AuthInterceptor(API_TOKEN, API_KEY));
         Retrofit retrofit = new Retrofit.Builder()
@@ -32,7 +32,7 @@ public class RestServiceFactory {
 
         UserRestRepository repository =  retrofit.create(UserRestRepository.class);
 
-        return new UserService(repository);
+        return new UserRestService(repository);
     }
 
     private static class AuthInterceptor implements Interceptor {

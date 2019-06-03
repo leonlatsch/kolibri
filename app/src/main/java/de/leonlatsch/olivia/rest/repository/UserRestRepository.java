@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -25,6 +26,9 @@ public interface UserRestRepository {
 
     @GET("users/getByUsername/{username}")
     Call<UserDTO> getByUsername(@Path("username") String username);
+
+    @POST("users/register")
+    Call<String> create(@Body User user);
 
     @PUT("users/update")
     Call<String> update(@Body User user);
