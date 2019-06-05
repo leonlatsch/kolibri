@@ -3,11 +3,11 @@ package de.leonlatsch.olivia.dto;
 public class UserAuthDTO extends BaseDTO {
 
     private String email;
-    private String passwordHash;
+    private String password;
 
-    public UserAuthDTO(String email, String passwordHash) {
+    public UserAuthDTO(String email, String password) {
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
     }
 
     public String getEmail() {
@@ -18,11 +18,11 @@ public class UserAuthDTO extends BaseDTO {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
