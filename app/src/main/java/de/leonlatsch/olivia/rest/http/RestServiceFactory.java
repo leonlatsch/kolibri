@@ -23,7 +23,6 @@ public class RestServiceFactory {
 	//TODO: create a service with a repository that cas just be used without creating a thread o.ä.
     public static UserRestService createUserService() {
         OkHttpClient client = OliviaHttpClient.getOliviaHttpClient();
-        client.interceptors().add(new AuthInterceptor(API_TOKEN, API_KEY));
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
@@ -35,21 +34,5 @@ public class RestServiceFactory {
         return new UserRestService(repository);
     }
 
-    private static class AuthInterceptor implements Interceptor {
 
-        private String credentials;
-
-        private AuthInterceptor(String token, String key){
-            credentials = Credentials.basic(token, key);
-        }
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-            Request authRequest = request.newBuilder()
-                    .header("Authorisation", credentials)
-                    .build();
-            return chain.proceed(authRequest);
-        }
-    }
 }

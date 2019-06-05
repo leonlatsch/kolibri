@@ -6,6 +6,7 @@ import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;

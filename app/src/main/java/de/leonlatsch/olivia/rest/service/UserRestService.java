@@ -6,6 +6,7 @@ import java.util.List;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.rest.repository.UserRestRepository;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserRestService {
@@ -17,37 +18,29 @@ public class UserRestService {
     }
 
     public List<UserDTO> getAll() {
-        final Call<List<UserDTO>> call = repository.getAll();
-        Runnable runnable = new Runnable() {
-            private volatile List<UserDTO> result;
+        Call<List<UserDTO>> call = repository.getAll();
+        call.enqueue(new Callback<List<UserDTO>>() {
+            @Override
+            public void onResponse(Call<List<UserDTO>> call, Response<List<UserDTO>> response) {
+                System.out.println("SUCCESS");
+
+                System.out.println(String.valueOf(response.code()));
+
+                if (response.code() == 200) {
+                    for (UserDTO user : response.body()) {
+                        System.out.println(user.getUid());
+                        System.out.println(user.getUsername());
+                        System.out.println(user.getEmail());
+                        System.out.println(user.getPassword());
+                    }
+                }
+            }
 
             @Override
-            public void run() {
-                Response<List<UserDTO>> response;
-                try {
-                     response = call.execute();
-                } catch (IOException e) {
-                    System.err.println(e);
-                    response = null;
-                }
-
-                result = response.isSuccessful() ? response.body() : null;
+            public void onFailure(Call<List<UserDTO>> call, Throwable t) {
+                System.out.println("FAIL " + t);
             }
-
-            public List<UserDTO> getResult() {
-                return result;
-            }
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
-        try {
-            thread.join();
-            //TODO
-            return ((Runnable) runnable).getResult();
-        } catch (InterruptedException e) {
-            System.err.println(e);
-            return null;
-        }
+        });
+        return null;
     }
 }
