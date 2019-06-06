@@ -1,18 +1,25 @@
 package de.leonlatsch.olivia.login;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.net.UnknownHostException;
+import java.util.Optional;
+
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.register.RegisterActivity;
+import de.leonlatsch.olivia.rest.event.RequestListener;
 import de.leonlatsch.olivia.rest.http.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserRestService;
+import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements RequestListener {
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -41,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        userService.setRequestListener(this);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,5 +65,24 @@ public class LoginActivity extends AppCompatActivity {
         if (email != null && !email.isEmpty()) {
             intent.putExtra(getString(R.string.loginEmail), email);
         }
+    }
+
+    @Override
+    public void requestSucceeded(Response event) {
+        new AlertDialog.Builder(this)
+                .setTitle("OK")
+                .setMessage("Response: " + event.toString())
+                .setNeutralButton("OK", null)
+                .show();
+    }
+
+    @Override
+    public void requestFailed(Throwable throwable) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("Please check your internet connection")
+                    .setNeutralButton("OK", null)
+                    .show();
+
     }
 }
