@@ -22,7 +22,7 @@ public class UserRestService {
         this.requestListener = requestListener;
     }
 
-    public List<UserDTO> getAll() {
+    public void loadAll() {
         Call<List<UserDTO>> call = repository.getAll();
         call.enqueue(new Callback<List<UserDTO>>() {
             @Override
@@ -35,6 +35,50 @@ public class UserRestService {
                 requestListener.requestFailed(t);
             }
         });
-        return null;
+    }
+
+    public void loadByUid(int uid) {
+        Call<UserDTO> call = repository.getbyUid(uid);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                requestListener.requestSucceeded(response);
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                requestListener.requestFailed(t);
+            }
+        });
+    }
+
+    public void loadByEmail(String email) {
+        Call<UserDTO> call = repository.getByEmail(email);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                requestListener.requestSucceeded(response);
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                requestListener.requestFailed(t);
+            }
+        });
+    }
+
+    public void loadByUsername(String username) {
+        Call<UserDTO> call = repository.getByUsername(username);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                requestListener.requestSucceeded(response);
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                requestListener.requestFailed(t);
+            }
+        });
     }
 }
