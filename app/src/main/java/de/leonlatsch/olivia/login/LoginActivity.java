@@ -64,19 +64,20 @@ public class LoginActivity extends AppCompatActivity implements RequestListener 
     }
 
     @Override
-    public void requestSucceeded(Response event) {
+    public void requestSucceeded(Response response) {
         new AlertDialog.Builder(this)
                 .setTitle("OK")
-                .setMessage("Response: " + event.toString())
+                .setMessage("Response: " + response.toString())
                 .setNeutralButton("OK", null)
                 .show();
     }
 
     @Override
     public void requestFailed(Throwable throwable) {
+        System.err.println(throwable);
             new AlertDialog.Builder(this)
                     .setTitle("Error")
-                    .setMessage("Please check your internet connection")
+                    .setMessage("Could not connect to server. Please check your internet connection.")
                     .setNeutralButton("OK", null)
                     .show();
 

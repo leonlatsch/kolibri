@@ -2,11 +2,9 @@ package de.leonlatsch.olivia.rest.repository;
 
 import java.util.List;
 
-import de.leonlatsch.olivia.entity.User;
-import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
+import de.leonlatsch.olivia.dto.UserDTO;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -29,10 +27,10 @@ public interface UserRestRepository {
     Call<UserDTO> getByUsername(@Path("username") String username);
 
     @POST("users/register")
-    Call<String> create(@Body User user);
+    Call<String> create(@Body UserDTO user);
 
     @PUT("users/update")
-    Call<String> update(@Body User user);
+    Call<String> update(@Body UserDTO user);
 
     @DELETE("users/delete/{uid}")
     Call<String> delete(@Path("uid") int uid);
