@@ -1,7 +1,8 @@
-package de.leonlatsch.olivia.rest.repository;
+package de.leonlatsch.olivia.rest.service;
 
 import java.util.List;
 
+import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import retrofit2.Call;
@@ -12,7 +13,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
-public interface UserRestRepository {
+public interface UserService {
 
     @GET("users")
     Call<List<UserDTO>> getAll();
@@ -27,20 +28,20 @@ public interface UserRestRepository {
     Call<UserDTO> getByUsername(@Path("username") String username);
 
     @POST("users/register")
-    Call<String> create(@Body UserDTO user);
+    Call<StringDTO> create(@Body UserDTO user);
 
     @PUT("users/update")
-    Call<String> update(@Body UserDTO user);
+    Call<StringDTO> update(@Body UserDTO user);
 
     @DELETE("users/delete/{uid}")
-    Call<String> delete(@Path("uid") int uid);
+    Call<StringDTO> delete(@Path("uid") int uid);
 
     @GET("users/checkUsername/{username}")
-    Call<String> checkUsername(@Path("username") String username);
+    Call<StringDTO> checkUsername(@Path("username") String username);
 
     @GET("users/checkEmail/{email}")
-    Call<String> checkEmail(@Path("email") String email);
-
+    Call<StringDTO> checkEmail(@Path("email") String email);
+    //TODO SWITCH TO POST
     @GET("users/auth")
-    Call<String> auth(@Body UserAuthDTO authenticator);
+    Call<StringDTO> auth(@Body UserAuthDTO authenticator);
 }
