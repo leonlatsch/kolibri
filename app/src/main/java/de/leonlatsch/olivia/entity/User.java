@@ -7,16 +7,16 @@ public class User {
     private int uid;
     private String username;
     private String email;
-    private String passwordHash;
+    private String password;
     private Blob profilePic;
 
     public User() {}
 
-    public User(int uid, String username, String email, String passwordHash, Blob profilePic) {
+    public User(int uid, String username, String email, String password, Blob profilePic) {
         this.uid = uid;
         this.username = username;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.profilePic = profilePic;
     }
 
@@ -44,12 +44,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Blob getProfilePic() {
