@@ -9,11 +9,13 @@ import android.widget.EditText;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
+import de.leonlatsch.olivia.security.Hash;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         // TODO add sha256 sum in dto or util class
-        UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), passwordEditText.getText().toString());
+        UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<StringDTO> call = userService.auth(userAuthDTO);
         call.enqueue(new Callback<StringDTO>() {
@@ -68,15 +70,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 StringDTO dto = response.body();
 
-                if (dto.getMessage() == "AUTH_OK") {
+                if (JsonRespose.OK.equals(dto.getMessage())) {
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
                     startActivity(intent);
+                } else {
+                    System.out.println(dto.getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
-
+                System.out.println(t);
             }
         });
     }
@@ -89,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isInputValid() {
         boolean isValid = true;
+        //TODO Replaace wiht email regex
         if (emailEditText.getText().toString().isEmpty() || !emailEditText.getText().toString().contains("@")) {
             isValid = false;
         }

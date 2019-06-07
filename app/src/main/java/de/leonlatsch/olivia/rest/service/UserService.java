@@ -21,7 +21,7 @@ public interface UserService {
     @GET("users/getByUid/{uid}")
     Call<UserDTO> getbyUid(@Path("name") int uid);
 
-    @GET("users(getByEmail/{email}")
+    @GET("users/getByEmail/{email}")
     Call<UserDTO> getByEmail(@Path("email") String email);
 
     @GET("users/getByUsername/{username}")
@@ -41,7 +41,7 @@ public interface UserService {
 
     @GET("users/checkEmail/{email}")
     Call<StringDTO> checkEmail(@Path("email") String email);
-    //TODO SWITCH TO POST
-    @GET("users/auth")
+
+    @POST("users/auth")
     Call<StringDTO> auth(@Body UserAuthDTO authenticator);
 }

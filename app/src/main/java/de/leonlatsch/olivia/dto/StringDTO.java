@@ -4,6 +4,8 @@ public class StringDTO extends BaseDTO {
 
     private String message;
 
+    public StringDTO() {}
+
     public StringDTO(String message) {
         this.message = message;
     }
