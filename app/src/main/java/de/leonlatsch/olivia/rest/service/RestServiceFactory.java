@@ -7,7 +7,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class RestServiceFactory {
 
-    private static final String BASE_URL = "https://olivia.leonlatsch.de:7443/";
+    private static final String BASE_URL = "https://olivia.leonlatsch.de:/";
 
     // TODO: create a server side stored keypair and REMOVE this afterwords
     private static final String API_TOKEN = "bfdc99b120cd49e0e1a18dc8267afa3e";
