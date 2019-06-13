@@ -1,19 +1,20 @@
 package de.leonlatsch.olivia.login;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chatlist.ChatListActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
+import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
@@ -31,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button registerBtn;
     private Button loginBtn;
-
+    private TextView errorText;
     private View progressOverlay;
 
     private UserService userService;
@@ -45,28 +46,10 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
-
-        emailEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Nothing
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Nothing
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkEmail(s.toString());
-            }
-        });
-
         registerBtn = findViewById(R.id.loginRegisterNowBtn);
         loginBtn = findViewById(R.id.loginBtn);
-
         progressOverlay = findViewById(R.id.progressOverlay);
+        errorText = findViewById(R.id.loginErrorTextView);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,38 +66,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkPassword(String toString) {
-
-    }
-
-    private void checkEmail(String email) {
-        Call<StringDTO> call = userService.checkEmail(email);
-        call.enqueue(new Callback<StringDTO>() {
-            @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                if (response.isSuccessful()) {
-                    String message = response.body().getMessage();
-                    if (JsonRespose.TAKEN.equals(message)) {
-                        emailEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icons8_checked_48, 0);
-                    } else {
-                        emailEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icons8_cancel_48, 0);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
-                //TODO errer message
-            }
-        });
-    }
-
     private void login() {
         isLoading(true);
         if (!isInputValid()) {
             isLoading(false);
+            displayError(getString(R.string.login_fail));
             return;
         }
+        displayError(getString(R.string.empty));
         UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<StringDTO> call = userService.auth(userAuthDTO);
@@ -127,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
                     startActivity(intent);
                 } else {
-                    System.out.println(dto.getMessage());
+                    displayError(getString(R.string.login_fail));
                 }
                 isLoading(false);
             }
@@ -135,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 isLoading(false);
-                showDialog("Error", "Check your internet connection");
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
     }
@@ -144,11 +103,6 @@ public class LoginActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Continue with delete operation
-                    }
-                })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
@@ -161,8 +115,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isInputValid() {
         boolean isValid = true;
-        //TODO Replaace wiht email regex
-        if (emailEditText.getText().toString().isEmpty() || !emailEditText.getText().toString().contains("@")) {
+
+        if (!isEmailValid(emailEditText.getText().toString())) {
             isValid = false;
         }
 
@@ -171,6 +125,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return isValid;
+    }
+
+    private void displayError(String message) {
+        errorText.setText(message);
+    }
+
+    private boolean isEmailValid(String email) {
+        return !emailEditText.getText().toString().isEmpty() || !Pattern.matches(Regex.EMAIL, emailEditText.getText().toString());
+    }
+
+    private void displayIcon(EditText editText, int drawable) {
+        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
 
     private void cacheToIntent(Intent intent) {
