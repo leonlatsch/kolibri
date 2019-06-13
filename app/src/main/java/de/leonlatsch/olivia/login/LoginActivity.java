@@ -16,6 +16,7 @@ import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
+import de.leonlatsch.olivia.util.AndroidUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button registerBtn;
     private Button loginBtn;
+
+    private View progressOverlay;
 
     private UserService userService;
 
@@ -40,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.loginPasswordEditText);
         registerBtn = findViewById(R.id.loginRegisterNowBtn);
         loginBtn = findViewById(R.id.loginBtn);
+
+        progressOverlay = findViewById(R.id.progressOverlay);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +121,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void isLoading(boolean loading) {
+        if (loading) {
+            AndroidUtils.animateView(progressOverlay, View.VISIBLE, 0.4f);
+        } else {
+            AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f);
+        }
         emailEditText.setEnabled(!loading);
         passwordEditText.setEnabled(!loading);
         loginBtn.setEnabled(!loading);

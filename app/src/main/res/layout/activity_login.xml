@@ -117,4 +117,6 @@
         app:layout_constraintTop_toBottomOf="@+id/loginPasswordEditText"
         app:layout_constraintVertical_bias="0.45" />
 
+    <include layout="@layout/progress_overlay" />
+
 </android.support.constraint.ConstraintLayout>
