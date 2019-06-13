@@ -57,11 +57,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
+        isLoading(true);
         if (!isInputValid()) {
             // TODO: add error message
             return;
         }
-        // TODO add sha256 sum in dto or util class
         UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<StringDTO> call = userService.auth(userAuthDTO);
@@ -76,11 +76,13 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     System.out.println(dto.getMessage());
                 }
+                isLoading(false);
             }
 
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 System.out.println(t);
+                isLoading(false);
             }
         });
     }
@@ -111,5 +113,12 @@ public class LoginActivity extends AppCompatActivity {
         if (email != null && !email.isEmpty()) {
             intent.putExtra(getString(R.string.loginEmail), email);
         }
+    }
+
+    private void isLoading(boolean loading) {
+        emailEditText.setEnabled(!loading);
+        passwordEditText.setEnabled(!loading);
+        loginBtn.setEnabled(!loading);
+        registerBtn.setEnabled(!loading);
     }
 }
