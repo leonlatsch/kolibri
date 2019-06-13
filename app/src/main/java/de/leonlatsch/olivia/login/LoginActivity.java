@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        return !emailEditText.getText().toString().isEmpty() || !Pattern.matches(Regex.EMAIL, emailEditText.getText().toString());
+        return !email.isEmpty() || !Pattern.matches(Regex.EMAIL, email);
     }
 
     private void displayIcon(EditText editText, int drawable) {
