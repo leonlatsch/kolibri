@@ -1,7 +1,9 @@
 package de.leonlatsch.olivia.login;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
-        
+
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -132,10 +134,23 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
-                System.out.println(t);
                 isLoading(false);
+                showDialog("Error", "Check your internet connection");
             }
         });
+    }
+
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void register() {
