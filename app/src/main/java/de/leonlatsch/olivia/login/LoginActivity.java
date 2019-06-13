@@ -3,6 +3,8 @@ package de.leonlatsch.olivia.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +43,24 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
+        
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkEmail(s.toString());
+            }
+        });
+
         registerBtn = findViewById(R.id.loginRegisterNowBtn);
         loginBtn = findViewById(R.id.loginBtn);
 
@@ -61,10 +81,36 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void checkPassword(String toString) {
+
+    }
+
+    private void checkEmail(String email) {
+        Call<StringDTO> call = userService.checkEmail(email);
+        call.enqueue(new Callback<StringDTO>() {
+            @Override
+            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+                if (response.isSuccessful()) {
+                    String message = response.body().getMessage();
+                    if (JsonRespose.TAKEN.equals(message)) {
+                        emailEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icons8_checked_48, 0);
+                    } else {
+                        emailEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.icons8_cancel_48, 0);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                //TODO errer message
+            }
+        });
+    }
+
     private void login() {
         isLoading(true);
         if (!isInputValid()) {
-            // TODO: add error message
+            isLoading(false);
             return;
         }
         UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
@@ -115,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
     private void cacheToIntent(Intent intent) {
         String email = emailEditText.getText().toString();
 
-        if (email != null && !email.isEmpty()) {
+        if (!email.isEmpty()) {
             intent.putExtra(getString(R.string.loginEmail), email);
         }
     }
