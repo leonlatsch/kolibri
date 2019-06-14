@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.rest.service.RestServiceFactory;
+import de.leonlatsch.olivia.rest.service.UserService;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -15,6 +17,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText registerPasswordEditText;
     private EditText registerPasswordConfirmEditText;
     private Button registerBtn;
+
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerPasswordEditText = findViewById(R.id.registerPasswordEditText);
         registerPasswordConfirmEditText = findViewById(R.id.registerPasswordConfirmEditText);
         registerBtn = findViewById(R.id.registerNowBtn);
+
+        userService = RestServiceFactory.getUserService();
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
