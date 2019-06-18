@@ -86,8 +86,45 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        TextWatcher passwordTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validatePassword();
+            }
+        };
+
+        passwordEditText.addTextChangedListener(passwordTextWatcher);
+        passwordConfirmEditText.addTextChangedListener(passwordTextWatcher);
+
         loadCachedData();
         usernameEditText.requestFocus();
+    }
+
+    private void validatePassword() {
+        final String password = passwordEditText.getText().toString();
+        final String passwordConfirm = passwordConfirmEditText.getText().toString();
+
+        if (password.isEmpty() || !Pattern.matches(Regex.PASSWORD, password)) {
+            showStatusIcon(passwordEditText, R.drawable.icons8_cancel_48);
+            passwordValid = false;
+            return;
+        } else {
+            showStatusIcon(passwordEditText, R.drawable.icons8_checked_48);
+        }
+
+        if (password.equals(passwordConfirm)) {
+            showStatusIcon(passwordConfirmEditText, R.drawable.icons8_checked_48);
+            passwordValid = true;
+        } else {
+            showStatusIcon(passwordConfirmEditText, R.drawable.icons8_cancel_48);
+            passwordValid = false;
+        }
     }
 
     private void validateEmail() {
