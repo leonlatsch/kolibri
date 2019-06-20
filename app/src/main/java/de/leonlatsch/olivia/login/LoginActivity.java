@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 isLoading(false);
-                AndroidUtils.showDialog(getApplicationContext(), getString(R.string.error), getString(R.string.error_no_internet)).show();
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
     }
@@ -150,5 +150,13 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.setEnabled(!loading);
         loginBtn.setEnabled(!loading);
         registerBtn.setEnabled(!loading);
+    }
+
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

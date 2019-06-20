@@ -1,6 +1,8 @@
 package de.leonlatsch.olivia.register;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.chatlist.ChatListActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.dto.StringDTO;
@@ -186,6 +189,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register() {
+        isLoading(true);
+
+        if (!usernameValid || !emailValid || !passwordValid) {
+            isLoading(false);
+            return;
+        }
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(emailEditText.getText().toString());
         userDTO.setUsername(usernameEditText.getText().toString());
@@ -195,12 +204,16 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<StringDTO>() {
             @Override
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                AndroidUtils.showDialog(getApplicationContext(), "", response.body().getMessage()).show();
+                isLoading(false);
+                //TODO: save as active user in database
+                Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+                startActivity(intent);
             }
 
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
-                AndroidUtils.showDialog(getApplicationContext(), "", t.getMessage()).show();
+                isLoading(false);
+                showDialog("Error", getString(R.string.error_no_internet));
             }
         });
     }
@@ -225,5 +238,13 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f);
         }
+    }
+
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

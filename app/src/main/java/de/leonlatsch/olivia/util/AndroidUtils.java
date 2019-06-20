@@ -2,8 +2,6 @@ package de.leonlatsch.olivia.util;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 public class AndroidUtils {
@@ -22,14 +20,5 @@ public class AndroidUtils {
                         view.setVisibility(toVisibility);
                     }
                 });
-    }
-
-    public static AlertDialog showDialog(Context context, String title, String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .create();
-        return alertDialog;
     }
 }
