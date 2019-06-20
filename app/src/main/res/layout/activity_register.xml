@@ -116,4 +116,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerPasswordEditText" />
 
+    <include layout="@layout/progress_overlay" />
+
 </android.support.constraint.ConstraintLayout>

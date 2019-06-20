@@ -1,5 +1,6 @@
 package de.leonlatsch.olivia.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -99,14 +100,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void showDialog(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-
     private void register() {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
         cacheToIntent(intent);
@@ -157,5 +150,13 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.setEnabled(!loading);
         loginBtn.setEnabled(!loading);
         registerBtn.setEnabled(!loading);
+    }
+
+    private void showDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
