@@ -10,6 +10,14 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="register_now">Register Now</string>
+    <string name="login_fail">E-Mail or Password is wrong</string>
+
+    <!-- Error -->
+    <string name="error">Error</string>
+    <string name="error_no_internet">Check your internet connection</string>
+
+    <!-- Common -->
+    <string name="empty"></string>
 
     <!-- Intent Keys -->
     <string name="loginEmail">login_email</string>
