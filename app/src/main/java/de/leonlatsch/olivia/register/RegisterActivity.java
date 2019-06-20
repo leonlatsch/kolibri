@@ -206,8 +206,12 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 isLoading(false);
                 //TODO: save as active user in database
-                Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
-                startActivity(intent);
+                if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
+                    Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+                    startActivity(intent);
+                } else {
+                    showDialog(getString(R.string.error), getString(R.string.error));
+                }
             }
 
             @Override
