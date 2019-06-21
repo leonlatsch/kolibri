@@ -191,6 +191,10 @@ public class RegisterActivity extends AppCompatActivity {
     private void register() {
         isLoading(true);
 
+        validateUsername();
+        validateEmail();
+        validatePassword();
+
         if (!usernameValid || !emailValid || !passwordValid) {
             isLoading(false);
             return;
