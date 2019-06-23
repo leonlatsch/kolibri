@@ -19,7 +19,8 @@
     <!-- Common -->
     <string name="empty"></string>
 
-    <!-- Intent Keys -->
+    <!-- Keys -->
     <string name="loginEmail">login_email</string>
+    <string name="firstBoot">first_boot</string>
 
 </resources>

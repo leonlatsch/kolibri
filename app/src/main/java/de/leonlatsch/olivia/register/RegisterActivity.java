@@ -212,6 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //TODO: save as active user in database
                 if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+                    // i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));

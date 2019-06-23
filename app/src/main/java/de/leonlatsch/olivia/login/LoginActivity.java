@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (JsonRespose.OK.equals(dto.getMessage())) {
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+                    // i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 } else {
                     displayError(getString(R.string.login_fail));
