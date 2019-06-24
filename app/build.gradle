@@ -27,8 +27,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    // API Client Framework RETROFIT
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
 
+    // RETROFIT json converter
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-jackson
     implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.5.0'
+
+    // SQLite Database Framework SugarORM
+    implementation 'com.github.satyan:sugar:1.5'
 }

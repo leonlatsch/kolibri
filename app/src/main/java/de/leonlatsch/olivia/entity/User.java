@@ -1,8 +1,10 @@
 package de.leonlatsch.olivia.entity;
 
+import com.orm.SugarRecord;
+
 import java.sql.Blob;
 
-public class User {
+public class User extends SugarRecord {
 
     private int uid;
     private String username;
