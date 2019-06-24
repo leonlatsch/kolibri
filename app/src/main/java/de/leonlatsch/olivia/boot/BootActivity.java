@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.constants.Values;
 
 public class BootActivity extends AppCompatActivity {
 
@@ -15,11 +16,11 @@ public class BootActivity extends AppCompatActivity {
     }
 
     private boolean isFirstBoot() {
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.firstBoot), MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREF_FIRST_BOOT, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        if (sharedPreferences.getBoolean(getString(R.string.firstBoot), true)) {
-            editor.putBoolean(getString(R.string.firstBoot), false);
+        if (sharedPreferences.getBoolean(Values.PREF_FIRST_BOOT, true)) {
+            editor.putBoolean(Values.PREF_FIRST_BOOT, false);
             editor.apply();
             return true;
         } else {

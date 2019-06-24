@@ -16,11 +16,4 @@
     <string name="error">Error</string>
     <string name="error_no_internet">Check your internet connection</string>
 
-    <!-- Common -->
-    <string name="empty"></string>
-
-    <!-- Keys -->
-    <string name="loginEmail">login_email</string>
-    <string name="firstBoot">first_boot</string>
-
 </resources>

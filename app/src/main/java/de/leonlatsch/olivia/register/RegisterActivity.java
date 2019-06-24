@@ -17,6 +17,7 @@ import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chatlist.ChatListActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -233,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void loadCachedData() {
         if (getIntent().getExtras() != null) {
-            String cachedEmail = (String) getIntent().getExtras().get(getString(R.string.loginEmail));
+            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_EMAIL);
 
             if (cachedEmail != null) {
                 emailEditText.setText(cachedEmail);

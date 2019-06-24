@@ -16,6 +16,7 @@ import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chatlist.ChatListActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
@@ -74,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             displayError(getString(R.string.login_fail));
             return;
         }
-        displayError(getString(R.string.empty));
+        displayError(Values.EMPTY);
         UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<StringDTO> call = userService.auth(userAuthDTO);
@@ -137,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
 
         if (!email.isEmpty()) {
-            intent.putExtra(getString(R.string.loginEmail), email);
+            intent.putExtra(Values.INTENT_EMAIL, email);
         }
     }
 
