@@ -10,16 +10,16 @@ public class User extends SugarRecord {
     private String username;
     private String email;
     private String password;
-    private Blob profilePic;
+    private String profilePicTn;
 
     public User() {}
 
-    public User(int uid, String username, String email, String password, Blob profilePic) {
+    public User(int uid, String username, String email, String password, String profilePicTn) {
         this.uid = uid;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.profilePic = profilePic;
+        this.profilePicTn = profilePicTn;
     }
 
     public int getUid() {
@@ -54,11 +54,11 @@ public class User extends SugarRecord {
         this.password = password;
     }
 
-    public Blob getProfilePic() {
-        return profilePic;
+    public String getProfilePic() {
+        return profilePicTn;
     }
 
-    public void setProfilePic(Blob profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePic(String profilePic) {
+        this.profilePicTn = profilePic;
     }
 }
