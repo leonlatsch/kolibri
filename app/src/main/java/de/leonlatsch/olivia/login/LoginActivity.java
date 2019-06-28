@@ -1,6 +1,5 @@
 package de.leonlatsch.olivia.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,11 +18,14 @@ import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
+import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         displayError(Values.EMPTY);
-        UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
+        final UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<StringDTO> call = userService.auth(userAuthDTO);
         call.enqueue(new Callback<StringDTO>() {
@@ -85,9 +87,12 @@ public class LoginActivity extends AppCompatActivity {
                 StringDTO dto = response.body();
 
                 if (JsonRespose.OK.equals(dto.getMessage())) {
+                    saveUser(userAuthDTO);
+
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
-                    // i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
+
+                    finish();
                 } else {
                     displayError(getString(R.string.login_fail));
                 }
@@ -97,6 +102,24 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 isLoading(false);
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+            }
+        });
+    }
+
+    private void saveUser(UserAuthDTO userAuthDTO) {
+        Call<UserDTO> call = userService.getByEmail(userAuthDTO.getEmail());
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                if (response.isSuccessful()) {
+                    User user = (User) DatabaseMapper.maptoEntity(response.body());
+                    user.save();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });

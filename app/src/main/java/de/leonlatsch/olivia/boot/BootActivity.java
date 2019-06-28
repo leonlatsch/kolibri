@@ -24,9 +24,6 @@ public class BootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
         SugarContext.init(getApplicationContext());
-        // create table if not exists
-        SchemaGenerator schemaGenerator = new SchemaGenerator(this);
-        schemaGenerator.createDatabase(new SugarDb(this).getDB());
 
         Intent intent = null;
 
@@ -36,10 +33,9 @@ public class BootActivity extends AppCompatActivity {
             intent = new Intent(getApplicationContext(), LoginActivity.class);
         }
 
-        // Make it so you cant go back to this activity
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
         startActivity(intent);
+        // Make it so you cant go back to this activity
+        finish();
     }
 
     private boolean isUserSaved() {

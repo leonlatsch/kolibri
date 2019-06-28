@@ -54,11 +54,11 @@ public class User extends SugarRecord {
         this.password = password;
     }
 
-    public String getProfilePic() {
+    public String getProfilePicTn() {
         return profilePicTn;
     }
 
-    public void setProfilePic(String profilePic) {
+    public void setProfilePicTn(String profilePic) {
         this.profilePicTn = profilePic;
     }
 }
