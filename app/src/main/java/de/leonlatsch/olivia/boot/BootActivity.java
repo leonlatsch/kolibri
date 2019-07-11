@@ -2,6 +2,7 @@ package de.leonlatsch.olivia.boot;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ public class BootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
         SugarContext.init(getApplicationContext());
+        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         Intent intent = null;
 
@@ -39,8 +41,12 @@ public class BootActivity extends AppCompatActivity {
     }
 
     private boolean isUserSaved() {
-        Iterator iterator = User.findAll(User.class);
-        return iterator.hasNext();
+        try {
+            Iterator iterator = User.findAll(User.class);
+            return iterator.hasNext();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // May be useful later

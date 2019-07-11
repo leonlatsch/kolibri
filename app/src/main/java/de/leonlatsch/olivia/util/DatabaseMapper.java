@@ -8,7 +8,7 @@ import de.leonlatsch.olivia.entity.User;
 
 public class DatabaseMapper {
 
-    public static SugarRecord maptoEntity(BaseDTO dto) {
+    public static SugarRecord mapToEntity(BaseDTO dto) {
         if (dto instanceof UserDTO) {
             UserDTO userDTO = (UserDTO) dto;
             User user = new User();

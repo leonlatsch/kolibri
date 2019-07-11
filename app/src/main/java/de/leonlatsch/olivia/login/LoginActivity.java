@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if (response.isSuccessful()) {
-                    User user = (User) DatabaseMapper.maptoEntity(response.body());
+                    User user = (User) DatabaseMapper.mapToEntity(response.body());
                     user.save();
                 }
             }
