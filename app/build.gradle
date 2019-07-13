@@ -18,6 +18,11 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -34,6 +39,5 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-jackson
     implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.5.0'
 
-    // SQLite Database Framework SugarORM
-    implementation 'com.github.satyan:sugar:1.5'
+    implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 }

@@ -1,14 +1,11 @@
 package de.leonlatsch.olivia.util;
 
-import com.orm.SugarRecord;
-
-import de.leonlatsch.olivia.dto.BaseDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 
 public class DatabaseMapper {
 
-    public static SugarRecord mapToEntity(BaseDTO dto) {
+    public static User mapToEntity(UserDTO dto) {
         if (dto instanceof UserDTO) {
             UserDTO userDTO = (UserDTO) dto;
             User user = new User();

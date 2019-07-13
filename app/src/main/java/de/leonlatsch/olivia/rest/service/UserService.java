@@ -20,7 +20,7 @@ public interface UserService {
     Call<List<UserDTO>> getAll();
 
     @GET("users/getByUid/{uid}")
-    Call<UserDTO> getbyUid(@Path("name") int uid);
+    Call<UserDTO> getbyUid(@Path("uid") int uid);
 
     @GET("users/getByEmail/{email}")
     Call<UserDTO> getByEmail(@Path("email") String email);

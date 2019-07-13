@@ -1,15 +1,25 @@
 package de.leonlatsch.olivia.entity;
 
-import com.orm.SugarRecord;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-import java.sql.Blob;
+@Table(name = "user")
+public class User extends Model {
 
-public class User extends SugarRecord {
-
+    @Column(name = "uid", index = true)
     private int uid;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "profile_pic_tn")
     private String profilePicTn;
 
     public User() {}

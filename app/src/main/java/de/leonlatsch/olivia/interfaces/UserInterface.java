@@ -1,8 +1,5 @@
 package de.leonlatsch.olivia.interfaces;
 
-import android.provider.ContactsContract;
-
-import de.leonlatsch.olivia.dto.BaseDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -26,7 +23,8 @@ public class UserInterface {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if (response.isSuccessful()) {
-                    saveDto(response.body());
+                    User user = DatabaseMapper.mapToEntity(response.body());
+                    user.save();
                 }
             }
 
@@ -60,10 +58,5 @@ public class UserInterface {
         }
 
         return userInterface;
-    }
-
-    private void saveDto(UserDTO dto) {
-        User user = (User) DatabaseMapper.mapToEntity(dto);
-        user.save();
     }
 }

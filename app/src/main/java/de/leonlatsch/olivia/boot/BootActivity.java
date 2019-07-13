@@ -2,34 +2,42 @@ package de.leonlatsch.olivia.boot;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteException;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.orm.SchemaGenerator;
-import com.orm.SugarContext;
-import com.orm.SugarDb;
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Select;
 
-import java.util.Iterator;
+import java.util.List;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chatlist.ChatListActivity;
 import de.leonlatsch.olivia.constants.Values;
+import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
+import de.leonlatsch.olivia.rest.service.RestServiceFactory;
+import de.leonlatsch.olivia.rest.service.UserService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BootActivity extends AppCompatActivity {
+
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
-        SugarContext.init(getApplicationContext());
+        ActiveAndroid.initialize(this);
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+
+        userService = RestServiceFactory.getUserService();
 
         Intent intent = null;
 
-        if (isUserSaved()) {
+        if (isValidUserSaved()) {
             intent = new Intent(getApplicationContext(), ChatListActivity.class);
         } else {
             intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -40,10 +48,35 @@ public class BootActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean isUserSaved() {
+    /**
+     * Checks if a user is saved and checks if the saved user is still in the backend
+     * Deleted the saved user and restarts this Activity if the saved user is not in the backend
+     * @return
+     */
+    private boolean isValidUserSaved() {
         try {
-            Iterator iterator = User.findAll(User.class);
-            return iterator.hasNext();
+            List<User> list = new Select().from(User.class).execute();
+            if (!list.isEmpty()) {
+                final User savedUser = list.get(0);;
+                Call<UserDTO> call = userService.getbyUid(savedUser.getUid());
+                call.enqueue(new Callback<UserDTO>() {
+                    @Override
+                    public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                        if (response.code() != 200) {
+                            // if the saved user is not in the backend finish this boot and the chatlist and start another boot
+                            savedUser.delete();
+                            Intent intent = new Intent(getApplicationContext(), BootActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserDTO> call, Throwable t) {}
+                });
+            }
+            return !list.isEmpty();
         } catch (Exception e) {
             return false;
         }

@@ -13,6 +13,7 @@ import de.leonlatsch.olivia.R;
 
 public class ChatListActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
