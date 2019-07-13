@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/nav_profile_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
         android:src="@drawable/default_profile_pic_tn" />
 
     <TextView

@@ -1,5 +1,6 @@
 package de.leonlatsch.olivia.main;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.entity.User;
+import de.leonlatsch.olivia.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,18 +56,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int setUserForDrawer(User user) {
+    private void setUserForDrawer(User user) {
         if (user == null) {
-            return 1;
+            return;
         }
         View header = navigationView.getHeaderView(0);
         ImageView profilePic = header.findViewById(R.id.nav_profile_pic);
         TextView username = header.findViewById(R.id.nav_username);
         TextView email = header.findViewById(R.id.nav_email);
 
+        Bitmap a = ImageUtil.createBitmap(user.getProfilePicTn());
+        profilePic.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         username.setText(user.getUsername());
         email.setText(user.getEmail());
-        return 0;
     }
 
     /////////////////////// IGNORE FOR NOW ///////////////////////

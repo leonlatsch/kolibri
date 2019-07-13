@@ -90,6 +90,10 @@ public class UserInterface {
         user.save();
     }
 
+    public void deleteUser(User user) {
+        user.delete();
+    }
+
     public static UserInterface getInstance() {
         if (userInterface == null) {
             userInterface = new UserInterface();

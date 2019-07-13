@@ -11,6 +11,8 @@ import com.activeandroid.query.Select;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.DatabaseMapper;
+import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.UserDTO;
@@ -25,6 +27,7 @@ import retrofit2.Response;
 public class BootActivity extends AppCompatActivity {
 
     private UserService userService;
+    private UserInterface userInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class BootActivity extends AppCompatActivity {
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         userService = RestServiceFactory.getUserService();
+        userInterface = UserInterface.getInstance();
 
         Intent intent = null;
 
@@ -62,13 +66,17 @@ public class BootActivity extends AppCompatActivity {
                 call.enqueue(new Callback<UserDTO>() {
                     @Override
                     public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                        if (response.code() != 200) {
+                        if (response.code() == 204) {
                             // if the saved user is not in the backend finish this boot and the chatlist and start another boot
-                            savedUser.delete();
+                            userInterface.deleteUser(savedUser);
                             Intent intent = new Intent(getApplicationContext(), BootActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
+                        } else if (response.code() == 200) {
+                            // Update saved user
+                            userInterface.deleteUser(savedUser);
+                            userInterface.saveUser(response.body());
                         }
                     }
 
