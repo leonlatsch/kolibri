@@ -1,10 +1,10 @@
-package de.leonlatsch.olivia.interfaces;
+package de.leonlatsch.olivia.database.interfaces;
 
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
-import de.leonlatsch.olivia.util.DatabaseMapper;
+import de.leonlatsch.olivia.database.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -5,10 +5,6 @@ public class Values {
     // Common
     public static final String EMPTY = "";
 
-    // Database
-    public static final String DB_NAME = "olivia.db";
-    public static final int DB_VERSION = 1;
-
     // Keys
     public static final String INTENT_EMAIL = "intent_email";
     public static final String PREF_FIRST_BOOT = "pref_first_boot";

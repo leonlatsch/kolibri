@@ -25,7 +25,7 @@ import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
 import de.leonlatsch.olivia.util.AndroidUtils;
-import de.leonlatsch.olivia.util.DatabaseMapper;
+import de.leonlatsch.olivia.database.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
