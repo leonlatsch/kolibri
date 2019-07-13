@@ -160,7 +160,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {}
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error));
+            }
         });
     }
 
@@ -189,7 +191,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {}
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error));
+            }
         });
     }
 
@@ -218,6 +222,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userInterface.loadUser(userDTO.getEmail(), true);
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
