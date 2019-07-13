@@ -87,10 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_help:
                 Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
                 break;
-
-            case R.id.nav_logout:
-                logout();
-                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -111,11 +107,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
         View header = navigationView.getHeaderView(0);
-        ImageView profilePic = header.findViewById(R.id.nav_profile_pic);
+        ImageView profilePic = header.findViewById(R.id.nav_profile_pic_card).findViewById(R.id.nav_profile_pic);
         TextView username = header.findViewById(R.id.nav_username);
         TextView email = header.findViewById(R.id.nav_email);
 
-        Bitmap a = ImageUtil.createBitmap(user.getProfilePicTn());
         profilePic.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         username.setText(user.getUsername());
         email.setText(user.getEmail());
