@@ -2,6 +2,7 @@ package de.leonlatsch.olivia.rest.service;
 
 import java.util.List;
 
+import de.leonlatsch.olivia.dto.ProfilePicDTO;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
@@ -19,13 +20,16 @@ public interface UserService {
     Call<List<UserDTO>> getAll();
 
     @GET("users/getByUid/{uid}")
-    Call<UserDTO> getbyUid(@Path("name") int uid);
+    Call<UserDTO> getbyUid(@Path("uid") int uid);
 
     @GET("users/getByEmail/{email}")
     Call<UserDTO> getByEmail(@Path("email") String email);
 
     @GET("users/getByUsername/{username}")
     Call<UserDTO> getByUsername(@Path("username") String username);
+
+    @GET("users/search/{username}")
+    Call<List<UserDTO>> search(@Path("username") String username);
 
     @POST("users/register")
     Call<StringDTO> create(@Body UserDTO user);
@@ -44,4 +48,7 @@ public interface UserService {
 
     @POST("users/auth")
     Call<StringDTO> auth(@Body UserAuthDTO authenticator);
+
+    @GET("users/getProfilePic/{uid}")
+    Call<ProfilePicDTO> loadProfilePic(@Path("uid") int uid);
 }

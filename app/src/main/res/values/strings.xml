@@ -16,10 +16,4 @@
     <string name="error">Error</string>
     <string name="error_no_internet">Check your internet connection</string>
 
-    <!-- Common -->
-    <string name="empty"></string>
-
-    <!-- Intent Keys -->
-    <string name="loginEmail">login_email</string>
-
 </resources>

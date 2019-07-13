@@ -10,19 +10,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chatlist.ChatListActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.entity.User;
+import de.leonlatsch.olivia.interfaces.UserInterface;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerBtn;
 
     private UserService userService;
+    private UserInterface userInterface;
 
     private boolean usernameValid;
     private boolean emailValid;
@@ -55,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.registerNowBtn);
 
         userService = RestServiceFactory.getUserService();
+        userInterface = UserInterface.getInstance();
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +160,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {}
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error));
+            }
         });
     }
 
@@ -184,7 +191,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {}
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error));
+            }
         });
     }
 
@@ -199,7 +208,7 @@ public class RegisterActivity extends AppCompatActivity {
             isLoading(false);
             return;
         }
-        UserDTO userDTO = new UserDTO();
+        final UserDTO userDTO = new UserDTO();
         userDTO.setEmail(emailEditText.getText().toString());
         userDTO.setUsername(usernameEditText.getText().toString());
         userDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
@@ -209,10 +218,11 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 isLoading(false);
-                //TODO: save as active user in database
                 if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
+                    userInterface.loadUser(userDTO.getEmail(), true);
                     Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
@@ -232,7 +242,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void loadCachedData() {
         if (getIntent().getExtras() != null) {
-            String cachedEmail = (String) getIntent().getExtras().get(getString(R.string.loginEmail));
+            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_EMAIL);
 
             if (cachedEmail != null) {
                 emailEditText.setText(cachedEmail);
