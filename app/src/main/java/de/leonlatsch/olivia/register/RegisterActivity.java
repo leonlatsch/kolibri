@@ -13,7 +13,7 @@ import android.widget.EditText;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
@@ -217,8 +217,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 isLoading(false);
                 if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
-                    userInterface.loadUser(userDTO.getEmail(), true);
-                    Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+                    userInterface.saveUserFromBackend(userDTO.getEmail(), true);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
                 } else {

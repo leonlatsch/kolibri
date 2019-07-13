@@ -11,7 +11,7 @@ import com.activeandroid.query.Select;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
@@ -38,7 +38,7 @@ public class BootActivity extends AppCompatActivity {
         Intent intent = null;
 
         if (isValidUserSaved()) {
-            intent = new Intent(getApplicationContext(), ChatListActivity.class);
+            intent = new Intent(getApplicationContext(), MainActivity.class);
         } else {
             intent = new Intent(getApplicationContext(), LoginActivity.class);
         }

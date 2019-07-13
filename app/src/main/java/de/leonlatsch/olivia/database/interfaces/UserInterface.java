@@ -1,5 +1,9 @@
 package de.leonlatsch.olivia.database.interfaces;
 
+import com.activeandroid.query.Select;
+
+import java.util.List;
+
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -11,11 +15,18 @@ import retrofit2.Response;
 
 public class UserInterface {
 
+    /**
+     * Singleton instance
+     */
     private static UserInterface userInterface;
 
     private UserService userService = RestServiceFactory.getUserService();
-
     private Callback<UserDTO> callback;
+
+    /**
+     * Singleton instance
+     */
+    private User user;
 
     private UserInterface() {
         // Prevent non private instantiation
@@ -33,19 +44,37 @@ public class UserInterface {
         };
     }
 
-    public void loadUser(int uid) {
+    public User loadUser() {
+        if (user != null) {
+            return user;
+        }
+
+        List<User> list = new Select().from(User.class).execute();
+        if (list.size() <= 1) {
+            if (list.size() == 1) {
+                user = list.get(0);
+                return user;
+            } else {
+                return null;
+            }
+        } else {
+            throw new RuntimeException("more than one user in database");
+        }
+    }
+
+    public void saveUserFromBackend(int uid) {
         Call<UserDTO> call = userService.getbyUid(uid);
         call.enqueue(callback);
     }
 
-    public void loadUser(String username) {
+    public void saveUserFromBackend(String username) {
         Call<UserDTO> call = userService.getByUsername(username);
         call.enqueue(callback);
     }
 
-    public void loadUser(String email, boolean isEmail) {
+    public void saveUserFromBackend(String email, boolean isEmail) {
         if (!isEmail) {
-            loadUser(email);
+            saveUserFromBackend(email);
         } else {
             Call<UserDTO> call = userService.getByEmail(email);
             call.enqueue(callback);

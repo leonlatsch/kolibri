@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (JsonRespose.OK.equals(dto.getMessage())) {
                     saveUser(userAuthDTO);
 
-                    Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
 
                     finish();
