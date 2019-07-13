@@ -13,7 +13,7 @@ import android.widget.EditText;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
@@ -217,10 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 isLoading(false);
                 if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
-                    userInterface.loadUser(userDTO.getEmail(), true);
-                    Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
-                    startActivity(intent);
-                    finish();
+                    saveUserAndStartMain(userDTO.getEmail());
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
@@ -230,6 +227,27 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 isLoading(false);
                 showDialog("Error", getString(R.string.error_no_internet));
+            }
+        });
+    }
+
+    private void saveUserAndStartMain(final String email) {
+        Call<UserDTO> call = userService.getByEmail(email);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                if (response.isSuccessful()) {
+                    userInterface.saveUser(response.body());
+                    isLoading(false);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
     }
