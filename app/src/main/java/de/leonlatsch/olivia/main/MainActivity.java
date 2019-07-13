@@ -1,6 +1,7 @@
 package de.leonlatsch.olivia.main;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -8,13 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.entity.User;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     private UserInterface userInterface;
 
@@ -26,13 +32,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        userInterface = UserInterface.getInstance();
+
+        navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.nav_drawer_open, R.string.nav_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        userInterface = UserInterface.getInstance();
+
+        setUserForDrawer(userInterface.loadUser());
     }
 
     @Override
@@ -42,6 +52,20 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private int setUserForDrawer(User user) {
+        if (user == null) {
+            return 1;
+        }
+        View header = navigationView.getHeaderView(0);
+        ImageView profilePic = header.findViewById(R.id.nav_profile_pic);
+        TextView username = header.findViewById(R.id.nav_username);
+        TextView email = header.findViewById(R.id.nav_email);
+
+        username.setText(user.getUsername());
+        email.setText(user.getEmail());
+        return 0;
     }
 
     /////////////////////// IGNORE FOR NOW ///////////////////////

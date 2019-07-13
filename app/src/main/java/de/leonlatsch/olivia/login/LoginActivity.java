@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private View progressOverlay;
 
     private UserService userService;
+    private UserInterface userInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userService = RestServiceFactory.getUserService();
+        userInterface = UserInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
@@ -87,16 +90,11 @@ public class LoginActivity extends AppCompatActivity {
                 StringDTO dto = response.body();
 
                 if (JsonRespose.OK.equals(dto.getMessage())) {
-                    saveUser(userAuthDTO);
-
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-
-                    finish();
+                    saveUserAndStartMain(userAuthDTO.getEmail());
                 } else {
                     displayError(getString(R.string.login_fail));
+                    isLoading(false);
                 }
-                isLoading(false);
             }
 
             @Override
@@ -107,14 +105,17 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUser(UserAuthDTO userAuthDTO) {
-        Call<UserDTO> call = userService.getByEmail(userAuthDTO.getEmail());
+    private void saveUserAndStartMain(final String email) {
+        Call<UserDTO> call = userService.getByEmail(email);
         call.enqueue(new Callback<UserDTO>() {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if (response.isSuccessful()) {
-                    User user = DatabaseMapper.mapToEntity(response.body());
-                    user.save();
+                    userInterface.saveUser(response.body());
+                    isLoading(false);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
 

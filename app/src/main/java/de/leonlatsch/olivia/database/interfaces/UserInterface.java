@@ -81,6 +81,15 @@ public class UserInterface {
         }
     }
 
+    public void saveUser(UserDTO userDto) {
+        User user = DatabaseMapper.mapToEntity(userDto);
+        user.save();
+    }
+
+    public void saveUser(User user) {
+        user.save();
+    }
+
     public static UserInterface getInstance() {
         if (userInterface == null) {
             userInterface = new UserInterface();
