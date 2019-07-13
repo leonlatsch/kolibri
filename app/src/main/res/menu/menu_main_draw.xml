@@ -6,14 +6,14 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_profile"
-            android:title="@string/profile" />
-
-        <item
             android:id="@+id/nav_chat"
             android:icon="@drawable/ic_chat"
             android:title="@string/chats" />
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/profile" />
 
     </group>
 

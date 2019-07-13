@@ -23,10 +23,6 @@ public class UserInterface {
     private UserService userService = RestServiceFactory.getUserService();
     private Callback<UserDTO> callback;
 
-    /**
-     * Singleton instance
-     */
-    private User user;
 
     private UserInterface() {
         // Prevent non private instantiation
@@ -45,15 +41,11 @@ public class UserInterface {
     }
 
     public User loadUser() {
-        if (user != null) {
-            return user;
-        }
 
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
-                user = list.get(0);
-                return user;
+                return list.get(0);
             } else {
                 return null;
             }

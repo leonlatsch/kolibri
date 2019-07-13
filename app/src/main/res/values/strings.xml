@@ -21,6 +21,7 @@
     <string name="profile">Profile</string>
     <string name="other">Other</string>
     <string name="help">Help</string>
+    <string name="logout">Log out</string>
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Open navigation close</string>
 
