@@ -42,5 +42,6 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="repeat_new_password">Repeat new Password</string>
+    <string name="account_saved">Account Saved</string>
 
 </resources>
