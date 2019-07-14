@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/nav_username"
-        style="@style/CommonEditText"
+        style="@style/LightEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="1dp"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/nav_email"
-        style="@style/CommonEditText"
+        style="@style/LightEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="1dp"

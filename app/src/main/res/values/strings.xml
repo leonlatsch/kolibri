@@ -27,8 +27,11 @@
 
     <!-- Profile Fragment -->
     <string name="username_hint">Enter a username</string>
-    <string name="email_hint">Enter a username</string>
+    <string name="email_hint">Enter a E-Mail address</string>
     <string name="password_hint">Enter a new password</string>
     <string name="password_confirm_hint">Repeat the new password</string>
+    <string name="sample_password">12345678909285</string>
+    <string name="save">Save</string>
+    <string name="delete_account">Delete Account</string>
 
 </resources>
