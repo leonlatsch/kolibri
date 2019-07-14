@@ -25,4 +25,10 @@
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Open navigation close</string>
 
+    <!-- Profile Fragment -->
+    <string name="username_hint">Enter a username</string>
+    <string name="email_hint">Enter a username</string>
+    <string name="password_hint">Enter a new password</string>
+    <string name="password_confirm_hint">Repeat the new password</string>
+
 </resources>
