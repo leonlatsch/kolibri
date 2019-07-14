@@ -16,4 +16,18 @@ public class DatabaseMapper {
         user.setProfilePicTn(dto.getProfilePicTn());
         return user;
     }
+
+    public static UserDTO mapToDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserDTO dto = new UserDTO();
+        dto.setUid(user.getUid());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+
+        return dto;
+    }
 }

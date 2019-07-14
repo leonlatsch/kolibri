@@ -2,6 +2,10 @@
     <string name="app_name">Olivia</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
     <!-- Login / Register -->
     <string name="username">Username</string>
     <string name="email">E-Mail Address</string>
@@ -15,6 +19,7 @@
     <!-- Error -->
     <string name="error">Error</string>
     <string name="error_no_internet">Check your internet connection</string>
+    <string name="error_common">Something went wrong</string>
 
     <!-- Menu -->>
     <string name="chats">Chats</string>
@@ -28,10 +33,14 @@
     <!-- Profile Fragment -->
     <string name="username_hint">Enter a username</string>
     <string name="email_hint">Enter a E-Mail address</string>
+    <string name="old_password_hint">Enter old password</string>
     <string name="password_hint">Enter a new password</string>
     <string name="password_confirm_hint">Repeat the new password</string>
     <string name="sample_password">12345678909285</string>
     <string name="save">Save</string>
     <string name="delete_account">Delete Account</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="repeat_new_password">Repeat new Password</string>
 
 </resources>

@@ -27,4 +27,8 @@
         <item name="android:textColorHighlight">@color/colorPrimaryLight</item>
     </style>
 
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:tint">@android:color/black</item>
+    </style>
+
 </resources>

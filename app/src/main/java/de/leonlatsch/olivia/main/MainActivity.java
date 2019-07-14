@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
@@ -24,7 +26,7 @@ import de.leonlatsch.olivia.main.fragment.ChatFragment;
 import de.leonlatsch.olivia.main.fragment.ProfileFragment;
 import de.leonlatsch.olivia.util.ImageUtil;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User> {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         userInterface = UserInterface.getInstance();
+        userInterface.addEntityChangedListener(this);
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        setUserForDrawer(userInterface.loadUser());
+        mapUserToDrawer(userInterface.getUser());
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setUserForDrawer(User user) {
+    private void mapUserToDrawer(User user) {
         if (user == null) {
             return;
         }
@@ -114,8 +117,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
-    private void logout() {
-        userInterface.deleteUser(userInterface.loadUser());
+    public void logout() {
+        User user = userInterface.getUser();
+        if (user != null) {
+            userInterface.deleteUser(user);
+        }
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }
@@ -141,5 +147,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void entityChanged(User newEntity) {
+        if (newEntity != null) {
+            mapUserToDrawer(newEntity);
+        }
+    }
+
+    public void showDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

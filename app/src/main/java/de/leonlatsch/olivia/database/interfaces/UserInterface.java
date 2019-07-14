@@ -2,8 +2,10 @@ package de.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -15,10 +17,10 @@ import retrofit2.Response;
 
 public class UserInterface {
 
-    /**
-     * Singleton instance
-     */
-    private static UserInterface userInterface;
+    private static UserInterface userInterface; // Singleton
+    private User savedUser;
+
+    private List<EntityChangedListener> listeners;
 
     private UserService userService = RestServiceFactory.getUserService();
     private Callback<UserDTO> callback;
@@ -26,12 +28,15 @@ public class UserInterface {
 
     private UserInterface() {
         // Prevent non private instantiation
+        listeners = new ArrayList<>();
+        savedUser = getUser();
+
         callback = new Callback<UserDTO>() {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if (response.isSuccessful()) {
                     User user = DatabaseMapper.mapToEntity(response.body());
-                    user.save();
+                    saveUser(user);
                 }
             }
 
@@ -40,18 +45,25 @@ public class UserInterface {
         };
     }
 
-    public User loadUser() {
+    public void addEntityChangedListener(EntityChangedListener listener) {
+        listeners.add(listener);
+    }
 
+    private void loadUser() {
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
-                return list.get(0);
+                savedUser = list.get(0);
             } else {
-                return null;
+                savedUser = null;
             }
         } else {
             throw new RuntimeException("more than one user in database");
         }
+    }
+
+    public User getUser() {
+        return savedUser;
     }
 
     public void saveUserFromBackend(int uid) {
@@ -75,15 +87,26 @@ public class UserInterface {
 
     public void saveUser(UserDTO userDto) {
         User user = DatabaseMapper.mapToEntity(userDto);
-        user.save();
+        saveUser(user);
     }
 
     public void saveUser(User user) {
-        user.save();
+        if (user != null) {
+            user.save();
+            notifyListeners(user);
+            loadUser();
+        }
     }
 
     public void deleteUser(User user) {
         user.delete();
+        notifyListeners(null);
+    }
+
+    private void notifyListeners(User user) {
+        for (EntityChangedListener listener : listeners) {
+            listener.entityChanged(user);
+        }
     }
 
     public static UserInterface getInstance() {
