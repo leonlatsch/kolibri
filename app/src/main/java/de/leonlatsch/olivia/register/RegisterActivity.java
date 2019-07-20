@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -59,12 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+        registerBtn.setOnClickListener(v -> register());
 
         usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override

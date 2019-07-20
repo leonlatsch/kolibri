@@ -4,6 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
+import com.esafirm.imagepicker.features.ImagePicker;
+
+import de.leonlatsch.olivia.R;
+
 public class AndroidUtils {
 
     public static void animateView(final View view, final int toVisibility, float toAlpha) {
@@ -20,5 +28,21 @@ public class AndroidUtils {
                         view.setVisibility(toVisibility);
                     }
                 });
+    }
+
+    public static ImagePicker createImagePicker(AppCompatActivity activity) {
+        ImagePicker imagePicker = ImagePicker.create(activity)
+                .folderMode(true)
+                .theme(R.style.AppTheme)
+                .single();
+        return imagePicker;
+    }
+
+    public static ImagePicker createImagePicker(Fragment fragment) {
+        ImagePicker imagePicker = ImagePicker.create(fragment)
+                .folderMode(true)
+                .theme(R.style.AppTheme)
+                .single();
+        return imagePicker;
     }
 }

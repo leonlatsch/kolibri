@@ -2,12 +2,10 @@ package de.leonlatsch.olivia.main.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.model.Image;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.regex.Pattern;
 
@@ -35,6 +39,7 @@ import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
+import de.leonlatsch.olivia.util.AndroidUtils;
 import de.leonlatsch.olivia.util.ImageUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,33 +76,13 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         TextView deleteAccount = view.findViewById(R.id.profile_deleteBtn);
         statusTextView = view.findViewById(R.id.profile_status_message);
 
-        changeProfilePicFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeProfilePic();
-            }
-        });
+        changeProfilePicFab.setOnClickListener(v -> changeProfilePic());
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save();
-            }
-        });
+        saveBtn.setOnClickListener(v -> save());
 
-        deleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteAccount();
-            }
-        });
+        deleteAccount.setOnClickListener(v -> deleteAccount());
 
-        passwordEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changePassword();
-            }
-        });
+        passwordEditText.setOnClickListener(v -> changePassword());
 
         userInterface = UserInterface.getInstance();
         userInterface.addEntityChangedListener(this);
@@ -117,63 +102,52 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         final View view = getLayoutInflater().inflate(R.layout.popup_password, null);
         builder.setView(view);
 
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Just initialize this button
-            }
+        builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+            // Just initialize this button
         });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.cancel());
 
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditText oldPasswordEditText = view.findViewById(R.id.password_old_password_EditText);
-                final EditText newPasswordEditText = view.findViewById(R.id.password_new_password_EditText);
-                final EditText confirmPasswordEditText = view.findViewById(R.id.password_confirm_password_EditText);
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            final EditText oldPasswordEditText = view.findViewById(R.id.password_old_password_EditText);
+            final EditText newPasswordEditText = view.findViewById(R.id.password_new_password_EditText);
+            final EditText confirmPasswordEditText = view.findViewById(R.id.password_confirm_password_EditText);
 
-                Call<StringDTO> call = userService.auth(new UserAuthDTO(userInterface.getUser().getEmail(), Hash.createHexHash(oldPasswordEditText.getText().toString())));
-                call.enqueue(new Callback<StringDTO>() {
-                    @Override
-                    public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                        if (response.isSuccessful()) {
-                            if (JsonRespose.OK.equals(response.body().getMessage())) {
-                                showStatusIcon(oldPasswordEditText, R.drawable.icons8_checked_48);
-                                String password = newPasswordEditText.getText().toString();
-                                String passwordConfirm = confirmPasswordEditText.getText().toString();
+            Call<StringDTO> call = userService.auth(new UserAuthDTO(userInterface.getUser().getEmail(), Hash.createHexHash(oldPasswordEditText.getText().toString())));
+            call.enqueue(new Callback<StringDTO>() {
+                @Override
+                public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+                    if (response.isSuccessful()) {
+                        if (JsonRespose.OK.equals(response.body().getMessage())) {
+                            showStatusIcon(oldPasswordEditText, R.drawable.icons8_checked_48);
+                            String password = newPasswordEditText.getText().toString();
+                            String passwordConfirm = confirmPasswordEditText.getText().toString();
 
-                                if (!password.isEmpty() || Pattern.matches(Regex.PASSWORD, password)) {
-                                    showStatusIcon(newPasswordEditText, R.drawable.icons8_checked_48);
-                                    if (password.equals(passwordConfirm)) {
-                                        showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
-                                        passwordCache = password;
-                                        dialog.dismiss();
-                                    } else {
-                                        showStatusIcon(confirmPasswordEditText, R.drawable.icons8_cancel_48);
-                                    }
+                            if (!password.isEmpty() || Pattern.matches(Regex.PASSWORD, password)) {
+                                showStatusIcon(newPasswordEditText, R.drawable.icons8_checked_48);
+                                if (password.equals(passwordConfirm)) {
+                                    showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
+                                    passwordCache = password;
+                                    dialog.dismiss();
                                 } else {
-                                    showStatusIcon(newPasswordEditText, R.drawable.icons8_cancel_48);
+                                    showStatusIcon(confirmPasswordEditText, R.drawable.icons8_cancel_48);
                                 }
                             } else {
-                                showStatusIcon(oldPasswordEditText, R.drawable.icons8_cancel_48);
+                                showStatusIcon(newPasswordEditText, R.drawable.icons8_cancel_48);
                             }
+                        } else {
+                            showStatusIcon(oldPasswordEditText, R.drawable.icons8_cancel_48);
                         }
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<StringDTO> call, Throwable t) {
-                        parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<StringDTO> call, Throwable t) {
+                    parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                }
+            });
         });
 
 
@@ -243,9 +217,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void changeProfilePic() {
-        ImagePicker.create(parent).start();
-        //TODO: implement image selection
-        profilePicChanged = false; // TODO set true if a new picture is selected
+        AndroidUtils.createImagePicker(this).start();
     }
 
     private void mapUserToView(User user) {
@@ -261,6 +233,16 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         savedUser.setPassword(Hash.createHexHash(passwordCache));
 
         return savedUser;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            Image image = ImagePicker.getImages(data).get(0);
+            profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(image.getPath()));
+            profilePicChanged = true;
+            // https://github.com/ArthurHub/Android-Image-Cropper
+        }
     }
 
     @Override

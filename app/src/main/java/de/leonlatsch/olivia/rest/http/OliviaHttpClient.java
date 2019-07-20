@@ -48,12 +48,7 @@ public class OliviaHttpClient {
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            builder.hostnameVerifier((hostname, session) -> true);
             builder.addInterceptor(new AuthInterceptor(Values.API_TOKEN, Values.API_KEY));
 
             OkHttpClient okHttpClient = builder.build();

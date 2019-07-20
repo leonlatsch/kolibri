@@ -56,19 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         progressOverlay = findViewById(R.id.progressOverlay);
         errorText = findViewById(R.id.loginErrorTextView);
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+        registerBtn.setOnClickListener(v -> register());
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        loginBtn.setOnClickListener(v -> login());
     }
 
     private void login() {
