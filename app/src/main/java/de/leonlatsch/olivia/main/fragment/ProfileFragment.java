@@ -117,30 +117,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText oldPasswordEditText = view.findViewById(R.id.password_old_password_EditText);
-                final EditText newPasswordEditText = view.findViewById(R.id.password_new_password_EditText);
-                final EditText confirmPasswordEditText = view.findViewById(R.id.password_confirm_password_EditText);
-
-                Call<StringDTO> call = userService.auth(new UserAuthDTO(userInterface.getUser().getEmail(), Hash.createHexHash(oldPasswordEditText.getText().toString())));
-                call.enqueue(new Callback<StringDTO>() {
-                    @Override
-                    public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                        if (response.isSuccessful()) {
-                            if (JsonRespose.OK.equals(response.body().getMessage())) {
-                                //TODO checked icon
-                                String password = newPasswordEditText.getText().toString();
-                                String passwordConfirm = confirmPasswordEditText.getText().toString();
-                                if (!password.isEmpty() || Pattern.matches(Regex.PASSWORD, password)) {
-                                    //TODO passowrd validation
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<StringDTO> call, Throwable t) {}
-                });
+            public void onClick(final DialogInterface dialog, int which) {
+                // Just initialize this button
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -150,7 +128,53 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             }
         });
 
-        builder.show();
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText oldPasswordEditText = view.findViewById(R.id.password_old_password_EditText);
+                final EditText newPasswordEditText = view.findViewById(R.id.password_new_password_EditText);
+                final EditText confirmPasswordEditText = view.findViewById(R.id.password_confirm_password_EditText);
+
+                Call<StringDTO> call = userService.auth(new UserAuthDTO(userInterface.getUser().getEmail(), Hash.createHexHash(oldPasswordEditText.getText().toString())));
+                call.enqueue(new Callback<StringDTO>() {
+                    @Override
+                    public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+                        if (response.isSuccessful()) {
+                            if (JsonRespose.OK.equals(response.body().getMessage())) {
+                                showStatusIcon(oldPasswordEditText, R.drawable.icons8_checked_48);
+                                String password = newPasswordEditText.getText().toString();
+                                String passwordConfirm = confirmPasswordEditText.getText().toString();
+
+                                if (!password.isEmpty() || Pattern.matches(Regex.PASSWORD, password)) {
+                                    showStatusIcon(newPasswordEditText, R.drawable.icons8_checked_48);
+                                    if (password.equals(passwordConfirm)) {
+                                        showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
+                                        passwordCache = password;
+                                        dialog.dismiss();
+                                    } else {
+                                        showStatusIcon(confirmPasswordEditText, R.drawable.icons8_cancel_48);
+                                    }
+                                } else {
+                                    showStatusIcon(newPasswordEditText, R.drawable.icons8_cancel_48);
+                                }
+                            } else {
+                                showStatusIcon(oldPasswordEditText, R.drawable.icons8_cancel_48);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StringDTO> call, Throwable t) {
+                        parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                    }
+                });
+            }
+        });
+
+
     }
 
     private void deleteAccount() {
@@ -175,16 +199,16 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void save() {
-        displayMessage(getString(R.string.account_saved));
-        //TODO: save new user and update it
         final User user = mapViewToUser();
         UserDTO dto = DatabaseMapper.mapToDTO(user);
 
         if (profilePicChanged) {
             dto.setProfilePic(extractBase64());
         }
+
         // delete local password
         user.setPassword(null);
+        passwordCache = null;
 
         Call<StringDTO> call = userService.update(dto);
         call.enqueue(new Callback<StringDTO>() {
@@ -231,7 +255,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         User savedUser = userInterface.getUser();
         savedUser.setUsername(usernameEditText.getText().toString());
         savedUser.setEmail(emailEditText.getText().toString());
-        //TODO: add password popup
+        savedUser.setPassword(Hash.createHexHash(passwordCache));
 
         return savedUser;
     }
@@ -241,5 +265,9 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         if (newEntity != null) {
             mapUserToView(newEntity);
         }
+    }
+
+    private void showStatusIcon(EditText editText, int drawable) {
+        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable,0 );
     }
 }

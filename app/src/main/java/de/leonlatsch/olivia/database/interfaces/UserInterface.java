@@ -29,7 +29,7 @@ public class UserInterface {
     private UserInterface() {
         // Prevent non private instantiation
         listeners = new ArrayList<>();
-        loadUser();
+        //loadUser();
         savedUser = getUser();
 
         callback = new Callback<UserDTO>() {
