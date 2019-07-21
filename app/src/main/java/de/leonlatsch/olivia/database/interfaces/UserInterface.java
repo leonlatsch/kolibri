@@ -2,25 +2,25 @@ package de.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Select;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import de.leonlatsch.olivia.database.EntityChangedListener;
+import de.leonlatsch.olivia.database.DatabaseMapper;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
-import de.leonlatsch.olivia.database.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserInterface {
+/**
+ *  Child of {@link BaseInterface}
+ *  Syncs the database table 'user' and the Entity {@link User}
+ */
+public class UserInterface extends BaseInterface<User> {
 
     private static UserInterface userInterface; // Singleton
-    private User savedUser;
-
-    private List<EntityChangedListener> listeners;
+    //private User savedUser;
 
     private UserService userService = RestServiceFactory.getUserService();
     private Callback<UserDTO> callback;
@@ -28,9 +28,7 @@ public class UserInterface {
 
     private UserInterface() {
         // Prevent non private instantiation
-        listeners = new ArrayList<>();
-        //loadUser();
-        savedUser = getUser();
+        model = getUser();
 
         callback = new Callback<UserDTO>() {
             @Override
@@ -45,17 +43,13 @@ public class UserInterface {
         };
     }
 
-    public void addEntityChangedListener(EntityChangedListener listener) {
-        listeners.add(listener);
-    }
-
     public void loadUser() {
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
-                savedUser = list.get(0);
+                model = list.get(0);
             } else {
-                savedUser = null;
+                model = null;
             }
         } else {
             throw new RuntimeException("more than one user in database");
@@ -63,10 +57,10 @@ public class UserInterface {
     }
 
     public User getUser() {
-        if (savedUser == null) {
+        if (model == null) {
             loadUser();
         }
-        return savedUser;
+        return model;
     }
 
     public void saveUserFromBackend(int uid) {
@@ -95,8 +89,8 @@ public class UserInterface {
 
     public void saveUser(User user) {
         if (user != null) {
-            if (savedUser != null) {
-                deleteUser(savedUser);
+            if (model != null) {
+                deleteUser(model);
             }
             user.save();
             notifyListeners(user);
@@ -106,15 +100,11 @@ public class UserInterface {
 
     public void deleteUser(User user) {
         user.delete();
-        savedUser = null;
+        model = null;
         notifyListeners(null);
     }
 
-    private void notifyListeners(User user) {
-        for (EntityChangedListener listener : listeners) {
-            listener.entityChanged(user);
-        }
-    }
+
 
     public static UserInterface getInstance() {
         if (userInterface == null) {
