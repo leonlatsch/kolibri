@@ -3,20 +3,18 @@ package de.leonlatsch.olivia.boot;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.activeandroid.ActiveAndroid;
-import com.activeandroid.query.Select;
-
-import java.util.List;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.database.interfaces.UserInterface;
-import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Values;
+import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import retrofit2.Call;

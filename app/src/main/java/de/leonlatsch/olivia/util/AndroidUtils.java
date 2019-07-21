@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.esafirm.imagepicker.features.ImagePicker;
