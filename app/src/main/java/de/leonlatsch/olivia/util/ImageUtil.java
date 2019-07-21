@@ -21,7 +21,7 @@ public class ImageUtil {
             return null;
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
         byte[] bytes = bos.toByteArray();
         return Base64.encodeToString(bytes, 0);
     }
