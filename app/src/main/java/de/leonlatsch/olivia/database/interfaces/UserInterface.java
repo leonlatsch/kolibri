@@ -36,8 +36,7 @@ public class UserInterface {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if (response.isSuccessful()) {
-                    User user = DatabaseMapper.mapToEntity(response.body());
-                    saveUser(user);
+                    saveUser(response.body());
                 }
             }
 
@@ -50,7 +49,7 @@ public class UserInterface {
         listeners.add(listener);
     }
 
-    private void loadUser() {
+    public void loadUser() {
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
@@ -64,6 +63,9 @@ public class UserInterface {
     }
 
     public User getUser() {
+        if (savedUser == null) {
+            loadUser();
+        }
         return savedUser;
     }
 
@@ -93,6 +95,9 @@ public class UserInterface {
 
     public void saveUser(User user) {
         if (user != null) {
+            if (savedUser != null) {
+                deleteUser(savedUser);
+            }
             user.save();
             notifyListeners(user);
             loadUser();
@@ -101,6 +106,7 @@ public class UserInterface {
 
     public void deleteUser(User user) {
         user.delete();
+        savedUser = null;
         notifyListeners(null);
     }
 

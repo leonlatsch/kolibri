@@ -192,7 +192,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 if (response.isSuccessful()) {
                     if (JsonRespose.OK.equals(response.body().getMessage())) {
-                        userInterface.saveUser(user);
+                        userInterface.saveUserFromBackend(user.getUid());
                         displayMessage(getString(R.string.account_saved));
                     }
                 } else {

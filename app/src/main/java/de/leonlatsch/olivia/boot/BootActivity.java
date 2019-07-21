@@ -32,11 +32,14 @@ public class BootActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
+
         ActiveAndroid.initialize(this);
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
+
+        userInterface.loadUser();
 
         Intent intent = null;
 
@@ -58,9 +61,8 @@ public class BootActivity extends AppCompatActivity {
      */
     private boolean isValidUserSaved() {
         try {
-            List<User> list = new Select().from(User.class).execute();
-            if (!list.isEmpty()) {
-                final User savedUser = list.get(0);;
+            final User savedUser = userInterface.getUser();
+            if (savedUser != null) {
                 Call<UserDTO> call = userService.getbyUid(savedUser.getUid());
                 call.enqueue(new Callback<UserDTO>() {
                     @Override
@@ -82,8 +84,10 @@ public class BootActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<UserDTO> call, Throwable t) {}
                 });
+                return true;
+            } else {
+                return false;
             }
-            return !list.isEmpty();
         } catch (Exception e) {
             return false;
         }
