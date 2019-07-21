@@ -253,7 +253,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void loadCachedData() {
         if (getIntent().getExtras() != null) {
-            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_EMAIL);
+            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_KEY_EMAIL);
 
             if (cachedEmail != null) {
                 emailEditText.setText(cachedEmail);

@@ -36,6 +36,7 @@ import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.main.MainActivity;
+import de.leonlatsch.olivia.main.ProfilePicActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
@@ -84,6 +85,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
         passwordEditText.setOnClickListener(v -> changePassword());
 
+        profilePicImageView.setOnClickListener(v -> showProfilePic());
+
         userInterface = UserInterface.getInstance();
         userInterface.addEntityChangedListener(this);
 
@@ -93,6 +96,13 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         displayMessage(Values.EMPTY);
 
         return view;
+    }
+
+    private void showProfilePic() {
+        Intent intent = new Intent(parent.getApplicationContext(), ProfilePicActivity.class);
+        intent.putExtra(Values.INTENT_KEY_PROFILE_PIC_UID, userInterface.getUser().getUid());
+        intent.putExtra(Values.INTENT_KEY_PROFILE_PIC_USERNAME, userInterface.getUser().getUsername());
+        startActivity(intent);
     }
 
     private void changePassword() {

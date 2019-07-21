@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
 
         if (!email.isEmpty()) {
-            intent.putExtra(Values.INTENT_EMAIL, email);
+            intent.putExtra(Values.INTENT_KEY_EMAIL, email);
         }
     }
 
