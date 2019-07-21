@@ -5,6 +5,8 @@
     <!-- Common -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- Login / Register -->
     <string name="username">Username</string>
@@ -43,5 +45,7 @@
     <string name="new_password">New Password</string>
     <string name="repeat_new_password">Repeat new Password</string>
     <string name="account_saved">Account Saved</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="are_you_sure_delete">Do you really want to delete your account?</string>
 
 </resources>

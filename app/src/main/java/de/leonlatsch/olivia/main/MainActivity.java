@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private View progressOverlay;
 
     private UserInterface userInterface;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
+        progressOverlay = findViewById(R.id.progressOverlay);
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -157,5 +159,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setMessage(message)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    public View getProgressOverlay() {
+        return progressOverlay;
     }
 }

@@ -1,6 +1,7 @@
 package de.leonlatsch.olivia.main.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -153,27 +154,44 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void deleteAccount() {
-        Call<StringDTO> call = userService.delete(userInterface.getUser().getUid());
-        call.enqueue(new Callback<StringDTO>() {
-            @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                if (response.isSuccessful()) {
-                    if (JsonRespose.OK.equals(response.body().getMessage())) {
-                        parent.logout();
-                    } else {
-                        parent.showDialog(getString(R.string.error), getString(R.string.error_common));
-                    }
-                }
-            }
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    isLoading(true);
+                    Call<StringDTO> call = userService.delete(userInterface.getUser().getUid());
+                    call.enqueue(new Callback<StringDTO>() {
+                        @Override
+                        public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+                            if (response.isSuccessful()) {
+                                if (JsonRespose.OK.equals(response.body().getMessage())) {
+                                    parent.logout();
+                                } else {
+                                    parent.showDialog(getString(R.string.error), getString(R.string.error_common));
+                                }
+                            }
+                            isLoading(false);
+                        }
 
-            @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
-                parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                        @Override
+                        public void onFailure(Call<StringDTO> call, Throwable t) {
+                            parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                            isLoading(false);
+                        }
+                    });
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    break;
             }
-        });
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AlertDialogCustom);
+        builder.setMessage(getString(R.string.are_you_sure_delete)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(R.string.no), dialogClickListener).show();
     }
 
     private void save() {
+        isLoading(true);
         final User user = mapViewToUser();
         UserDTO dto = DatabaseMapper.mapToDTO(user);
 
@@ -197,11 +215,13 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 } else {
                     parent.showDialog(getString(R.string.error), getString(R.string.error_common));
                 }
+                isLoading(false);
             }
 
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                isLoading(false);
             }
         });
     }
@@ -248,6 +268,14 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     public void entityChanged(User newEntity) {
         if (newEntity != null) {
             mapUserToView(newEntity);
+        }
+    }
+
+    private void isLoading(boolean loading) {
+        if (loading) {
+            AndroidUtils.animateView(parent.getProgressOverlay(), View.VISIBLE, 0.4f);
+        } else {
+            AndroidUtils.animateView(parent.getProgressOverlay(), View.GONE, 0.4f);
         }
     }
 
