@@ -135,7 +135,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                             String password = newPasswordEditText.getText().toString();
                             String passwordConfirm = confirmPasswordEditText.getText().toString();
 
-                            if (!password.isEmpty() || Pattern.matches(Regex.PASSWORD, password)) {
+                            if (!password.isEmpty() && Pattern.matches(Regex.PASSWORD, password)) {
                                 showStatusIcon(newPasswordEditText, R.drawable.icons8_checked_48);
                                 if (password.equals(passwordConfirm)) {
                                     showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
