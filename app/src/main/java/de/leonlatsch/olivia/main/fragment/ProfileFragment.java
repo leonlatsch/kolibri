@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.regex.Pattern;
 
@@ -246,7 +249,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void changeProfilePic() {
-        AndroidUtils.createImagePicker(this).start();
+        AndroidUtils.createImageCropper(getString(R.string.apply)).start(getContext(), this);
     }
 
     private void mapUserToView(User user) {
@@ -266,11 +269,11 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            Image image = ImagePicker.getImages(data).get(0);
-            profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(image.getPath()));
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            Uri resultUri = result.getUri();
+            profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(resultUri.getPath()));
             profilePicChanged = true;
-            // https://github.com/ArthurHub/Android-Image-Cropper
         }
     }
 

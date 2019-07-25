@@ -47,8 +47,6 @@ dependencies {
     // Active Android Database ORM
     implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 
-    // Image Picker Library
-    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.0.0'
-    implementation 'com.github.esafirm.android-image-picker:rximagepicker:2.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    // Image Crop API
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 }

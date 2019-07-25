@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.esafirm.imagepicker.features.ImagePicker;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import de.leonlatsch.olivia.R;
 
@@ -29,19 +31,12 @@ public class AndroidUtils {
                 });
     }
 
-    public static ImagePicker createImagePicker(AppCompatActivity activity) {
-        ImagePicker imagePicker = ImagePicker.create(activity)
-                .folderMode(true)
-                .theme(R.style.AppTheme)
-                .single();
-        return imagePicker;
-    }
-
-    public static ImagePicker createImagePicker(Fragment fragment) {
-        ImagePicker imagePicker = ImagePicker.create(fragment)
-                .folderMode(true)
-                .theme(R.style.AppTheme)
-                .single();
-        return imagePicker;
+    public static CropImage.ActivityBuilder createImageCropper(String title) {
+        return CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .setAllowFlipping(true)
+                .setAllowRotation(true)
+                .setCropMenuCropButtonTitle(title);
     }
 }
