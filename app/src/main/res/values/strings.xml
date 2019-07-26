@@ -48,5 +48,6 @@
     <string name="account_saved">Account Saved</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="are_you_sure_delete">Do you really want to delete your account?</string>
+    <string name="unsaved_data">Unsaved data</string>
 
 </resources>

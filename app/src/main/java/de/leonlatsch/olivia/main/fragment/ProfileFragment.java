@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import retrofit2.Response;
 
 public class ProfileFragment extends Fragment implements EntityChangedListener<User> {
 
+    private boolean isReloadMode = false;
     private boolean profilePicChanged = false;
     private String passwordCache;
 
@@ -61,6 +64,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private EditText usernameEditText;
     private EditText emailEditText;
     private EditText passwordEditText;
+    private TextView status_message;
 
     @Nullable
     @Override
@@ -75,6 +79,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         FloatingActionButton changeProfilePicFab = view.findViewById(R.id.profile_profile_pic_change);
         Button saveBtn = view.findViewById(R.id.profile_saveBtn);
         TextView deleteAccount = view.findViewById(R.id.profile_deleteBtn);
+        status_message = view.findViewById(R.id.profile_status_message);
 
         changeProfilePicFab.setOnClickListener(v -> changeProfilePic());
 
@@ -86,14 +91,38 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
         profilePicImageView.setOnClickListener(v -> showProfilePic());
 
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                dataChanged();
+            }
+        };
+
+        usernameEditText.addTextChangedListener(textWatcher);
+        emailEditText.addTextChangedListener(textWatcher);
+
+
         userInterface = UserInterface.getInstance();
         userInterface.addEntityChangedListener(this);
 
         userService = RestServiceFactory.getUserService();
 
         mapUserToView(userInterface.getUser());
+        displayStatusMessage(Values.EMPTY);
 
         return view;
+    }
+
+    private void dataChanged() {
+        if (!isReloadMode) {
+            displayStatusMessage(getString(R.string.unsaved_data));
+        }
     }
 
     private void showProfilePic() {
@@ -101,6 +130,10 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         intent.putExtra(Values.INTENT_KEY_PROFILE_PIC_UID, userInterface.getUser().getUid());
         intent.putExtra(Values.INTENT_KEY_PROFILE_PIC_USERNAME, userInterface.getUser().getUsername());
         startActivity(intent);
+    }
+
+    private void displayStatusMessage(String message) {
+        status_message.setText(message);
     }
 
     private void changePassword() {
@@ -138,6 +171,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                                 if (password.equals(passwordConfirm)) {
                                     showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
                                     passwordCache = password;
+                                    dataChanged();
                                     dialog.dismiss();
                                 } else {
                                     showStatusIcon(confirmPasswordEditText, R.drawable.icons8_cancel_48);
@@ -217,6 +251,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                     if (JsonRespose.OK.equals(response.body().getMessage())) {
                         userInterface.saveUserFromBackend(user.getUid());
                         displayToast(R.string.account_saved);
+                        displayStatusMessage(Values.EMPTY);
                     }
                 } else {
                     parent.showDialog(getString(R.string.error), getString(R.string.error_common));
@@ -246,9 +281,11 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void mapUserToView(User user) {
+        isReloadMode = true;
         profilePicImageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         usernameEditText.setText(user.getUsername());
         emailEditText.setText(user.getEmail());
+        isReloadMode = false;
     }
 
     private User mapViewToUser() {
@@ -267,6 +304,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             Uri resultUri = result.getUri();
             profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(resultUri.getPath()));
             profilePicChanged = true;
+            dataChanged();
         }
     }
 
