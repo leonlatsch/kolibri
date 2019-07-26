@@ -3,7 +3,6 @@ package de.leonlatsch.olivia.main;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NavUtils;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -69,6 +68,7 @@ public class ProfilePicActivity extends AppCompatActivity {
             public void onFailure(Call<ProfilePicDTO> call, Throwable t) {
                 isLoading(false);
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                finish();
             }
         });
     }

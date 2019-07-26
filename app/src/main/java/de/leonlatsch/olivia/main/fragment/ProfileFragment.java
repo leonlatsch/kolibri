@@ -14,16 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.model.Image;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.regex.Pattern;
 
@@ -63,7 +61,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private EditText usernameEditText;
     private EditText emailEditText;
     private EditText passwordEditText;
-    private TextView statusTextView;
 
     @Nullable
     @Override
@@ -78,7 +75,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         FloatingActionButton changeProfilePicFab = view.findViewById(R.id.profile_profile_pic_change);
         Button saveBtn = view.findViewById(R.id.profile_saveBtn);
         TextView deleteAccount = view.findViewById(R.id.profile_deleteBtn);
-        statusTextView = view.findViewById(R.id.profile_status_message);
 
         changeProfilePicFab.setOnClickListener(v -> changeProfilePic());
 
@@ -96,7 +92,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         userService = RestServiceFactory.getUserService();
 
         mapUserToView(userInterface.getUser());
-        displayMessage(Values.EMPTY);
 
         return view;
     }
@@ -162,8 +157,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 }
             });
         });
-
-
     }
 
     private void deleteAccount() {
@@ -223,7 +216,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 if (response.isSuccessful()) {
                     if (JsonRespose.OK.equals(response.body().getMessage())) {
                         userInterface.saveUserFromBackend(user.getUid());
-                        displayMessage(getString(R.string.account_saved));
+                        displayToast(R.string.account_saved);
                     }
                 } else {
                     parent.showDialog(getString(R.string.error), getString(R.string.error_common));
@@ -239,8 +232,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         });
     }
 
-    private void displayMessage(String message) {
-        statusTextView.setText(message);
+    private void displayToast(int text) {
+        Toast.makeText(parent, text, Toast.LENGTH_LONG).show();
     }
 
     private String extractBase64() {
