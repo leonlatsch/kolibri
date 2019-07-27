@@ -301,10 +301,12 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            Uri resultUri = result.getUri();
-            profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(resultUri.getPath()));
-            profilePicChanged = true;
-            dataChanged();
+            if (result != null) {
+                Uri resultUri = result.getUri();
+                profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(resultUri.getPath()));
+                profilePicChanged = true;
+                dataChanged();
+            }
         }
     }
 
