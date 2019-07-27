@@ -2,8 +2,8 @@ package de.leonlatsch.olivia.register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -59,12 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+        registerBtn.setOnClickListener(v -> register());
 
         usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -258,7 +253,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void loadCachedData() {
         if (getIntent().getExtras() != null) {
-            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_EMAIL);
+            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_KEY_EMAIL);
 
             if (cachedEmail != null) {
                 emailEditText.setText(cachedEmail);

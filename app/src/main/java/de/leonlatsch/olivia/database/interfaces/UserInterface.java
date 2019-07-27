@@ -4,21 +4,23 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
+import de.leonlatsch.olivia.database.DatabaseMapper;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
-import de.leonlatsch.olivia.database.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserInterface {
+/**
+ *  Child of {@link BaseInterface}
+ *  Syncs the database table 'user' and the Entity {@link User}
+ */
+public class UserInterface extends BaseInterface<User> {
 
-    /**
-     * Singleton instance
-     */
-    private static UserInterface userInterface;
+    private static UserInterface userInterface; // Singleton
+    //private User savedUser;
 
     private UserService userService = RestServiceFactory.getUserService();
     private Callback<UserDTO> callback;
@@ -26,12 +28,13 @@ public class UserInterface {
 
     private UserInterface() {
         // Prevent non private instantiation
+        model = getUser();
+
         callback = new Callback<UserDTO>() {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if (response.isSuccessful()) {
-                    User user = DatabaseMapper.mapToEntity(response.body());
-                    user.save();
+                    saveUser(response.body());
                 }
             }
 
@@ -40,18 +43,24 @@ public class UserInterface {
         };
     }
 
-    public User loadUser() {
-
+    public void loadUser() {
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
-                return list.get(0);
+                model = list.get(0);
             } else {
-                return null;
+                model = null;
             }
         } else {
             throw new RuntimeException("more than one user in database");
         }
+    }
+
+    public User getUser() {
+        if (model == null) {
+            loadUser();
+        }
+        return model;
     }
 
     public void saveUserFromBackend(int uid) {
@@ -75,16 +84,27 @@ public class UserInterface {
 
     public void saveUser(UserDTO userDto) {
         User user = DatabaseMapper.mapToEntity(userDto);
-        user.save();
+        saveUser(user);
     }
 
     public void saveUser(User user) {
-        user.save();
+        if (user != null) {
+            if (model != null) {
+                deleteUser(model);
+            }
+            user.save();
+            notifyListeners(user);
+            loadUser();
+        }
     }
 
     public void deleteUser(User user) {
         user.delete();
+        model = null;
+        notifyListeners(null);
     }
+
+
 
     public static UserInterface getInstance() {
         if (userInterface == null) {

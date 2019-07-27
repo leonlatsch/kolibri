@@ -3,6 +3,8 @@
     package="de.leonlatsch.olivia">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -11,18 +13,32 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".boot.BootActivity" android:screenOrientation="portrait">
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity android:name=".main.ProfilePicActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.leonlatsch.olivia.main.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".boot.BootActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.LoginActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".register.RegisterActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".register.RegisterActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -40,49 +56,14 @@
             android:name="com.activeandroid.content.ContentProvider"
             android:authorities="de.leonlatsch.olivia"
             android:enabled="true"
-            android:exported="false">
-        </provider>
+            android:exported="false"></provider>
 
-        <meta-data android:name="AA_DB_NAME" android:value="olivia.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
-
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="olivia.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
     </application>
-
-    <!--
-    Reserved Columns:
-
-    ABORT               DEFAULT         INNER         REGEXP
-ACTION              DEFERRABLE      INSERT        REINDEX
-ADD                 DEFERRED        INSTEAD       RELEASE
-AFTER               DELETE          INTERSECT     RENAME
-ALL                 DESC            INTO          REPLACE
-ALTER               DETACH          IS            RESTRICT
-ANALYZE             DISTINCT        ISNULL        RIGHT
-AND                 DROP            JOIN          ROLLBACK
-AS                  EACH            KEY           ROW
-ASC                 ELSE            LEFT          SAVEPOINT
-ATTACH              END             LIKE          SELECT
-AUTOINCREMENT       ESCAPE          LIMIT         SET
-BEFORE              EXCEPT          MATCH         TABLE
-BEGIN               EXCLUSIVE       NATURAL       TEMP
-BETWEEN             EXISTS          NO            TEMPORARY
-BY                  EXPLAIN         NOT           THEN
-CASCADE             FAIL            NOTNULL       TO
-CASE                FOR             NULL          TRANSACTION
-CAST                FOREIGN         OF            TRIGGER
-CHECK               FROM            OFFSET        UNION
-COLLATE             FULL            ON            UNIQUE
-COLUMN              GLOB            OR            UPDATE
-COMMIT              GROUP           ORDER         USING
-CONFLICT            HAVING          OUTER         VACUUM
-CONSTRAINT          IF              PLAN          VALUES
-CREATE              IGNORE          PRAGMA        VIEW
-CROSS               IMMEDIATE       PRIMARY       VIRTUAL
-CURRENT_DATE        IN              QUERY         WHEN
-CURRENT_TIME        INDEX           RAISE         WHERE
-CURRENT_TIMESTAMP   INDEXED         RECURSIVE     WITH
-DATABASE            INITIALLY       REFERENCES    WITHOUT
-                    ID
-                    -->
 
 </manifest>

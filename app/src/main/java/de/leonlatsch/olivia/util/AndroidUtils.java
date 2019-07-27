@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
 public class AndroidUtils {
 
     public static void animateView(final View view, final int toVisibility, float toAlpha) {
@@ -20,5 +23,14 @@ public class AndroidUtils {
                         view.setVisibility(toVisibility);
                     }
                 });
+    }
+
+    public static CropImage.ActivityBuilder createImageCropper(String title) {
+        return CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .setAllowFlipping(true)
+                .setAllowRotation(true)
+                .setCropMenuCropButtonTitle(title);
     }
 }

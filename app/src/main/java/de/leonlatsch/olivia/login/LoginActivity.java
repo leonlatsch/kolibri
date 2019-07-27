@@ -2,8 +2,8 @@ package de.leonlatsch.olivia.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +20,11 @@ import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
-import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
 import de.leonlatsch.olivia.util.AndroidUtils;
-import de.leonlatsch.olivia.database.DatabaseMapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,19 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         progressOverlay = findViewById(R.id.progressOverlay);
         errorText = findViewById(R.id.loginErrorTextView);
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+        registerBtn.setOnClickListener(v -> register());
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        loginBtn.setOnClickListener(v -> login());
     }
 
     private void login() {
@@ -162,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
 
         if (!email.isEmpty()) {
-            intent.putExtra(Values.INTENT_EMAIL, email);
+            intent.putExtra(Values.INTENT_KEY_EMAIL, email);
         }
     }
 
