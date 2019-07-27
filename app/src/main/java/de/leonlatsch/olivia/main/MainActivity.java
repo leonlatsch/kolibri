@@ -24,6 +24,7 @@ import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.fragment.ChatFragment;
 import de.leonlatsch.olivia.main.fragment.ProfileFragment;
+import de.leonlatsch.olivia.main.fragment.SettingsFragment;
 import de.leonlatsch.olivia.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User> {
@@ -82,6 +83,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ProfileFragment()).commit();
                 break;
 
+            case R.id.nav_settings:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new SettingsFragment()).commit();
+                break;
+
             case R.id.nav_help:
                 Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
                 break;
@@ -121,29 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
-    }
-
-    /////////////////////// IGNORE FOR NOW ///////////////////////
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_secondary, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
