@@ -20,7 +20,6 @@ import retrofit2.Response;
 public class UserInterface extends BaseInterface<User> {
 
     private static UserInterface userInterface; // Singleton
-    //private User savedUser;
 
     private UserService userService = RestServiceFactory.getUserService();
     private Callback<UserDTO> callback;
