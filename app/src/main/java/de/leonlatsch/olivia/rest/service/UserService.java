@@ -28,8 +28,11 @@ public interface UserService {
     @GET("users/getByUsername/{username}")
     Call<UserDTO> getByUsername(@Path("username") String username);
 
-    @GET("users/search/{username}")
+    @GET("users/search/top100/{username}")
     Call<List<UserDTO>> search(@Path("username") String username);
+
+    @GET("users/search/{username}")
+    Call<List<UserDTO>> searchAll(@Path("username") String username);
 
     @POST("users/register")
     Call<StringDTO> create(@Body UserDTO user);
