@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.UserSearchActivity">
+
+    <EditText
+        android:id="@+id/userSearchEditText"
+        android:inputType="text"
+        android:hint="@string/user_search_hint"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="3dp"
+        style="@style/CommonEditText" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="-3dp"
+        android:layout_marginBottom="24dp"
+        android:layout_toEndOf="@+id/userSearchEditText"
+        android:src="@drawable/ic_search" />
+
+</RelativeLayout>

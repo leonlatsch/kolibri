@@ -1,5 +1,6 @@
 package de.leonlatsch.olivia.main.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.main.MainActivity;
+import de.leonlatsch.olivia.main.UserSearchActivity;
 
 public class ChatFragment extends Fragment {
 
@@ -33,5 +35,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void newChat() {
+        Intent intent = new Intent(parent.getApplicationContext(), UserSearchActivity.class);
+        startActivity(intent);
     }
 }
