@@ -19,6 +19,9 @@
     <string name="register_now">Register Now</string>
     <string name="login_fail">E-Mail or Password is wrong</string>
 
+    <!-- User Search -->
+    <string name="user_search_hint">Search for users...</string>
+
     <!-- Error -->
     <string name="error">Error</string>
     <string name="error_no_internet">Check your internet connection</string>
