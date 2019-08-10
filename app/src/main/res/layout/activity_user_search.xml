@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.UserSearchActivity">
 
-    <EditText
-        android:id="@+id/userSearchEditText"
-        android:inputType="text"
-        android:hint="@string/user_search_hint"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="3dp"
-        style="@style/CommonEditText" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/user_search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="-3dp"
-        android:layout_marginBottom="24dp"
-        android:layout_toEndOf="@+id/userSearchEditText"
-        android:src="@drawable/ic_search" />
+        <EditText
+            android:id="@+id/userSearchEditText"
+            style="@style/LightEditText"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:hint="@string/user_search_hint"
+            android:inputType="text" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/userSearchBtn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_search"
+            android:tint="@color/colorAccent" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <include layout="@layout/progress_overlay"/>
+
+</LinearLayout>
