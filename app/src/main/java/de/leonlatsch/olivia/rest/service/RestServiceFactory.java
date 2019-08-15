@@ -6,7 +6,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class RestServiceFactory {
 
-    private static final String BASE_URL = "https://olivia.leonlatsch.de:/";
+    private static final String BASE_URL = "https://olivia.leonlatsch.de/api/";
 
     private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
