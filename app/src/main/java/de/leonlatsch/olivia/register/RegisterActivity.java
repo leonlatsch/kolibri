@@ -2,23 +2,24 @@ package de.leonlatsch.olivia.register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
@@ -37,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerBtn;
 
     private UserService userService;
+    private UserInterface userInterface;
 
     private boolean usernameValid;
     private boolean emailValid;
@@ -55,13 +57,9 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.registerNowBtn);
 
         userService = RestServiceFactory.getUserService();
+        userInterface = UserInterface.getInstance();
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+        registerBtn.setOnClickListener(v -> register());
 
         usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -155,7 +153,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {}
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error));
+            }
         });
     }
 
@@ -184,18 +184,24 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {}
+            public void onFailure(Call<StringDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error));
+            }
         });
     }
 
     private void register() {
         isLoading(true);
 
+        validateUsername();
+        validateEmail();
+        validatePassword();
+
         if (!usernameValid || !emailValid || !passwordValid) {
             isLoading(false);
             return;
         }
-        UserDTO userDTO = new UserDTO();
+        final UserDTO userDTO = new UserDTO();
         userDTO.setEmail(emailEditText.getText().toString());
         userDTO.setUsername(usernameEditText.getText().toString());
         userDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
@@ -205,10 +211,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 isLoading(false);
-                //TODO: save as active user in database
                 if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
-                    Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
-                    startActivity(intent);
+                    saveUserAndStartMain(userDTO.getEmail());
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
@@ -222,13 +226,34 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void saveUserAndStartMain(final String email) {
+        Call<UserDTO> call = userService.getByEmail(email);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                if (response.isSuccessful()) {
+                    userInterface.saveUser(response.body());
+                    isLoading(false);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+            }
+        });
+    }
+
     private void showStatusIcon(EditText editText, int drawable) {
         editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable,0 );
     }
 
     private void loadCachedData() {
         if (getIntent().getExtras() != null) {
-            String cachedEmail = (String) getIntent().getExtras().get(getString(R.string.loginEmail));
+            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_KEY_EMAIL);
 
             if (cachedEmail != null) {
                 emailEditText.setText(cachedEmail);

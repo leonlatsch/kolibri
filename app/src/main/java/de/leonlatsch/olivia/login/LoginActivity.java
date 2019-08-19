@@ -1,10 +1,9 @@
 package de.leonlatsch.olivia.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +12,14 @@ import android.widget.TextView;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.chatlist.ChatListActivity;
+import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.JsonRespose;
 import de.leonlatsch.olivia.constants.Regex;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserAuthDTO;
+import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private View progressOverlay;
 
     private UserService userService;
+    private UserInterface userInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userService = RestServiceFactory.getUserService();
+        userInterface = UserInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
@@ -52,19 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         progressOverlay = findViewById(R.id.progressOverlay);
         errorText = findViewById(R.id.loginErrorTextView);
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register();
-            }
-        });
+        registerBtn.setOnClickListener(v -> register());
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        loginBtn.setOnClickListener(v -> login());
     }
 
     private void login() {
@@ -74,8 +68,8 @@ public class LoginActivity extends AppCompatActivity {
             displayError(getString(R.string.login_fail));
             return;
         }
-        displayError(getString(R.string.empty));
-        UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
+        displayError(Values.EMPTY);
+        final UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<StringDTO> call = userService.auth(userAuthDTO);
         call.enqueue(new Callback<StringDTO>() {
@@ -84,17 +78,37 @@ public class LoginActivity extends AppCompatActivity {
                 StringDTO dto = response.body();
 
                 if (JsonRespose.OK.equals(dto.getMessage())) {
-                    Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
-                    startActivity(intent);
+                    saveUserAndStartMain(userAuthDTO.getEmail());
                 } else {
                     displayError(getString(R.string.login_fail));
+                    isLoading(false);
                 }
-                isLoading(false);
             }
 
             @Override
             public void onFailure(Call<StringDTO> call, Throwable t) {
                 isLoading(false);
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+            }
+        });
+    }
+
+    private void saveUserAndStartMain(final String email) {
+        Call<UserDTO> call = userService.getByEmail(email);
+        call.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                if (response.isSuccessful()) {
+                    userInterface.saveUser(response.body());
+                    isLoading(false);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
@@ -136,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
 
         if (!email.isEmpty()) {
-            intent.putExtra(getString(R.string.loginEmail), email);
+            intent.putExtra(Values.INTENT_KEY_EMAIL, email);
         }
     }
 

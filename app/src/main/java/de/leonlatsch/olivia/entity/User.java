@@ -1,23 +1,35 @@
 package de.leonlatsch.olivia.entity;
 
-import java.sql.Blob;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-public class User {
+@Table(name = "user")
+public class User extends Model {
 
+    @Column(name = "uid", index = true)
     private int uid;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
-    private Blob profilePic;
+
+    @Column(name = "profile_pic_tn")
+    private String profilePicTn;
 
     public User() {}
 
-    public User(int uid, String username, String email, String password, Blob profilePic) {
+    public User(int uid, String username, String email, String password, String profilePicTn) {
         this.uid = uid;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.profilePic = profilePic;
+        this.profilePicTn = profilePicTn;
     }
 
     public int getUid() {
@@ -52,11 +64,11 @@ public class User {
         this.password = password;
     }
 
-    public Blob getProfilePic() {
-        return profilePic;
+    public String getProfilePicTn() {
+        return profilePicTn;
     }
 
-    public void setProfilePic(Blob profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicTn(String profilePic) {
+        this.profilePicTn = profilePic;
     }
 }
