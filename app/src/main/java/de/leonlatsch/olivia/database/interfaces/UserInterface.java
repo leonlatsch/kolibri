@@ -63,7 +63,7 @@ public class UserInterface extends BaseInterface<User> {
     }
 
     public void saveUserFromBackend(int uid) {
-        Call<UserDTO> call = userService.getbyUid(uid);
+        Call<UserDTO> call = userService.get(uid);
         call.enqueue(callback);
     }
 

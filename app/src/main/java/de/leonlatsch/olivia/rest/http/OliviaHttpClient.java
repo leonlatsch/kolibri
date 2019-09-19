@@ -47,30 +47,11 @@ public class OliviaHttpClient {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
             builder.hostnameVerifier((hostname, session) -> true);
-            builder.addInterceptor(new AuthInterceptor(Values.API_TOKEN, Values.API_KEY));
 
             OkHttpClient okHttpClient = builder.build();
             return okHttpClient;
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private static class AuthInterceptor implements Interceptor {
-
-        private String credentials;
-
-        private AuthInterceptor(String token, String key){
-            credentials = Credentials.basic(token, key);
-        }
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-            Request authRequest = request.newBuilder()
-                    .header("Authorization", credentials)
-                    .build();
-            return chain.proceed(authRequest);
         }
     }
 }

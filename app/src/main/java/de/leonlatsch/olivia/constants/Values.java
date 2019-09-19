@@ -11,10 +11,8 @@ public class Values {
     public static final String INTENT_KEY_PROFILE_PIC_USERNAME = "intent_profile_pic_username";
     public static final String PREF_FIRST_BOOT = "pref_first_boot";
 
-
     // API
-    public static final String API_TOKEN = "bfdc99b120cd49e0e1a18dc8267afa3e";
-    public static final String API_KEY = "6eb77586c6fbfd1280412db3bf0e103f";
+    public static final String API_BASE_URL = "https://olivia.leonlatsch.de/backend";
 
     private Values() {
         // Prevent instantiation

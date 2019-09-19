@@ -61,7 +61,7 @@ public class BootActivity extends AppCompatActivity {
         try {
             final User savedUser = userInterface.getUser();
             if (savedUser != null) {
-                Call<UserDTO> call = userService.getbyUid(savedUser.getUid());
+                Call<UserDTO> call = userService.get(savedUser.getUid());
                 call.enqueue(new Callback<UserDTO>() {
                     @Override
                     public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {

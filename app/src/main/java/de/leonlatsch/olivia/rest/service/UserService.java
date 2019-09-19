@@ -16,42 +16,33 @@ import retrofit2.http.Path;
 
 public interface UserService {
 
-    @GET("users")
-    Call<List<UserDTO>> getAll();
+    @GET("user/get")
+    Call<UserDTO> get();
 
-    @GET("users/getByUid/{uid}")
-    Call<UserDTO> getbyUid(@Path("uid") int uid);
-
-    @GET("users/getByEmail/{email}")
-    Call<UserDTO> getByEmail(@Path("email") String email);
-
-    @GET("users/getByUsername/{username}")
-    Call<UserDTO> getByUsername(@Path("username") String username);
-
-    @GET("users/search/top100/{username}")
+    @GET("user/search/top100/{username}")
     Call<List<UserDTO>> search(@Path("username") String username);
 
-    @GET("users/search/{username}")
+    @GET("user/search/{username}")
     Call<List<UserDTO>> searchAll(@Path("username") String username);
 
-    @POST("users/register")
-    Call<StringDTO> create(@Body UserDTO user);
-
-    @PUT("users/update")
+    @PUT("user/update")
     Call<StringDTO> update(@Body UserDTO user);
 
-    @DELETE("users/delete/{uid}")
-    Call<StringDTO> delete(@Path("uid") int uid);
+    @DELETE("user/delete")
+    Call<StringDTO> delete();
 
-    @GET("users/checkUsername/{username}")
+    @GET("user/check/username/{username}")
     Call<StringDTO> checkUsername(@Path("username") String username);
 
-    @GET("users/checkEmail/{email}")
+    @GET("user/check/email/{email}")
     Call<StringDTO> checkEmail(@Path("email") String email);
 
-    @POST("users/auth")
-    Call<StringDTO> auth(@Body UserAuthDTO authenticator);
+    @GET("user/get/profilePic")
+    Call<ProfilePicDTO> loadProfilePic();
 
-    @GET("users/getProfilePic/{uid}")
-    Call<ProfilePicDTO> loadProfilePic(@Path("uid") int uid);
+    @GET("user/public-key/get/{uid}")
+    Call<StringDTO> getPublicKey(@Path("uid") int uid);
+
+    @PUT("user/public-key/update")
+    Call<StringDTO> updatePublicKey(); // String publicKey ??
 }
