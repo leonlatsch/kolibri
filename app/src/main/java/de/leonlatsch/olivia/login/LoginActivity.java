@@ -14,11 +14,9 @@ import java.util.regex.Pattern;
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.main.MainActivity;
-import de.leonlatsch.olivia.constants.JsonRespose;
+import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
-import de.leonlatsch.olivia.dto.StringDTO;
-import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -77,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 StringDTO dto = response.body();
 
-                if (JsonRespose.OK.equals(dto.getMessage())) {
+                if (Responses.MSG_OK.equals(dto.getMessage())) {
                     saveUserAndStartMain(userAuthDTO.getEmail());
                 } else {
                     displayError(getString(R.string.login_fail));

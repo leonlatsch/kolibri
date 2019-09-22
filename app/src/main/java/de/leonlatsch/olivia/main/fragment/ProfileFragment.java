@@ -28,14 +28,12 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.constants.JsonRespose;
+import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.DatabaseMapper;
 import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
-import de.leonlatsch.olivia.dto.StringDTO;
-import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.main.MainActivity;
@@ -161,7 +159,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 @Override
                 public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                     if (response.isSuccessful()) {
-                        if (JsonRespose.OK.equals(response.body().getMessage())) {
+                        if (Responses.MSG_OK.equals(response.body().getMessage())) {
                             showStatusIcon(oldPasswordEditText, R.drawable.icons8_checked_48);
                             String password = newPasswordEditText.getText().toString();
                             String passwordConfirm = confirmPasswordEditText.getText().toString();
@@ -203,7 +201,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                         @Override
                         public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                             if (response.isSuccessful()) {
-                                if (JsonRespose.OK.equals(response.body().getMessage())) {
+                                if (Responses.MSG_OK.equals(response.body().getMessage())) {
                                     parent.logout();
                                 } else {
                                     parent.showDialog(getString(R.string.error), getString(R.string.error_common));
@@ -248,7 +246,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             @Override
             public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
                 if (response.isSuccessful()) {
-                    if (JsonRespose.OK.equals(response.body().getMessage())) {
+                    if (Responses.MSG_OK.equals(response.body().getMessage())) {
                         userInterface.saveUserFromBackend(user.getUid());
                         displayToast(R.string.account_saved);
                         displayStatusMessage(Values.EMPTY);

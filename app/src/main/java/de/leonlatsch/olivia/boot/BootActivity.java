@@ -90,18 +90,4 @@ public class BootActivity extends AppCompatActivity {
             return false;
         }
     }
-
-    // May be useful later
-    private boolean isFirstBoot() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREF_FIRST_BOOT, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (sharedPreferences.getBoolean(Values.PREF_FIRST_BOOT, true)) {
-            editor.putBoolean(Values.PREF_FIRST_BOOT, false);
-            editor.apply();
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

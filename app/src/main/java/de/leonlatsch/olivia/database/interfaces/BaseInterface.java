@@ -18,12 +18,12 @@ public abstract class BaseInterface<T extends Model> {
     /**
      * Cached model to be synced with database a every transaction
      */
-    T model = null;
+    private T model = null;
 
     /**
      * {@link List} of {@link EntityChangedListener}s that get notified when a model has changed
      */
-    List<EntityChangedListener> listeners = new ArrayList<>();
+    private List<EntityChangedListener> listeners = new ArrayList<>();
 
     /**
      *  Adds a {@link EntityChangedListener} that gets notified when the model hat changed
@@ -42,5 +42,13 @@ public abstract class BaseInterface<T extends Model> {
         for (EntityChangedListener listener : listeners) {
             listener.entityChanged(model);
         }
+    }
+
+    T getModel() {
+        return model;
+    }
+
+    void setModel(T model) {
+        this.model = model;
     }
 }

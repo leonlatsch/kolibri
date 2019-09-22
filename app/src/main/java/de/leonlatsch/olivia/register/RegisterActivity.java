@@ -13,13 +13,14 @@ import android.widget.EditText;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.main.MainActivity;
-import de.leonlatsch.olivia.constants.JsonRespose;
+import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
-import de.leonlatsch.olivia.dto.StringDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
@@ -38,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerBtn;
 
     private UserService userService;
+    private AuthService authService;
     private UserInterface userInterface;
 
     private boolean usernameValid;
@@ -57,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.registerNowBtn);
 
         userService = RestServiceFactory.getUserService();
+        authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
 
         registerBtn.setOnClickListener(v -> register());
@@ -136,13 +139,13 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Call<StringDTO> call = userService.checkEmail(email);
-        call.enqueue(new Callback<StringDTO>() {
+        Call<Container<String>> call = userService.checkEmail(email);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
                     String message = response.body().getMessage();
-                    if (JsonRespose.FREE.equals(message)) {
+                    if (Responses.MSG_FREE.equals(message)) {
                         showStatusIcon(emailEditText, R.drawable.icons8_checked_48);
                         emailValid = true;
                     } else {
@@ -153,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error));
             }
         });
@@ -167,13 +170,13 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Call<StringDTO> call = userService.checkUsername(username);
-        call.enqueue(new Callback<StringDTO>() {
+        Call<Container<String>> call = userService.checkUsername(username);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
                     String message = response.body().getMessage();
-                    if (JsonRespose.FREE.equals(message)) {
+                    if (Responses.MSG_FREE.equals(message)) {
                         showStatusIcon(usernameEditText, R.drawable.icons8_checked_48);
                         usernameValid = true;
                     } else {
@@ -184,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error));
             }
         });
@@ -206,33 +209,34 @@ public class RegisterActivity extends AppCompatActivity {
         userDTO.setUsername(usernameEditText.getText().toString());
         userDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
 
-        Call<StringDTO> call = userService.create(userDTO);
-        call.enqueue(new Callback<StringDTO>() {
+        Call<Container<String>> call = authService.register(userDTO);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 isLoading(false);
-                if (response.isSuccessful() && JsonRespose.OK.equals(response.body().getMessage())) {
-                    saveUserAndStartMain(userDTO.getEmail());
+                if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
+                    saveUserAndStartMain(response.body().getContent());
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 isLoading(false);
                 showDialog("Error", getString(R.string.error_no_internet));
             }
         });
     }
 
-    private void saveUserAndStartMain(final String email) {
-        Call<UserDTO> call = userService.getByEmail(email);
-        call.enqueue(new Callback<UserDTO>() {
+    private void saveUserAndStartMain(final String accessToken) {
+        Call<Container<UserDTO>> call = userService.get(accessToken);
+        call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+            public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.saveUser(response.body());
+                    userInterface.saveUser(response.body().getContent());
+                    // TODO: SAVE ACCESS-TOKEN
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -241,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserDTO> call, Throwable t) {
+            public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });

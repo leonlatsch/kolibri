@@ -27,7 +27,7 @@ public class UserInterface extends BaseInterface<User> {
 
     private UserInterface() {
         // Prevent non private instantiation
-        model = getUser();
+        setModel(getUser());
 
         callback = new Callback<UserDTO>() {
             @Override
@@ -46,9 +46,9 @@ public class UserInterface extends BaseInterface<User> {
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
-                model = list.get(0);
+                setModel(list.get(0));
             } else {
-                model = null;
+                setModel(null);
             }
         } else {
             throw new RuntimeException("more than one user in database");
@@ -56,10 +56,10 @@ public class UserInterface extends BaseInterface<User> {
     }
 
     public User getUser() {
-        if (model == null) {
+        if (getModel() == null) {
             loadUser();
         }
-        return model;
+        return getModel();
     }
 
     public void saveUserFromBackend(int uid) {
@@ -88,8 +88,8 @@ public class UserInterface extends BaseInterface<User> {
 
     public void saveUser(User user) {
         if (user != null) {
-            if (model != null) {
-                deleteUser(model);
+            if (getModel() != null) {
+                deleteUser(getModel());
             }
             user.save();
             notifyListeners(user);
@@ -99,7 +99,7 @@ public class UserInterface extends BaseInterface<User> {
 
     public void deleteUser(User user) {
         user.delete();
-        model = null;
+        setModel(null);
         notifyListeners(null);
     }
 

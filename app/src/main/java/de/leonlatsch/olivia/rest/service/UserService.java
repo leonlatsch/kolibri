@@ -2,47 +2,46 @@ package de.leonlatsch.olivia.rest.service;
 
 import java.util.List;
 
-import de.leonlatsch.olivia.dto.ProfilePicDTO;
-import de.leonlatsch.olivia.dto.StringDTO;
-import de.leonlatsch.olivia.dto.UserAuthDTO;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.rest.http.Headers;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserService {
 
     @GET("user/get")
-    Call<UserDTO> get();
+    Call<Container<UserDTO>> get(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
     @GET("user/search/top100/{username}")
-    Call<List<UserDTO>> search(@Path("username") String username);
+    Call<Container<List<UserDTO>>> search(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
     @GET("user/search/{username}")
-    Call<List<UserDTO>> searchAll(@Path("username") String username);
+    Call<Container<List<UserDTO>>> searchAll(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
     @PUT("user/update")
-    Call<StringDTO> update(@Body UserDTO user);
+    Call<Container<String>> update(@Header(Headers.ACCESS_TOKEN) String accessToken, @Body UserDTO user);
 
     @DELETE("user/delete")
-    Call<StringDTO> delete();
+    Call<Container<String>> delete(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
     @GET("user/check/username/{username}")
-    Call<StringDTO> checkUsername(@Path("username") String username);
+    Call<Container<String>> checkUsername(@Path("username") String username);
 
     @GET("user/check/email/{email}")
-    Call<StringDTO> checkEmail(@Path("email") String email);
+    Call<Container<String>> checkEmail(@Path("email") String email);
 
     @GET("user/get/profilePic")
-    Call<ProfilePicDTO> loadProfilePic();
+    Call<Container<String>> loadProfilePic(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
     @GET("user/public-key/get/{uid}")
-    Call<StringDTO> getPublicKey(@Path("uid") int uid);
+    Call<Container<String>> getPublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") int uid);
 
     @PUT("user/public-key/update")
-    Call<StringDTO> updatePublicKey(); // String publicKey ??
+    Call<Container<String>> updatePublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Header(Headers.PUBLIC_KEY) String publicKey); // String publicKey ??
 }

@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.constants.Values;
-import de.leonlatsch.olivia.dto.ProfilePicDTO;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.util.AndroidUtils;
