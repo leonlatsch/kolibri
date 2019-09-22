@@ -1,8 +1,6 @@
 package de.leonlatsch.olivia.boot;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +9,6 @@ import com.activeandroid.ActiveAndroid;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.constants.Responses;
-import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.interfaces.AccessTokenInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.Container;

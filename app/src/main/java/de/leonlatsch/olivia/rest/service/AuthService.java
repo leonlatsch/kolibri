@@ -2,8 +2,10 @@ package de.leonlatsch.olivia.rest.service;
 
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.rest.http.Headers;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface AuthService {
@@ -12,5 +14,5 @@ public interface AuthService {
     Call<Container<String>> login(@Body UserDTO dto);
 
     @POST("auth/register")
-    Call<Container<String>> register(@Body UserDTO dto);
+    Call<Container<String>> register(@Body UserDTO dto, @Header(Headers.PUBLIC_KEY) String publicKey);
 }

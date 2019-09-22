@@ -2,7 +2,6 @@ package de.leonlatsch.olivia.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 
@@ -12,7 +11,7 @@ public class ImageUtil {
         if (base64 == null) {
             return null;
         }
-        byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
+        byte[] bytes = Base64.toBytes(base64);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
@@ -23,6 +22,6 @@ public class ImageUtil {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
         byte[] bytes = bos.toByteArray();
-        return Base64.encodeToString(bytes, 0);
+        return Base64.toBase64(bytes);
     }
 }

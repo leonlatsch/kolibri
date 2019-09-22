@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
@@ -25,7 +27,9 @@ import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
+import de.leonlatsch.olivia.security.KeyGenerator;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -212,7 +216,9 @@ public class RegisterActivity extends AppCompatActivity {
         userDTO.setUsername(usernameEditText.getText().toString());
         userDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
 
-        Call<Container<String>> call = authService.register(userDTO);
+        KeyPair keyPair = KeyGenerator.genKeyPair();
+
+        Call<Container<String>> call = authService.register(userDTO, Base64.toBase64(keyPair.getPublic().getEncoded())); // TODO: SAVE PRIVATE KEY
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
