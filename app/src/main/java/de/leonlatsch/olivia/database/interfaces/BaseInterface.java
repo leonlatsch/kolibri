@@ -44,6 +44,22 @@ public abstract class BaseInterface<T extends Model> {
         }
     }
 
+    public void save(T model) {
+        if (model != null) {
+            if (getModel() != null) {
+                delete(getModel());
+            }
+            model.save();
+            notifyListeners(model);
+        }
+    }
+
+    public void delete(T model) {
+        model.delete();
+        setModel(null);
+        notifyListeners(null);
+    }
+
     T getModel() {
         return model;
     }

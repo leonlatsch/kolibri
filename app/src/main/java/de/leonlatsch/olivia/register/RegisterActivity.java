@@ -13,6 +13,7 @@ import android.widget.EditText;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.interfaces.AccessTokenInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Responses;
@@ -41,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private UserService userService;
     private AuthService authService;
     private UserInterface userInterface;
+    private AccessTokenInterface accessTokenInterface;
 
     private boolean usernameValid;
     private boolean emailValid;
@@ -61,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
+        accessTokenInterface = AccessTokenInterface.getInstance();
 
         registerBtn.setOnClickListener(v -> register());
 
@@ -235,8 +238,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.saveUser(response.body().getContent());
-                    // TODO: SAVE ACCESS-TOKEN
+                    userInterface.save(response.body().getContent());
+                    accessTokenInterface.save(accessToken);
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

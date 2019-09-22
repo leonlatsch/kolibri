@@ -1,5 +1,6 @@
 package de.leonlatsch.olivia.boot;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,9 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.activeandroid.ActiveAndroid;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Values;
+import de.leonlatsch.olivia.database.interfaces.AccessTokenInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.entity.AccessToken;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.MainActivity;
@@ -25,6 +30,7 @@ public class BootActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
+    private AccessTokenInterface accessTokenInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class BootActivity extends AppCompatActivity {
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
+        accessTokenInterface = AccessTokenInterface.getInstance();
 
         userInterface.loadUser();
 
@@ -60,27 +67,27 @@ public class BootActivity extends AppCompatActivity {
     private boolean isValidUserSaved() {
         try {
             final User savedUser = userInterface.getUser();
-            if (savedUser != null) {
-                Call<UserDTO> call = userService.get(savedUser.getUid());
-                call.enqueue(new Callback<UserDTO>() {
+            final AccessToken accessToken = accessTokenInterface.getAccessToken();
+            if (savedUser != null && accessToken != null) {
+                Call<Container<UserDTO>> call = userService.get(accessToken.getToken());
+                call.enqueue(new Callback<Container<UserDTO>>() {
                     @Override
-                    public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                        if (response.code() == 204) {
+                    public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
+                        if (response.code() == Responses.CODE_OK) {
+                            // Update saved user
+                            userInterface.delete(savedUser);
+                            userInterface.save(response.body().getContent());
+                        } else {
                             // if the saved user is not in the backend finish this boot and the chatlist and start another boot
-                            userInterface.deleteUser(savedUser);
+                            userInterface.delete(savedUser);
                             Intent intent = new Intent(getApplicationContext(), BootActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
-                        } else if (response.code() == 200) {
-                            // Update saved user
-                            userInterface.deleteUser(savedUser);
-                            userInterface.saveUser(response.body());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<UserDTO> call, Throwable t) {}
+                    public void onFailure(Call<Container<UserDTO>> call, Throwable t) {}
                 });
                 return true;
             } else {
