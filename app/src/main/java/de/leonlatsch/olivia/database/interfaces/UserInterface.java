@@ -47,6 +47,14 @@ public class UserInterface extends BaseInterface<User> {
         return getModel();
     }
 
+    public String getAccessToken() {
+        if (getModel() == null) {
+            loadUser();
+        }
+
+        return getModel().getAccessToken();
+    }
+
     public void save(UserDTO userDto, String accessToken, String privateKey) {
         User user = DatabaseMapper.mapToEntity(userDto);
         user.setAccessToken(accessToken);

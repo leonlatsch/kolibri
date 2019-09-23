@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.security.KeyPair;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
@@ -24,7 +25,9 @@ import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
+import de.leonlatsch.olivia.security.KeyGenerator;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,7 +106,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.save(response.body().getContent(), accessToken, null); //TODO: gen new keypair and update public key
+                    KeyPair newKeyPair = KeyGenerator.genKeyPair();
+                    userInterface.save(response.body().getContent(), accessToken, Base64.toBase64(newKeyPair.getPrivate().getEncoded()));
+                    updatePublicKey(Base64.toBase64(newKeyPair.getPublic().getEncoded()));
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -113,6 +118,25 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+            }
+        });
+    }
+
+    private void updatePublicKey(final String publicKey) {
+        Call<Container<String>> call = userService.updatePublicKey(userInterface.getAccessToken(), publicKey);
+        call.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    if (!Responses.MSG_OK.equals(response.body().getMessage())) {
+                        showDialog(getString(R.string.error), getString(R.string.error));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
