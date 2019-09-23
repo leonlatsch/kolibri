@@ -11,11 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.security.KeyPair;
-import java.security.PublicKey;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.database.interfaces.AccessTokenInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Responses;
@@ -46,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
     private UserService userService;
     private AuthService authService;
     private UserInterface userInterface;
-    private AccessTokenInterface accessTokenInterface;
 
     private boolean usernameValid;
     private boolean emailValid;
@@ -67,7 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
-        accessTokenInterface = AccessTokenInterface.getInstance();
 
         registerBtn.setOnClickListener(v -> register());
 
@@ -224,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 isLoading(false);
                 if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
-                    saveUserAndStartMain(response.body().getContent());
+                    saveUserAndStartMain(response.body().getContent(), Base64.toBase64(keyPair.getPrivate().getEncoded()));
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
@@ -238,14 +234,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserAndStartMain(final String accessToken) {
+    private void saveUserAndStartMain(final String accessToken, final String privateKey) {
         Call<Container<UserDTO>> call = userService.get(accessToken);
         call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.save(response.body().getContent());
-                    accessTokenInterface.save(accessToken);
+                    userInterface.save(response.body().getContent(), accessToken, privateKey);
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

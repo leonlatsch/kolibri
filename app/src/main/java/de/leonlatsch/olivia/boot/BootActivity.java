@@ -9,11 +9,9 @@ import com.activeandroid.ActiveAndroid;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.constants.Responses;
-import de.leonlatsch.olivia.database.interfaces.AccessTokenInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
-import de.leonlatsch.olivia.entity.AccessToken;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.MainActivity;
@@ -27,7 +25,6 @@ public class BootActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
-    private AccessTokenInterface accessTokenInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +36,6 @@ public class BootActivity extends AppCompatActivity {
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
-        accessTokenInterface = AccessTokenInterface.getInstance();
 
         userInterface.loadUser();
 
@@ -64,16 +60,14 @@ public class BootActivity extends AppCompatActivity {
     private boolean isValidUserSaved() {
         try {
             final User savedUser = userInterface.getUser();
-            final AccessToken accessToken = accessTokenInterface.getAccessToken();
-            if (savedUser != null && accessToken != null) {
-                Call<Container<UserDTO>> call = userService.get(accessToken.getToken());
+            if (savedUser != null) {
+                Call<Container<UserDTO>> call = userService.get(savedUser.getAccessToken());
                 call.enqueue(new Callback<Container<UserDTO>>() {
                     @Override
                     public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                         if (response.code() == Responses.CODE_OK) {
                             // Update saved user
-                            userInterface.delete(savedUser);
-                            userInterface.save(response.body().getContent());
+                            userInterface.save(response.body().getContent(), savedUser.getAccessToken(), savedUser.getPrivateKey());
                         } else {
                             // if the saved user is not in the backend finish this boot and the chatlist and start another boot
                             userInterface.delete(savedUser);

@@ -22,25 +22,9 @@ public class UserInterface extends BaseInterface<User> {
 
     private static UserInterface userInterface; // Singleton
 
-    private UserService userService = RestServiceFactory.getUserService();
-    private Callback<Container<UserDTO>> callback;
-
 
     private UserInterface() {
-        // Prevent non private instantiation
         setModel(getUser());
-
-        callback = new Callback<Container<UserDTO>>() {
-            @Override
-            public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
-                if (response.isSuccessful()) {
-                    save(response.body().getContent());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Container<UserDTO>> call, Throwable t) {}
-        };
     }
 
     public void loadUser() {
@@ -63,13 +47,10 @@ public class UserInterface extends BaseInterface<User> {
         return getModel();
     }
 
-    public void saveUserFromBackend(String accessToken) {
-        Call<Container<UserDTO>> call = userService.get(accessToken);
-        call.enqueue(callback);
-    }
-
-    public void save(UserDTO userDto) {
+    public void save(UserDTO userDto, String accessToken, String privateKey) {
         User user = DatabaseMapper.mapToEntity(userDto);
+        user.setAccessToken(accessToken);
+        user.setPrivateKey(privateKey);
         save(user);
     }
 

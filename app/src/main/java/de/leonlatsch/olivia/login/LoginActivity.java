@@ -13,12 +13,14 @@ import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
+import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private View progressOverlay;
 
     private UserService userService;
+    private AuthService authService;
     private UserInterface userInterface;
 
     @Override
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userService = RestServiceFactory.getUserService();
+        authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);
@@ -67,16 +71,18 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         displayError(Values.EMPTY);
-        final UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
+        final UserDTO userAuthDTO = new UserDTO();
+        userAuthDTO.setEmail(emailEditText.getText().toString());
+        userAuthDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
 
-        Call<StringDTO> call = userService.auth(userAuthDTO);
-        call.enqueue(new Callback<StringDTO>() {
+        Call<Container<String>> call = authService.login(userAuthDTO);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                StringDTO dto = response.body();
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                Container<String> res = response.body();
 
-                if (Responses.MSG_OK.equals(dto.getMessage())) {
-                    saveUserAndStartMain(userAuthDTO.getEmail());
+                if (Responses.MSG_AUTHORIZED.equals(res.getMessage())) {
+                    saveUserAndStartMain(res.getContent());
                 } else {
                     displayError(getString(R.string.login_fail));
                     isLoading(false);
@@ -84,20 +90,20 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 isLoading(false);
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
     }
 
-    private void saveUserAndStartMain(final String email) {
-        Call<UserDTO> call = userService.getByEmail(email);
-        call.enqueue(new Callback<UserDTO>() {
+    private void saveUserAndStartMain(final String accessToken) {
+        Call<Container<UserDTO>> call = userService.get(accessToken);
+        call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+            public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.save(response.body());
+                    userInterface.save(response.body().getContent(), accessToken, null); //TODO: gen new keypair and update public key
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -106,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserDTO> call, Throwable t) {
+            public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
