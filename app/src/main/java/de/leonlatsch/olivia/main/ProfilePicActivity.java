@@ -41,7 +41,7 @@ public class ProfilePicActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         userInterface = UserInterface.getInstance();
-        userService = RestServiceFactory.getUserService();
+        userService = RestServiceFactory.createService(UserService.class);
 
         TextView title = toolbar.findViewById(R.id.profile_pic_toolbar_text);
         imageView = findViewById(R.id.profile_pic_image_view);

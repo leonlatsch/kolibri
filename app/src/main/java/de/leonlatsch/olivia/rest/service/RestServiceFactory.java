@@ -8,28 +8,23 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class RestServiceFactory {
 
 
-    private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(Values.API_BASE_URL)
-            .client(OliviaHttpClient.getOliviaHttpClient())
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
+    private static Retrofit retrofit;
 
     private static UserService userService;
     private static AuthService authService;
 
-    public static UserService getUserService() {
-        if (userService == null) {
-            userService = retrofit.create(UserService.class);
-        }
-
-        return userService;
+    private static Retrofit provideRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(Values.API_BASE_URL)
+                .client(OliviaHttpClient.getOliviaHttpClient())
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
     }
 
-    public static AuthService getAuthService() {
-        if (authService == null) {
-            authService = retrofit.create(AuthService.class);
+    public static <S> S createService(Class<S> serviceClass) {
+        if (retrofit == null) {
+            retrofit = provideRetrofit();
         }
-
-        return authService;
+        return retrofit.create(serviceClass);
     }
 }

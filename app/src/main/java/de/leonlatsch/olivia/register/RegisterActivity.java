@@ -61,8 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
         passwordConfirmEditText = findViewById(R.id.registerPasswordConfirmEditText);
         registerBtn = findViewById(R.id.registerNowBtn);
 
-        userService = RestServiceFactory.getUserService();
-        authService = RestServiceFactory.getAuthService();
+        userService = RestServiceFactory.createService(UserService.class);
+        authService = RestServiceFactory.createService(AuthService.class);
         userInterface = UserInterface.getInstance();
 
         registerBtn.setOnClickListener(v -> register());

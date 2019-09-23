@@ -34,10 +34,12 @@ import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.DatabaseMapper;
 import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.main.ProfilePicActivity;
+import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
@@ -51,10 +53,12 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     private boolean isReloadMode = false;
     private boolean profilePicChanged = false;
+    private boolean passwordChanged = false;
     private String passwordCache;
 
     private UserInterface userInterface;
     private UserService userService;
+    private AuthService authService;
 
     private MainActivity parent;
     private View view;
@@ -109,7 +113,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         userInterface = UserInterface.getInstance();
         userInterface.addEntityChangedListener(this);
 
-        userService = RestServiceFactory.getUserService();
+        userService = RestServiceFactory.createService(UserService.class);
+        authService = RestServiceFactory.createService(AuthService.class);
 
         mapUserToView(userInterface.getUser());
         displayStatusMessage(Values.EMPTY);
@@ -154,12 +159,15 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             final EditText newPasswordEditText = view.findViewById(R.id.password_new_password_EditText);
             final EditText confirmPasswordEditText = view.findViewById(R.id.password_confirm_password_EditText);
 
-            Call<StringDTO> call = userService.auth(new UserAuthDTO(userInterface.getUser().getEmail(), Hash.createHexHash(oldPasswordEditText.getText().toString())));
-            call.enqueue(new Callback<StringDTO>() {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setEmail(userInterface.getUser().getEmail());
+            userDTO.setPassword(Hash.createHexHash(oldPasswordEditText.getText().toString()));
+            Call<Container<String>> call = authService.login(userDTO);
+            call.enqueue(new Callback<Container<String>>() {
                 @Override
-                public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+                public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                     if (response.isSuccessful()) {
-                        if (Responses.MSG_OK.equals(response.body().getMessage())) {
+                        if (Responses.MSG_AUTHORIZED.equals(response.body().getMessage())) {
                             showStatusIcon(oldPasswordEditText, R.drawable.icons8_checked_48);
                             String password = newPasswordEditText.getText().toString();
                             String passwordConfirm = confirmPasswordEditText.getText().toString();
@@ -170,6 +178,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                                     showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
                                     passwordCache = password;
                                     dataChanged();
+                                    passwordChanged = true;
                                     dialog.dismiss();
                                 } else {
                                     showStatusIcon(confirmPasswordEditText, R.drawable.icons8_cancel_48);
@@ -184,7 +193,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 }
 
                 @Override
-                public void onFailure(Call<StringDTO> call, Throwable t) {
+                public void onFailure(Call<Container<String>> call, Throwable t) {
                     parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
                 }
             });
@@ -196,10 +205,10 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     isLoading(true);
-                    Call<StringDTO> call = userService.delete(userInterface.getUser().getUid());
-                    call.enqueue(new Callback<StringDTO>() {
+                    Call<Container<String>> call = userService.delete(userInterface.getAccessToken());
+                    call.enqueue(new Callback<Container<String>>() {
                         @Override
-                        public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+                        public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                             if (response.isSuccessful()) {
                                 if (Responses.MSG_OK.equals(response.body().getMessage())) {
                                     parent.logout();
@@ -211,7 +220,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                         }
 
                         @Override
-                        public void onFailure(Call<StringDTO> call, Throwable t) {
+                        public void onFailure(Call<Container<String>> call, Throwable t) {
                             parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
                             isLoading(false);
                         }
@@ -241,13 +250,13 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         user.setPassword(null);
         passwordCache = null;
 
-        Call<StringDTO> call = userService.update(dto);
-        call.enqueue(new Callback<StringDTO>() {
+        Call<Container<String>> call = userService.update(userInterface.getAccessToken(), dto);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
                     if (Responses.MSG_OK.equals(response.body().getMessage())) {
-                        userInterface.saveUserFromBackend(user.getUid());
+                        saveNewUserAndAccessToken(response.body().getContent());
                         displayToast(R.string.account_saved);
                         displayStatusMessage(Values.EMPTY);
                     }
@@ -258,9 +267,29 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
                 isLoading(false);
+            }
+        });
+    }
+
+    private void saveNewUserAndAccessToken(final String newAccessToken) {
+        Call<Container<UserDTO>> call = userService.get(newAccessToken);
+        call.enqueue(new Callback<Container<UserDTO>>() {
+            @Override
+            public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
+                if (response.isSuccessful()) {
+                    String accessToken = userInterface.getAccessToken();
+                    String privateKey = userInterface.getUser().getPrivateKey();
+
+                    userInterface.save(response.body().getContent(), accessToken, privateKey);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
+                parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
     }
@@ -290,7 +319,11 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         User savedUser = userInterface.getUser();
         savedUser.setUsername(usernameEditText.getText().toString());
         savedUser.setEmail(emailEditText.getText().toString());
-        savedUser.setPassword(Hash.createHexHash(passwordCache));
+        if (passwordChanged) {
+            savedUser.setPassword(Hash.createHexHash(passwordCache));
+        } else {
+            savedUser.setPassword(null);
+        }
 
         return savedUser;
     }
