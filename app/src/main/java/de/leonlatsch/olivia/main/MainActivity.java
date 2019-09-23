@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void logout() {
         User user = userInterface.getUser();
         if (user != null) {
-            userInterface.deleteUser(user);
+            userInterface.delete(user);
         }
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
