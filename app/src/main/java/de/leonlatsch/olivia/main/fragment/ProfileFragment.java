@@ -309,7 +309,11 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     private void mapUserToView(User user) {
         isReloadMode = true;
-        profilePicImageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
+        if (user.getProfilePicTn() != null) {
+            profilePicImageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
+        } else {
+            profilePicImageView.setImageDrawable(ImageUtil.getDefaultProfilePic(parent));
+        }
         usernameEditText.setText(user.getUsername());
         emailEditText.setText(user.getEmail());
         isReloadMode = false;

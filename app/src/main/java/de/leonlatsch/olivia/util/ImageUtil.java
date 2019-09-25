@@ -1,9 +1,13 @@
 package de.leonlatsch.olivia.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 
 import java.io.ByteArrayOutputStream;
+
+import de.leonlatsch.olivia.R;
 
 public class ImageUtil {
 
@@ -23,5 +27,9 @@ public class ImageUtil {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
         byte[] bytes = bos.toByteArray();
         return Base64.toBase64(bytes);
+    }
+
+    public static Drawable getDefaultProfilePic(Context context) {
+        return context.getResources().getDrawable(R.drawable.default_profile_pic_tn);
     }
 }
