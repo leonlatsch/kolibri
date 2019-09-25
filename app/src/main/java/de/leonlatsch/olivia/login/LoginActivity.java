@@ -82,10 +82,8 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
-                Container<String> res = response.body();
-
-                if (Responses.MSG_AUTHORIZED.equals(res.getMessage())) {
-                    saveUserAndStartMain(res.getContent());
+                if (Responses.CODE_UNAUTHORIZED != response.code()) {
+                    saveUserAndStartMain(response.body().getContent());
                 } else {
                     displayError(getString(R.string.login_fail));
                     isLoading(false);

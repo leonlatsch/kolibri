@@ -50,6 +50,7 @@ public abstract class BaseInterface<T extends Model> {
                 delete(getModel());
             }
             model.save();
+            setModel(model);
             notifyListeners(model);
         }
     }
