@@ -55,7 +55,7 @@ public class ProfilePicActivity extends AppCompatActivity {
 
     private void loadProfilePic(int uid) {
         isLoading(true);
-        Call<Container<String>> call = userService.loadProfilePic(userInterface.getAccessToken());
+        Call<Container<String>> call = userService.loadProfilePic(userInterface.getAccessToken(), uid);
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {

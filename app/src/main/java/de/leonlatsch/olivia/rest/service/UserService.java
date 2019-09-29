@@ -36,12 +36,12 @@ public interface UserService {
     @GET("user/check/email/{email}")
     Call<Container<String>> checkEmail(@Path("email") String email);
 
-    @GET("user/get/profilePic")
-    Call<Container<String>> loadProfilePic(@Header(Headers.ACCESS_TOKEN) String accessToken);
+    @GET("user/get/profile-pic/{uid}")
+    Call<Container<String>> loadProfilePic(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") int uid);
 
     @GET("user/public-key/get/{uid}")
     Call<Container<String>> getPublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") int uid);
 
     @PUT("user/public-key/update")
-    Call<Container<String>> updatePublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Header(Headers.PUBLIC_KEY) String publicKey); // String publicKey ??
+    Call<Container<String>> updatePublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Header(Headers.PUBLIC_KEY) String publicKey);
 }
