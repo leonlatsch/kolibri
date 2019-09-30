@@ -50,8 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        userService = RestServiceFactory.createService(UserService.class);
-        authService = RestServiceFactory.createService(AuthService.class);
+        userService = RestServiceFactory.getUserService();
+        authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);

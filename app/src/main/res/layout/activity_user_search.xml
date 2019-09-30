@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".main.UserSearchActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -20,7 +21,6 @@
             style="@style/LightEditText"
             android:layout_width="290dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="3dp"
             android:hint="@string/user_search_hint"
             android:inputType="text" />
@@ -34,6 +34,11 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <include layout="@layout/progress_overlay"/>
+    <ListView
+        android:id="@+id/user_search_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <include layout="@layout/progress_overlay" />
 
 </LinearLayout>
