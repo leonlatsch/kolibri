@@ -13,18 +13,29 @@ public class RestServiceFactory {
     private static UserService userService;
     private static AuthService authService;
 
-    private static Retrofit provideRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl(Values.API_BASE_URL)
-                .client(OliviaHttpClient.getOliviaHttpClient())
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
+    private static void provideRetrofit() {
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(Values.API_BASE_URL)
+                    .client(OliviaHttpClient.getOliviaHttpClient())
+                    .addConverterFactory(JacksonConverterFactory.create())
+                    .build();
+        }
     }
 
-    public static <S> S createService(Class<S> serviceClass) {
-        if (retrofit == null) {
-            retrofit = provideRetrofit();
+    public static UserService getUserService() {
+        provideRetrofit();
+        if (userService == null) {
+            userService = retrofit.create(UserService.class);
         }
-        return retrofit.create(serviceClass);
+        return userService;
+    }
+
+    public static AuthService getAuthService() {
+        provideRetrofit();
+        if (authService == null) {
+            authService = retrofit.create(AuthService.class);
+        }
+        return authService;
     }
 }

@@ -113,8 +113,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         userInterface = UserInterface.getInstance();
         userInterface.addEntityChangedListener(this);
 
-        userService = RestServiceFactory.createService(UserService.class);
-        authService = RestServiceFactory.createService(AuthService.class);
+        userService = RestServiceFactory.getUserService();
+        authService = RestServiceFactory.getAuthService();
 
         mapUserToView(userInterface.getUser());
         displayStatusMessage(Values.EMPTY);

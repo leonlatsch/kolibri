@@ -20,7 +20,6 @@
             style="@style/LightEditText"
             android:layout_width="290dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="3dp"
             android:hint="@string/user_search_hint"
             android:inputType="text" />
@@ -33,6 +32,10 @@
             android:tint="@color/colorAccent" />
 
     </androidx.appcompat.widget.Toolbar>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <include layout="@layout/progress_overlay"/>
 
