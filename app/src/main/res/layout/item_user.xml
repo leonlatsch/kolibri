@@ -20,20 +20,21 @@
         android:id="@+id/item_user_search_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/item_user_search_username"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/item_user_search_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_search_chat_hint"
-            android:textSize="10sp"/>
+            android:textSize="12sp"/>
 
     </LinearLayout>
 </LinearLayout>

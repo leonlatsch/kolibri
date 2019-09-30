@@ -5,18 +5,23 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
+import de.leonlatsch.olivia.util.AndroidUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,6 +30,10 @@ public class UserSearchActivity extends AppCompatActivity {
 
     private ImageView searchBtn;
     private EditText searchBar;
+    private ListView listView;
+    private UserAdapter userAdapter;
+
+    private View progressOverlay;
 
     private UserService userService;
     private UserInterface userInterface;
@@ -44,29 +53,45 @@ public class UserSearchActivity extends AppCompatActivity {
 
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
+        listView = findViewById(R.id.user_search_list_view);
+        progressOverlay = findViewById(R.id.progressOverlay);
+
+        userAdapter = new UserAdapter(this, new ArrayList<>());
 
         searchBtn.setOnClickListener(v -> search());
+        listView.setAdapter(userAdapter);
     }
 
     private void search() {
-        Call<Container<List<UserDTO>>> call = userService.search(userInterface.getAccessToken(), searchBar.getText().toString());
-        call.enqueue(new Callback<Container<List<UserDTO>>>() {
-            @Override
-            public void onResponse(Call<Container<List<UserDTO>>> call, Response<Container<List<UserDTO>>> response) {
-                if (response.isSuccessful()) {
-                    Container<List<UserDTO>> container = response.body();
-                    System.out.println(container.getCode());
-                    System.out.println(container.getMessage());
-                    for (UserDTO dto : container.getContent()) {
-                        System.out.println(dto.getUid());
-                        System.out.println(dto.getUsername());
+        if (searchBar.getText().toString().length() >= 2) {
+            isLoading(true);
+            Call<Container<List<UserDTO>>> call = userService.search(userInterface.getAccessToken(), searchBar.getText().toString());
+            call.enqueue(new Callback<Container<List<UserDTO>>>() {
+                @Override
+                public void onResponse(Call<Container<List<UserDTO>>> call, Response<Container<List<UserDTO>>> response) {
+                    if (response.isSuccessful()) {
+                        Container<List<UserDTO>> container = response.body();
+                        if (container.getContent() != null && !container.getContent().isEmpty()) {
+                            userAdapter.addAll(container.getContent());
+                        }
                     }
+                    isLoading(false);
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Container<List<UserDTO>>> call, Throwable t) {}
-        });
+                @Override
+                public void onFailure(Call<Container<List<UserDTO>>> call, Throwable t) {
+                    isLoading(false);
+                }
+            });
+        }
+    }
+
+    private void isLoading(boolean loading) {
+        if (loading) {
+            AndroidUtils.animateView(progressOverlay, View.VISIBLE, 0.4f);
+        } else {
+            AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f);
+        }
     }
 
     @Override
