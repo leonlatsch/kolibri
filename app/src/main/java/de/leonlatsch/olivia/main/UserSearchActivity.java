@@ -72,7 +72,12 @@ public class UserSearchActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         Container<List<UserDTO>> container = response.body();
                         if (container.getContent() != null && !container.getContent().isEmpty()) {
-                            userAdapter.addAll(container.getContent());
+                            userAdapter.clear();
+                            for (UserDTO user : container.getContent()) {
+                                if (user.getUid() != userInterface.getUser().getUid()) {
+                                    userAdapter.add(user);
+                                }
+                            }
                         }
                     }
                     isLoading(false);
