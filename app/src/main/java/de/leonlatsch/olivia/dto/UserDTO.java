@@ -1,6 +1,6 @@
 package de.leonlatsch.olivia.dto;
 
-public class UserDTO extends BaseDTO {
+public class UserDTO {
 
     private int uid;
     private String username;

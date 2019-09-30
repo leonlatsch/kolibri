@@ -22,14 +22,22 @@ public class User extends Model {
     @Column(name = "profile_pic_tn")
     private String profilePicTn;
 
+    @Column(name = "token")
+    private String accessToken;
+
+    @Column(name = "private_key")
+    private String privateKey;
+
     public User() {}
 
-    public User(int uid, String username, String email, String password, String profilePicTn) {
+    public User(int uid, String username, String email, String password, String profilePicTn, String accessToken, String privateKey) {
         this.uid = uid;
         this.username = username;
         this.email = email;
         this.password = password;
         this.profilePicTn = profilePicTn;
+        this.accessToken = accessToken;
+        this.privateKey = privateKey;
     }
 
     public int getUid() {
@@ -68,7 +76,23 @@ public class User extends Model {
         return profilePicTn;
     }
 
-    public void setProfilePicTn(String profilePic) {
-        this.profilePicTn = profilePic;
+    public void setProfilePicTn(String profilePicTn) {
+        this.profilePicTn = profilePicTn;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
     }
 }

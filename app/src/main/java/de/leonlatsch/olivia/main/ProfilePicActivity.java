@@ -13,7 +13,8 @@ import android.widget.TextView;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.constants.Values;
-import de.leonlatsch.olivia.dto.ProfilePicDTO;
+import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.util.AndroidUtils;
@@ -23,6 +24,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProfilePicActivity extends AppCompatActivity {
+
+    private UserInterface userInterface;
 
     private UserService userService;
     private ImageView imageView;
@@ -37,7 +40,8 @@ public class ProfilePicActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        userService = RestServiceFactory.getUserService();
+        userInterface = UserInterface.getInstance();
+        userService = RestServiceFactory.createService(UserService.class);
 
         TextView title = toolbar.findViewById(R.id.profile_pic_toolbar_text);
         imageView = findViewById(R.id.profile_pic_image_view);
@@ -51,12 +55,12 @@ public class ProfilePicActivity extends AppCompatActivity {
 
     private void loadProfilePic(int uid) {
         isLoading(true);
-        Call<ProfilePicDTO> call = userService.loadProfilePic(uid);
-        call.enqueue(new Callback<ProfilePicDTO>() {
+        Call<Container<String>> call = userService.loadProfilePic(userInterface.getAccessToken(), uid);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<ProfilePicDTO> call, Response<ProfilePicDTO> response) {
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    String profilePic = response.body().getProfilePic();
+                    String profilePic = response.body().getContent();
                     if (profilePic != null) {
                         imageView.setImageBitmap(ImageUtil.createBitmap(profilePic));
                     }
@@ -65,7 +69,7 @@ public class ProfilePicActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ProfilePicDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 isLoading(false);
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
                 finish();

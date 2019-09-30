@@ -5,6 +5,7 @@ import com.activeandroid.query.Select;
 import java.util.List;
 
 import de.leonlatsch.olivia.database.DatabaseMapper;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -21,34 +22,18 @@ public class UserInterface extends BaseInterface<User> {
 
     private static UserInterface userInterface; // Singleton
 
-    private UserService userService = RestServiceFactory.getUserService();
-    private Callback<UserDTO> callback;
-
 
     private UserInterface() {
-        // Prevent non private instantiation
-        model = getUser();
-
-        callback = new Callback<UserDTO>() {
-            @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                if (response.isSuccessful()) {
-                    saveUser(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserDTO> call, Throwable t) {}
-        };
+        setModel(getUser());
     }
 
     public void loadUser() {
         List<User> list = new Select().from(User.class).execute();
         if (list.size() <= 1) {
             if (list.size() == 1) {
-                model = list.get(0);
+                setModel(list.get(0));
             } else {
-                model = null;
+                setModel(null);
             }
         } else {
             throw new RuntimeException("more than one user in database");
@@ -56,54 +41,32 @@ public class UserInterface extends BaseInterface<User> {
     }
 
     public User getUser() {
-        if (model == null) {
+        if (getModel() == null) {
             loadUser();
         }
-        return model;
+        return getModel();
     }
 
-    public void saveUserFromBackend(int uid) {
-        Call<UserDTO> call = userService.getbyUid(uid);
-        call.enqueue(callback);
-    }
-
-    public void saveUserFromBackend(String username) {
-        Call<UserDTO> call = userService.getByUsername(username);
-        call.enqueue(callback);
-    }
-
-    public void saveUserFromBackend(String email, boolean isEmail) {
-        if (!isEmail) {
-            saveUserFromBackend(email);
-        } else {
-            Call<UserDTO> call = userService.getByEmail(email);
-            call.enqueue(callback);
+    public String getAccessToken() {
+        if (getModel() == null) {
+            loadUser();
         }
+
+        return getModel().getAccessToken();
     }
 
-    public void saveUser(UserDTO userDto) {
+    public void save(UserDTO userDto, String accessToken, String privateKey) {
         User user = DatabaseMapper.mapToEntity(userDto);
-        saveUser(user);
+        user.setAccessToken(accessToken);
+        user.setPrivateKey(privateKey);
+        save(user);
     }
 
-    public void saveUser(User user) {
-        if (user != null) {
-            if (model != null) {
-                deleteUser(model);
-            }
-            user.save();
-            notifyListeners(user);
-            loadUser();
-        }
+    @Override
+    public void save(User user) {
+        super.save(user);
+        loadUser();
     }
-
-    public void deleteUser(User user) {
-        user.delete();
-        model = null;
-        notifyListeners(null);
-    }
-
-
 
     public static UserInterface getInstance() {
         if (userInterface == null) {

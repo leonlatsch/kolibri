@@ -1,7 +1,6 @@
 package de.leonlatsch.olivia.boot;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,8 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.activeandroid.ActiveAndroid;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.constants.Values;
+import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 import de.leonlatsch.olivia.login.LoginActivity;
@@ -34,7 +34,7 @@ public class BootActivity extends AppCompatActivity {
         ActiveAndroid.initialize(this);
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
-        userService = RestServiceFactory.getUserService();
+        userService = RestServiceFactory.createService(UserService.class);
         userInterface = UserInterface.getInstance();
 
         userInterface.loadUser();
@@ -61,46 +61,30 @@ public class BootActivity extends AppCompatActivity {
         try {
             final User savedUser = userInterface.getUser();
             if (savedUser != null) {
-                Call<UserDTO> call = userService.getbyUid(savedUser.getUid());
-                call.enqueue(new Callback<UserDTO>() {
+                Call<Container<UserDTO>> call = userService.get(savedUser.getAccessToken());
+                call.enqueue(new Callback<Container<UserDTO>>() {
                     @Override
-                    public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                        if (response.code() == 204) {
+                    public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
+                        if (response.code() == Responses.CODE_OK) {
+                            // Update saved user
+                            userInterface.save(response.body().getContent(), savedUser.getAccessToken(), savedUser.getPrivateKey());
+                        } else {
                             // if the saved user is not in the backend finish this boot and the chatlist and start another boot
-                            userInterface.deleteUser(savedUser);
+                            userInterface.delete(savedUser);
                             Intent intent = new Intent(getApplicationContext(), BootActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
-                        } else if (response.code() == 200) {
-                            // Update saved user
-                            userInterface.deleteUser(savedUser);
-                            userInterface.saveUser(response.body());
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<UserDTO> call, Throwable t) {}
+                    public void onFailure(Call<Container<UserDTO>> call, Throwable t) {}
                 });
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // May be useful later
-    private boolean isFirstBoot() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREF_FIRST_BOOT, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (sharedPreferences.getBoolean(Values.PREF_FIRST_BOOT, true)) {
-            editor.putBoolean(Values.PREF_FIRST_BOOT, false);
-            editor.apply();
-            return true;
-        } else {
             return false;
         }
     }

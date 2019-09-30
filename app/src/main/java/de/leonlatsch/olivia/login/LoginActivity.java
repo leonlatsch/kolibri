@@ -9,22 +9,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.security.KeyPair;
 import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.main.MainActivity;
-import de.leonlatsch.olivia.constants.JsonRespose;
+import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
-import de.leonlatsch.olivia.dto.StringDTO;
-import de.leonlatsch.olivia.dto.UserAuthDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
+import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
+import de.leonlatsch.olivia.security.KeyGenerator;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private View progressOverlay;
 
     private UserService userService;
+    private AuthService authService;
     private UserInterface userInterface;
 
     @Override
@@ -46,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        userService = RestServiceFactory.getUserService();
+        userService = RestServiceFactory.createService(UserService.class);
+        authService = RestServiceFactory.createService(AuthService.class);
         userInterface = UserInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);
@@ -69,16 +74,16 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         displayError(Values.EMPTY);
-        final UserAuthDTO userAuthDTO = new UserAuthDTO(emailEditText.getText().toString(), Hash.createHexHash(passwordEditText.getText().toString()));
+        final UserDTO userAuthDTO = new UserDTO();
+        userAuthDTO.setEmail(emailEditText.getText().toString());
+        userAuthDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
 
-        Call<StringDTO> call = userService.auth(userAuthDTO);
-        call.enqueue(new Callback<StringDTO>() {
+        Call<Container<String>> call = authService.login(userAuthDTO);
+        call.enqueue(new Callback<Container<String>>() {
             @Override
-            public void onResponse(Call<StringDTO> call, Response<StringDTO> response) {
-                StringDTO dto = response.body();
-
-                if (JsonRespose.OK.equals(dto.getMessage())) {
-                    saveUserAndStartMain(userAuthDTO.getEmail());
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (Responses.CODE_UNAUTHORIZED != response.code()) {
+                    saveUserAndStartMain(response.body().getContent());
                 } else {
                     displayError(getString(R.string.login_fail));
                     isLoading(false);
@@ -86,20 +91,22 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StringDTO> call, Throwable t) {
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 isLoading(false);
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });
     }
 
-    private void saveUserAndStartMain(final String email) {
-        Call<UserDTO> call = userService.getByEmail(email);
-        call.enqueue(new Callback<UserDTO>() {
+    private void saveUserAndStartMain(final String accessToken) {
+        Call<Container<UserDTO>> call = userService.get(accessToken);
+        call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+            public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.saveUser(response.body());
+                    KeyPair newKeyPair = KeyGenerator.genKeyPair();
+                    userInterface.save(response.body().getContent(), accessToken, Base64.toBase64(newKeyPair.getPrivate().getEncoded()));
+                    updatePublicKey(Base64.toBase64(newKeyPair.getPublic().getEncoded()));
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -108,7 +115,26 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserDTO> call, Throwable t) {
+            public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
+                showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+            }
+        });
+    }
+
+    private void updatePublicKey(final String publicKey) {
+        Call<Container<String>> call = userService.updatePublicKey(userInterface.getAccessToken(), publicKey);
+        call.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    if (!Responses.MSG_OK.equals(response.body().getMessage())) {
+                        showDialog(getString(R.string.error), getString(R.string.error));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet));
             }
         });

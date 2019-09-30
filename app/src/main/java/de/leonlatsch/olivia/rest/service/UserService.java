@@ -2,56 +2,46 @@ package de.leonlatsch.olivia.rest.service;
 
 import java.util.List;
 
-import de.leonlatsch.olivia.dto.ProfilePicDTO;
-import de.leonlatsch.olivia.dto.StringDTO;
-import de.leonlatsch.olivia.dto.UserAuthDTO;
+import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.rest.http.Headers;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserService {
 
-    @GET("users")
-    Call<List<UserDTO>> getAll();
+    @GET("user/get")
+    Call<Container<UserDTO>> get(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
-    @GET("users/getByUid/{uid}")
-    Call<UserDTO> getbyUid(@Path("uid") int uid);
+    @GET("user/search/top100/{username}")
+    Call<Container<List<UserDTO>>> search(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
-    @GET("users/getByEmail/{email}")
-    Call<UserDTO> getByEmail(@Path("email") String email);
+    @GET("user/search/{username}")
+    Call<Container<List<UserDTO>>> searchAll(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
-    @GET("users/getByUsername/{username}")
-    Call<UserDTO> getByUsername(@Path("username") String username);
+    @PUT("user/update")
+    Call<Container<String>> update(@Header(Headers.ACCESS_TOKEN) String accessToken, @Body UserDTO user);
 
-    @GET("users/search/top100/{username}")
-    Call<List<UserDTO>> search(@Path("username") String username);
+    @DELETE("user/delete")
+    Call<Container<String>> delete(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
-    @GET("users/search/{username}")
-    Call<List<UserDTO>> searchAll(@Path("username") String username);
+    @GET("user/check/username/{username}")
+    Call<Container<String>> checkUsername(@Path("username") String username);
 
-    @POST("users/register")
-    Call<StringDTO> create(@Body UserDTO user);
+    @GET("user/check/email/{email}")
+    Call<Container<String>> checkEmail(@Path("email") String email);
 
-    @PUT("users/update")
-    Call<StringDTO> update(@Body UserDTO user);
+    @GET("user/get/profile-pic/{uid}")
+    Call<Container<String>> loadProfilePic(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") int uid);
 
-    @DELETE("users/delete/{uid}")
-    Call<StringDTO> delete(@Path("uid") int uid);
+    @GET("user/public-key/get/{uid}")
+    Call<Container<String>> getPublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") int uid);
 
-    @GET("users/checkUsername/{username}")
-    Call<StringDTO> checkUsername(@Path("username") String username);
-
-    @GET("users/checkEmail/{email}")
-    Call<StringDTO> checkEmail(@Path("email") String email);
-
-    @POST("users/auth")
-    Call<StringDTO> auth(@Body UserAuthDTO authenticator);
-
-    @GET("users/getProfilePic/{uid}")
-    Call<ProfilePicDTO> loadProfilePic(@Path("uid") int uid);
+    @PUT("user/public-key/update")
+    Call<Container<String>> updatePublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Header(Headers.PUBLIC_KEY) String publicKey);
 }
