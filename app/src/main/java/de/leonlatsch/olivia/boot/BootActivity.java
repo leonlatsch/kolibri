@@ -2,6 +2,7 @@ package de.leonlatsch.olivia.boot;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,20 +38,27 @@ public class BootActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
 
-        userInterface.loadUser();
-
-        Intent intent = null;
-
-        if (isValidUserSaved()) {
-            intent = new Intent(getApplicationContext(), MainActivity.class);
-        } else {
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-        }
-
-        startActivity(intent);
-        // Make it so you cant go back to this activity
-        finish();
+        new Handler().postDelayed(runnable, 500);
     }
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            userInterface.loadUser();
+
+            Intent intent = null;
+
+            if (isValidUserSaved()) {
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+            } else {
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
+            }
+
+            startActivity(intent);
+            // Make it so you cant go back to this activity
+            finish();
+        }
+    };
 
     /**
      * Checks if a user is saved and checks if the saved user is still in the backend
