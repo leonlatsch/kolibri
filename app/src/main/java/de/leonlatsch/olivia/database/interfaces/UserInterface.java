@@ -5,20 +5,14 @@ import com.activeandroid.query.Select;
 import java.util.List;
 
 import de.leonlatsch.olivia.database.DatabaseMapper;
-import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
-import de.leonlatsch.olivia.rest.service.RestServiceFactory;
-import de.leonlatsch.olivia.rest.service.UserService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
- *  Child of {@link BaseInterface}
+ *  Child of {@link CacheInterface}
  *  Syncs the database table 'user' and the Entity {@link User}
  */
-public class UserInterface extends BaseInterface<User> {
+public class UserInterface extends CacheInterface<User> {
 
     private static UserInterface userInterface; // Singleton
 

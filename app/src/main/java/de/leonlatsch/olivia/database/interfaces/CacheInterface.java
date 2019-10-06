@@ -13,7 +13,7 @@ import de.leonlatsch.olivia.database.EntityChangedListener;
  *
  * @param <T> extends Model
  */
-public abstract class BaseInterface<T extends Model> {
+public abstract class CacheInterface<T extends Model> {
 
     /**
      * Cached model to be synced with database a every transaction
