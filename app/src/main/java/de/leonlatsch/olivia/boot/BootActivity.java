@@ -41,23 +41,20 @@ public class BootActivity extends AppCompatActivity {
         new Handler().postDelayed(runnable, 500);
     }
 
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            userInterface.loadUser();
+    private Runnable runnable  = () -> {
+        userInterface.loadUser();
 
-            Intent intent = null;
+        Intent intent = null;
 
-            if (isValidUserSaved()) {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-            } else {
-                intent = new Intent(getApplicationContext(), LoginActivity.class);
-            }
-
-            startActivity(intent);
-            // Make it so you cant go back to this activity
-            finish();
+        if (isValidUserSaved()) {
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), LoginActivity.class);
         }
+
+        startActivity(intent);
+        // Make it so you cant go back to this activity
+        finish();
     };
 
     /**

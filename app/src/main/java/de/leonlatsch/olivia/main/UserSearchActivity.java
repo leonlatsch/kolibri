@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.interfaces.PublicKeyInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
@@ -22,6 +24,7 @@ import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +40,7 @@ public class UserSearchActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
+    private PublicKeyInterface publicKeyInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class UserSearchActivity extends AppCompatActivity {
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
+        publicKeyInterface = PublicKeyInterface.getInstance();
 
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
@@ -60,6 +65,30 @@ public class UserSearchActivity extends AppCompatActivity {
 
         searchBtn.setOnClickListener(v -> search());
         listView.setAdapter(userAdapter);
+        listView.setOnItemClickListener(itemClickListener);
+    }
+
+    private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
+        Object raw = listView.getItemAtPosition(position);
+        if (raw instanceof UserDTO) {
+            UserDTO user = (UserDTO) raw;
+            proceedUser(user);
+        }
+    };
+
+    private void proceedUser(UserDTO user) {
+        Call<Container<String>> call = userService.getPublicKey(userInterface.getAccessToken(), user.getUid());
+        call.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    //TODO
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {}
+        });
     }
 
     private void search() {
