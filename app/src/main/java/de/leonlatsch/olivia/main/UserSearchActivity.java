@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,11 @@ import de.leonlatsch.olivia.database.interfaces.PublicKeyInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.entity.PublicKey;
 import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
+import de.leonlatsch.olivia.security.KeyGenerator;
 import de.leonlatsch.olivia.util.AndroidUtils;
 import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
@@ -64,6 +67,11 @@ public class UserSearchActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(this, new ArrayList<>());
 
         searchBtn.setOnClickListener(v -> search());
+        searchBar.setOnEditorActionListener((v, actionId, event) -> {
+            search();
+            return true;
+        });
+
         listView.setAdapter(userAdapter);
         listView.setOnItemClickListener(itemClickListener);
     }
@@ -82,7 +90,10 @@ public class UserSearchActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    //TODO
+                    PublicKey publicKey = new PublicKey();
+                    publicKey.setKey(response.body().getContent());
+                    publicKey.setUid(user.getUid());
+                    publicKeyInterface.save(publicKey);
                 }
             }
 
