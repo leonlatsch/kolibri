@@ -5,7 +5,7 @@ import com.activeandroid.query.Select;
 import de.leonlatsch.olivia.entity.PublicKey;
 import de.leonlatsch.olivia.util.Base64;
 
-public class PublicKeyInterface {
+public class PublicKeyInterface extends BaseInterface {
 
     private static final String QUEUE_WHERE_UID = "uid = ?";
 

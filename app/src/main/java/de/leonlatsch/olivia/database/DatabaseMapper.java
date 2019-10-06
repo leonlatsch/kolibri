@@ -1,11 +1,22 @@
 package de.leonlatsch.olivia.database;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.Date;
+
+import de.leonlatsch.olivia.constants.Formats;
+import de.leonlatsch.olivia.dto.MessageDTO;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.entity.Message;
 import de.leonlatsch.olivia.entity.User;
 
 public class DatabaseMapper {
 
-    public static User mapToEntity(UserDTO dto) {
+    private static DatabaseMapper databaseMapper;
+
+    private DatabaseMapper() {}
+
+    public User toModel(UserDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -17,7 +28,7 @@ public class DatabaseMapper {
         return user;
     }
 
-    public static UserDTO mapToDTO(User user) {
+    public UserDTO toDto(User user) {
         if (user == null) {
             return null;
         }
@@ -29,5 +40,55 @@ public class DatabaseMapper {
         dto.setPassword(user.getPassword());
 
         return dto;
+    }
+
+    public Message toModel(MessageDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Message message = new Message();
+        message.setMid(dto.getMid());
+        message.setCid(dto.getCid());
+        message.setFrom(dto.getFrom());
+        message.setTo(dto.getTo());
+        message.setType(dto.getType());
+        message.setTimestamp(stringToTimestamp(dto.getTimestamp()));
+        message.setContent(dto.getContent());
+        return message;
+    }
+
+    public MessageDTO toDto(Message message) {
+        if (message == null) {
+            return null;
+        }
+
+        MessageDTO dto = new MessageDTO();
+        dto.setMid(message.getMid());
+        dto.setCid(message.getCid());
+        dto.setFrom(message.getFrom());
+        dto.setTo(message.getTo());
+        dto.setType(message.getType());
+        dto.setTimestamp(message.getTimestamp().toString());
+        dto.setContent(message.getContent());
+        return dto;
+    }
+
+    private Timestamp stringToTimestamp(String timestamp) {
+        try {
+            Date parsed = Formats.DATE_FORMAT.parse(timestamp);
+            return new Timestamp(parsed.getTime());
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+
+    public static DatabaseMapper getInstance() {
+        if (databaseMapper == null) {
+            databaseMapper = new DatabaseMapper();
+        }
+
+        return databaseMapper;
     }
 }

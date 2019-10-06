@@ -1,6 +1,5 @@
 package de.leonlatsch.olivia.rest.http;
 
-import java.io.IOException;
 import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLContext;
@@ -8,12 +7,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import de.leonlatsch.olivia.constants.Values;
-import okhttp3.Credentials;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class OliviaHttpClient {
 

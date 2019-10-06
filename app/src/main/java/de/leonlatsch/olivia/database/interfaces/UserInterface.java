@@ -4,7 +4,6 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
-import de.leonlatsch.olivia.database.DatabaseMapper;
 import de.leonlatsch.olivia.dto.UserDTO;
 import de.leonlatsch.olivia.entity.User;
 
@@ -50,7 +49,7 @@ public class UserInterface extends CacheInterface<User> {
     }
 
     public void save(UserDTO userDto, String accessToken, String privateKey) {
-        User user = DatabaseMapper.mapToEntity(userDto);
+        User user = getDatabaseMapper().toModel(userDto);
         user.setAccessToken(accessToken);
         user.setPrivateKey(privateKey);
         save(user);

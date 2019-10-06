@@ -240,7 +240,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private void save() {
         isLoading(true);
         final User user = mapViewToUser();
-        UserDTO dto = DatabaseMapper.mapToDTO(user);
+        UserDTO dto = DatabaseMapper.toDto(user);
 
         if (profilePicChanged) {
             dto.setProfilePic(extractBase64());

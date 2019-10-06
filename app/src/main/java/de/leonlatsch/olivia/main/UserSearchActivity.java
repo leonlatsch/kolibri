@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 
-import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +24,7 @@ import de.leonlatsch.olivia.entity.PublicKey;
 import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
-import de.leonlatsch.olivia.security.KeyGenerator;
 import de.leonlatsch.olivia.util.AndroidUtils;
-import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -141,13 +138,12 @@ public class UserSearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }
