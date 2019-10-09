@@ -56,6 +56,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private boolean passwordChanged = false;
     private String passwordCache;
 
+    private DatabaseMapper databaseMapper = DatabaseMapper.getInstance();
+
     private UserInterface userInterface;
     private UserService userService;
     private AuthService authService;
@@ -240,7 +242,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private void save() {
         isLoading(true);
         final User user = mapViewToUser();
-        UserDTO dto = DatabaseMapper.toDto(user);
+        UserDTO dto = databaseMapper.toDto(user);
 
         if (profilePicChanged) {
             dto.setProfilePic(extractBase64());
