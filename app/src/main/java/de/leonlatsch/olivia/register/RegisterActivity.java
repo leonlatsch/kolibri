@@ -142,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Call<Container<String>> call = userService.checkEmail(email);
+        Call<Container<String>> call = userService.checkEmail(null, email);
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {

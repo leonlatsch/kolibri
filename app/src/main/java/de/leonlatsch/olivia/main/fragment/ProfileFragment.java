@@ -70,7 +70,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private EditText passwordEditText;
     private TextView status_message;
 
-    private boolean usernameValid;
     private boolean emailValid;
 
     @Nullable
@@ -111,7 +110,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             }
         };
 
-        usernameEditText.addTextChangedListener(textWatcher);
         emailEditText.addTextChangedListener(textWatcher);
 
 
@@ -128,36 +126,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void validate() {
-        validateUsername();
-    }
-
-    private void validateUsername() {
-        final String username = usernameEditText.getText().toString();
-        if (username.isEmpty() || username.length() < 3) {
-            showStatusIcon(usernameEditText, R.drawable.icons8_cancel_48);
-            usernameValid = false;
-            return;
-        }
-
-        Call<Container<String>> usernameCall = userService.checkUsername(username);
-        usernameCall.enqueue(new Callback<Container<String>>() {
-            @Override
-            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
-                if (response.isSuccessful()) {
-                    if (Responses.MSG_FREE.equals(response.body().getMessage())) {
-                        usernameValid = true;
-                    } else {
-                        showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
-                    }
-                }
-                validateEmail();
-            }
-
-            @Override
-            public void onFailure(Call<Container<String>> call, Throwable t) {
-                parent.showDialog(getString(R.string.error), getString(R.string.error));
-            }
-        });
+        validateEmail();
     }
 
     private void validateEmail() {
@@ -168,7 +137,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             return;
         }
 
-        Call<Container<String>> usernameCall = userService.checkEmail(email);
+        Call<Container<String>> usernameCall = userService.checkEmail(userInterface.getAccessToken(), email);
         usernameCall.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
@@ -397,7 +366,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     private User mapViewToUser() {
         User savedUser = userInterface.getUser();
-        savedUser.setUsername(usernameEditText.getText().toString());
         savedUser.setEmail(emailEditText.getText().toString());
         if (passwordChanged) {
             savedUser.setPassword(Hash.createHexHash(passwordCache));
