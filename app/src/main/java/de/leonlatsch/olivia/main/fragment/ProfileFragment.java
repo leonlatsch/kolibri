@@ -90,7 +90,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
         changeProfilePicFab.setOnClickListener(v -> changeProfilePic());
 
-        saveBtn.setOnClickListener(v -> save());
+        saveBtn.setOnClickListener(v -> saveBtn());
 
         deleteAccount.setOnClickListener(v -> deleteAccount());
 
