@@ -70,6 +70,9 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private EditText passwordEditText;
     private TextView status_message;
 
+    private boolean usernameValid;
+    private boolean emailValid;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -122,6 +125,68 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         displayStatusMessage(Values.EMPTY);
 
         return view;
+    }
+
+    private void validate() {
+        validateUsername();
+    }
+
+    private void validateUsername() {
+        final String username = usernameEditText.getText().toString();
+        if (username.isEmpty() || username.length() < 3) {
+            showStatusIcon(usernameEditText, R.drawable.icons8_cancel_48);
+            usernameValid = false;
+            return;
+        }
+
+        Call<Container<String>> usernameCall = userService.checkUsername(username);
+        usernameCall.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    if (Responses.MSG_FREE.equals(response.body().getMessage())) {
+                        usernameValid = true;
+                    } else {
+                        showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
+                    }
+                }
+                validateEmail();
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {
+                parent.showDialog(getString(R.string.error), getString(R.string.error));
+            }
+        });
+    }
+
+    private void validateEmail() {
+        final String email = emailEditText.getText().toString();
+        if (email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)) {
+            showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
+            emailValid = false;
+            return;
+        }
+
+        Call<Container<String>> usernameCall = userService.checkEmail(email);
+        usernameCall.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    if (Responses.MSG_FREE.equals(response.body().getMessage())) {
+                        emailValid = true;
+                        save();
+                    } else {
+                        showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {
+                parent.showDialog(getString(R.string.error), getString(R.string.error));
+            }
+        });
     }
 
     private void dataChanged() {
@@ -239,8 +304,11 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 .setNegativeButton(getString(R.string.no), dialogClickListener).show();
     }
 
+    private void saveBtn() {
+        validate();
+    }
+
     private void save() {
-        isLoading(true);
         final User user = mapViewToUser();
         UserDTO dto = databaseMapper.toDto(user);
 
