@@ -142,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Call<Container<String>> call = userService.checkEmail(email);
+        Call<Container<String>> call = userService.checkEmail(Values.EMPTY, email);
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
@@ -173,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Call<Container<String>> call = userService.checkUsername(username);
+        Call<Container<String>> call = userService.checkUsername(Values.EMPTY, username);
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {

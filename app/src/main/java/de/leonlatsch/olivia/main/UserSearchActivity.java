@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,9 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.interfaces.PublicKeyInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.dto.Container;
 import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.entity.PublicKey;
 import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
@@ -37,6 +40,7 @@ public class UserSearchActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
+    private PublicKeyInterface publicKeyInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class UserSearchActivity extends AppCompatActivity {
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
+        publicKeyInterface = PublicKeyInterface.getInstance();
 
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
@@ -59,7 +64,39 @@ public class UserSearchActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(this, new ArrayList<>());
 
         searchBtn.setOnClickListener(v -> search());
+        searchBar.setOnEditorActionListener((v, actionId, event) -> {
+            search();
+            return true;
+        });
+
         listView.setAdapter(userAdapter);
+        listView.setOnItemClickListener(itemClickListener);
+    }
+
+    private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
+        Object raw = listView.getItemAtPosition(position);
+        if (raw instanceof UserDTO) {
+            UserDTO user = (UserDTO) raw;
+            proceedUser(user);
+        }
+    };
+
+    private void proceedUser(UserDTO user) {
+        Call<Container<String>> call = userService.getPublicKey(userInterface.getAccessToken(), user.getUid());
+        call.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    PublicKey publicKey = new PublicKey();
+                    publicKey.setKey(response.body().getContent());
+                    publicKey.setUid(user.getUid());
+                    publicKeyInterface.save(publicKey);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {}
+        });
     }
 
     private void search() {
@@ -101,13 +138,12 @@ public class UserSearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }

@@ -1,71 +1,18 @@
 package de.leonlatsch.olivia.database.interfaces;
 
-import com.activeandroid.Model;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import de.leonlatsch.olivia.database.EntityChangedListener;
+import de.leonlatsch.olivia.database.DatabaseMapper;
 
 /**
- * Base Class for a Database Interface
- * The cached model needs to be
- *
- * @param <T> extends Model
+ * BaseInterface
  */
-public abstract class BaseInterface<T extends Model> {
+public abstract class BaseInterface {
 
     /**
-     * Cached model to be synced with database a every transaction
+     * Used to map convert dto's and models
      */
-    private T model = null;
+    private DatabaseMapper databaseMapper = DatabaseMapper.getInstance();
 
-    /**
-     * {@link List} of {@link EntityChangedListener}s that get notified when a model has changed
-     */
-    private List<EntityChangedListener> listeners = new ArrayList<>();
-
-    /**
-     *  Adds a {@link EntityChangedListener} that gets notified when the model hat changed
-     *
-     * @param listener the listener to add
-     */
-    public void addEntityChangedListener(EntityChangedListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     *  Notify all listeners with the same model
-     * @param model
-     */
-    void notifyListeners(T model) {
-        for (EntityChangedListener listener : listeners) {
-            listener.entityChanged(model);
-        }
-    }
-
-    public void save(T model) {
-        if (model != null) {
-            if (getModel() != null) {
-                delete(getModel());
-            }
-            model.save();
-            setModel(model);
-            notifyListeners(model);
-        }
-    }
-
-    public void delete(T model) {
-        model.delete();
-        setModel(null);
-        notifyListeners(null);
-    }
-
-    T getModel() {
-        return model;
-    }
-
-    void setModel(T model) {
-        this.model = model;
+    protected DatabaseMapper getDatabaseMapper() {
+        return databaseMapper;
     }
 }

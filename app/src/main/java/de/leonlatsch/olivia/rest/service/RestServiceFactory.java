@@ -12,6 +12,7 @@ public class RestServiceFactory {
 
     private static UserService userService;
     private static AuthService authService;
+    private static ChatService chatService;
 
     private static void provideRetrofit() {
         if (retrofit == null) {
@@ -37,5 +38,13 @@ public class RestServiceFactory {
             authService = retrofit.create(AuthService.class);
         }
         return authService;
+    }
+
+    public static ChatService getChatService() {
+        provideRetrofit();
+        if (chatService == null) {
+            chatService = retrofit.create(ChatService.class);
+        }
+        return chatService;
     }
 }

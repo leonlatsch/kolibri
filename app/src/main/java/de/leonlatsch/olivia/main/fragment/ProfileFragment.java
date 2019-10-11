@@ -56,6 +56,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private boolean passwordChanged = false;
     private String passwordCache;
 
+    private DatabaseMapper databaseMapper = DatabaseMapper.getInstance();
+
     private UserInterface userInterface;
     private UserService userService;
     private AuthService authService;
@@ -67,6 +69,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private EditText emailEditText;
     private EditText passwordEditText;
     private TextView status_message;
+
+    private boolean emailValid;
 
     @Nullable
     @Override
@@ -85,7 +89,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
         changeProfilePicFab.setOnClickListener(v -> changeProfilePic());
 
-        saveBtn.setOnClickListener(v -> save());
+        saveBtn.setOnClickListener(v -> saveBtn());
 
         deleteAccount.setOnClickListener(v -> deleteAccount());
 
@@ -106,7 +110,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             }
         };
 
-        usernameEditText.addTextChangedListener(textWatcher);
         emailEditText.addTextChangedListener(textWatcher);
 
 
@@ -120,6 +123,44 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         displayStatusMessage(Values.EMPTY);
 
         return view;
+    }
+
+    private void validate() {
+        validateEmail();
+    }
+
+    private void validateEmail() {
+        final String email = emailEditText.getText().toString();
+        if (email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)) {
+            showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
+            emailValid = false;
+            isLoading(false);
+            return;
+        }
+
+        Call<Container<String>> usernameCall = userService.checkEmail(userInterface.getAccessToken(), email);
+        usernameCall.enqueue(new Callback<Container<String>>() {
+            @Override
+            public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                if (response.isSuccessful()) {
+                    if (Responses.MSG_FREE.equals(response.body().getMessage())
+                            || Responses.MSG_TAKEN_BY_YOU.equals(response.body().getMessage())) {
+                        emailValid = true;
+                        showStatusIcon(emailEditText, 0);
+                        save();
+                    } else {
+                        showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
+                        isLoading(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Container<String>> call, Throwable t) {
+                parent.showDialog(getString(R.string.error), getString(R.string.error));
+                isLoading(false);
+            }
+        });
     }
 
     private void dataChanged() {
@@ -237,10 +278,14 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 .setNegativeButton(getString(R.string.no), dialogClickListener).show();
     }
 
-    private void save() {
+    private void saveBtn() {
         isLoading(true);
+        validate();
+    }
+
+    private void save() {
         final User user = mapViewToUser();
-        UserDTO dto = DatabaseMapper.mapToDTO(user);
+        UserDTO dto = databaseMapper.toDto(user);
 
         if (profilePicChanged) {
             dto.setProfilePic(extractBase64());
@@ -327,7 +372,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     private User mapViewToUser() {
         User savedUser = userInterface.getUser();
-        savedUser.setUsername(usernameEditText.getText().toString());
         savedUser.setEmail(emailEditText.getText().toString());
         if (passwordChanged) {
             savedUser.setPassword(Hash.createHexHash(passwordCache));

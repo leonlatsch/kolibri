@@ -31,10 +31,10 @@ public interface UserService {
     Call<Container<String>> delete(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
     @GET("user/check/username/{username}")
-    Call<Container<String>> checkUsername(@Path("username") String username);
+    Call<Container<String>> checkUsername(@Header(Headers.ACCESS_TOKEN) String accessToken,@Path("username") String username);
 
     @GET("user/check/email/{email}")
-    Call<Container<String>> checkEmail(@Path("email") String email);
+    Call<Container<String>> checkEmail(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("email") String email);
 
     @GET("user/get/profile-pic/{uid}")
     Call<Container<String>> loadProfilePic(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") int uid);
