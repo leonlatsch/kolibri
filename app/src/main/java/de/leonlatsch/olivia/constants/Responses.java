@@ -7,6 +7,7 @@ public class Responses {
     public static final String MSG_AUTHORIZED = "AUTHORIZED";
     public static final String MSG_UNAUTHORIZED = "UNAUTHORIZED";
     public static final String MSG_TAKEN = "TAKEN";
+    public static final String MSG_TAKEN_BY_YOU = "TAKEN_BY_YOU";
     public static final String MSG_FREE = "FREE";
 
     public static int CODE_OK = 200;

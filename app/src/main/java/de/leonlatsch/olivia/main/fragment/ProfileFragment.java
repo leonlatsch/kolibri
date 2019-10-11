@@ -134,6 +134,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         if (email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)) {
             showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
             emailValid = false;
+            isLoading(false);
             return;
         }
 
@@ -142,11 +143,14 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    if (Responses.MSG_FREE.equals(response.body().getMessage())) {
+                    if (Responses.MSG_FREE.equals(response.body().getMessage())
+                            || Responses.MSG_TAKEN_BY_YOU.equals(response.body().getMessage())) {
                         emailValid = true;
+                        showStatusIcon(emailEditText, 0);
                         save();
                     } else {
                         showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
+                        isLoading(false);
                     }
                 }
             }
@@ -154,6 +158,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             @Override
             public void onFailure(Call<Container<String>> call, Throwable t) {
                 parent.showDialog(getString(R.string.error), getString(R.string.error));
+                isLoading(false);
             }
         });
     }
@@ -274,6 +279,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void saveBtn() {
+        isLoading(true);
         validate();
     }
 
