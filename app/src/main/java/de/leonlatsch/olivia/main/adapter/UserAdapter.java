@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.util.ImageUtil;
 
 public class UserAdapter extends ArrayAdapter<UserDTO> {

@@ -14,12 +14,12 @@ import java.util.regex.Pattern;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
-import de.leonlatsch.olivia.dto.Container;
+import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.constants.Regex;
 import de.leonlatsch.olivia.constants.Values;
-import de.leonlatsch.olivia.dto.UserDTO;
+import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.register.RegisterActivity;
 import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;

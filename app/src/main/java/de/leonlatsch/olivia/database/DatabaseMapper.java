@@ -5,10 +5,10 @@ import java.text.ParseException;
 import java.util.Date;
 
 import de.leonlatsch.olivia.constants.Formats;
-import de.leonlatsch.olivia.dto.MessageDTO;
-import de.leonlatsch.olivia.dto.UserDTO;
-import de.leonlatsch.olivia.entity.Message;
-import de.leonlatsch.olivia.entity.User;
+import de.leonlatsch.olivia.rest.dto.MessageDTO;
+import de.leonlatsch.olivia.rest.dto.UserDTO;
+import de.leonlatsch.olivia.database.model.Message;
+import de.leonlatsch.olivia.database.model.User;
 
 public class DatabaseMapper {
 

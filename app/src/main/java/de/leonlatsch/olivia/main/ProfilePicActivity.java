@@ -15,7 +15,7 @@ import android.widget.TextView;
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
-import de.leonlatsch.olivia.dto.Container;
+import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.util.AndroidUtils;

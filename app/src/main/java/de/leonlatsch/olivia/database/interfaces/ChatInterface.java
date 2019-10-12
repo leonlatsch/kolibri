@@ -5,9 +5,9 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
-import de.leonlatsch.olivia.dto.MessageDTO;
-import de.leonlatsch.olivia.entity.Chat;
-import de.leonlatsch.olivia.entity.Message;
+import de.leonlatsch.olivia.rest.dto.MessageDTO;
+import de.leonlatsch.olivia.database.model.Chat;
+import de.leonlatsch.olivia.database.model.Message;
 
 public class ChatInterface extends BaseInterface {
 

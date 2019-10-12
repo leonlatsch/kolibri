@@ -4,8 +4,8 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
-import de.leonlatsch.olivia.dto.UserDTO;
-import de.leonlatsch.olivia.entity.User;
+import de.leonlatsch.olivia.rest.dto.UserDTO;
+import de.leonlatsch.olivia.database.model.User;
 
 /**
  *  Child of {@link CacheInterface}

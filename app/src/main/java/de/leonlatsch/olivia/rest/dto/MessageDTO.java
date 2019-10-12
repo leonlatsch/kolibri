@@ -1,45 +1,25 @@
-package de.leonlatsch.olivia.entity;
+package de.leonlatsch.olivia.rest.dto;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+public class MessageDTO {
 
-import java.sql.Timestamp;
-
-@Table(name = "message")
-public class Message extends Model {
-
-    @Column(name = "mid", index = true)
     private String mid;
-
-    @Column(name = "cid")
+    private int from;
+    private int to;
+    private String type;
+    private String timestamp;
+    private String content;
     private String cid;
 
-    @Column(name = "uid_from")
-    private int from;
+    public MessageDTO() {}
 
-    @Column(name = "uid_to")
-    private int to;
-
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "timestamp")
-    private Timestamp timestamp;
-
-    @Column(name = "content")
-    private String content;
-
-    public Message() {}
-
-    public Message(String mid, String cid, int from, int to, String type, Timestamp timestamp, String content) {
+    public MessageDTO(String mid, int from, int to, String type, String timestamp, String content, String cid) {
         this.mid = mid;
-        this.cid = cid;
         this.from = from;
         this.to = to;
         this.type = type;
         this.timestamp = timestamp;
         this.content = content;
+        this.cid = cid;
     }
 
     public String getMid() {
@@ -48,14 +28,6 @@ public class Message extends Model {
 
     public void setMid(String mid) {
         this.mid = mid;
-    }
-
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
     }
 
     public int getFrom() {
@@ -82,11 +54,11 @@ public class Message extends Model {
         this.type = type;
     }
 
-    public Timestamp getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -96,5 +68,13 @@ public class Message extends Model {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
     }
 }

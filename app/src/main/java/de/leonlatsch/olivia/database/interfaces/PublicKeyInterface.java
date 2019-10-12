@@ -2,7 +2,7 @@ package de.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Select;
 
-import de.leonlatsch.olivia.entity.PublicKey;
+import de.leonlatsch.olivia.database.model.PublicKey;
 import de.leonlatsch.olivia.util.Base64;
 
 public class PublicKeyInterface extends BaseInterface {

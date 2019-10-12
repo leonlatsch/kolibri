@@ -2,7 +2,6 @@ package de.leonlatsch.olivia.boot;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,9 +10,9 @@ import com.activeandroid.ActiveAndroid;
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
-import de.leonlatsch.olivia.dto.Container;
-import de.leonlatsch.olivia.dto.UserDTO;
-import de.leonlatsch.olivia.entity.User;
+import de.leonlatsch.olivia.rest.dto.Container;
+import de.leonlatsch.olivia.rest.dto.UserDTO;
+import de.leonlatsch.olivia.database.model.User;
 import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;

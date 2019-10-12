@@ -1,4 +1,4 @@
-package de.leonlatsch.olivia.dto;
+package de.leonlatsch.olivia.rest.dto;
 
 public class Container<T> {
 

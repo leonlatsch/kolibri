@@ -20,7 +20,7 @@ import android.widget.Toast;
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
-import de.leonlatsch.olivia.entity.User;
+import de.leonlatsch.olivia.database.model.User;
 import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.fragment.ChatFragment;
 import de.leonlatsch.olivia.main.fragment.ProfileFragment;

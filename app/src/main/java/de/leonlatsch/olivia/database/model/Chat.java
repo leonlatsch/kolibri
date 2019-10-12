@@ -1,4 +1,4 @@
-package de.leonlatsch.olivia.entity;
+package de.leonlatsch.olivia.database.model;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
