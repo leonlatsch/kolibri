@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,7 +48,7 @@ public class ProfilePicActivity extends AppCompatActivity {
         imageView = findViewById(R.id.profile_pic_image_view);
         progressOverlay = findViewById(R.id.progressOverlay);
 
-        title.setText(createTitle((String) getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_USERNAME)));
+        title.setText((String) getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_USERNAME));
         int uid = (int) getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_UID);
 
         loadProfilePic(uid);
@@ -55,6 +56,7 @@ public class ProfilePicActivity extends AppCompatActivity {
 
     private void loadProfilePic(int uid) {
         isLoading(true);
+        final Context context = this;
         Call<Container<String>> call = userService.loadProfilePic(userInterface.getAccessToken(), uid);
         call.enqueue(new Callback<Container<String>>() {
             @Override
@@ -63,6 +65,8 @@ public class ProfilePicActivity extends AppCompatActivity {
                     String profilePic = response.body().getContent();
                     if (profilePic != null) {
                         imageView.setImageBitmap(ImageUtil.createBitmap(profilePic));
+                    } else {
+                        imageView.setImageDrawable(ImageUtil.getDefaultProfilePic(context));
                     }
                 }
                 isLoading(false);
@@ -75,16 +79,6 @@ public class ProfilePicActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private String createTitle(String username) {
-        if (username == null) {
-            return null;
-        }
-
-        String base = "${username}'s Profile Picture";
-        base = base.replace("${username}", username);
-        return base;
     }
 
     @Override

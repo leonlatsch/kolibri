@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user.getProfilePicTn() != null) {
             profilePic.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         } else {
-            profilePic.setImageDrawable(ImageUtil.getDefaultProfilePic(this));
+            profilePic.setImageDrawable(ImageUtil.getDefaultProfilePicTn(this));
         }
         username.setText(user.getUsername());
         email.setText(user.getEmail());

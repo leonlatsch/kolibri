@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Olivia</string>
+    <string name="account_saved">Account gespeichert</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="apply">Anwenden</string>
+    <string name="are_you_sure">Bist du sicher?</string>
+    <string name="are_you_sure_delete">Willst du deinen Account wirklich löschen?</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="chats">Chats</string>
+    <string name="delete_account">Account löschen</string>
+    <string name="email">E-Mail Addresse</string>
+    <string name="email_hint">E-Mail Addresse eingeben</string>
+    <string name="error">Fehler</string>
+    <string name="error_common">Etwas ist schief gelaufen</string>
+    <string name="error_no_internet">Überprüfe dein Internetverbindung</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="help">Hilfe</string>
+    <string name="login">Einloggen</string>
+    <string name="login_fail">E-Mail oder Password ist falsch</string>
+    <string name="logout">Ausloggen</string>
+    <string name="nav_drawer_close">Open navigation close</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="new_password">Neues Passwort</string>
+    <string name="no">Nein</string>
+    <string name="ok">OK</string>
+    <string name="old_password">Altes Passwort</string>
+    <string name="old_password_hint">Altes Passwort eingeben</string>
+    <string name="other">Andere</string>
+    <string name="password">Passwort</string>
+    <string name="password_confirm">Passwort bestätigen</string>
+    <string name="password_confirm_hint">Wiederhole das neue Passwort</string>
+    <string name="password_hint">Gib ein neues Passwort ein</string>
+    <string name="profile">Profil</string>
+    <string name="register">Registrieren</string>
+    <string name="register_now">Jetzt Registrieren</string>
+    <string name="repeat_new_password">Neues Passwort wiederholen</string>
+    <string name="sample_password">12345678909285</string>
+    <string name="save">Speichern</string>
+    <string name="settings">Einstellungen</string>
+    <string name="unsaved_data">Änderungen nicht gespeichert</string>
+    <string name="user_search_chat_hint">Tippen um zu chatten</string>
+    <string name="user_search_hint">Suche nach Nutzern...</string>
+    <string name="username">Nutzername</string>
+    <string name="username_hint">Gib einen Nutzernamen ein</string>
+    <string name="yes">Ja</string>
+</resources>
