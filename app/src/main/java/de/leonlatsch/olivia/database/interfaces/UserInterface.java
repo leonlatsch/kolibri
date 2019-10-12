@@ -15,7 +15,6 @@ public class UserInterface extends CacheInterface<User> {
 
     private static UserInterface userInterface; // Singleton
 
-
     private UserInterface() {
         setModel(getUser());
     }

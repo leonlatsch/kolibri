@@ -5,10 +5,12 @@ import java.text.ParseException;
 import java.util.Date;
 
 import de.leonlatsch.olivia.constants.Formats;
+import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.database.model.Message;
 import de.leonlatsch.olivia.database.model.User;
+import de.leonlatsch.olivia.util.Generator;
 
 public class DatabaseMapper {
 
@@ -72,6 +74,31 @@ public class DatabaseMapper {
         dto.setTimestamp(message.getTimestamp().toString());
         dto.setContent(message.getContent());
         return dto;
+    }
+
+    public Contact toContact(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        Contact contact = new Contact();
+        contact.setContactId(Generator.genUUid());
+        contact.setUid(user.getUid());
+        contact.setUsername(user.getUsername());
+        contact.setProfilePicTn(user.getProfilePicTn());
+        return contact;
+    }
+
+    public User toUser(Contact contact) {
+        if (contact == null) {
+            return null;
+        }
+
+        User user = new User();
+        user.setUid(contact.getUid());
+        user.setUsername(contact.getUsername());
+        user.setProfilePicTn(contact.getProfilePicTn());
+        return user;
     }
 
     private Timestamp stringToTimestamp(String timestamp) {

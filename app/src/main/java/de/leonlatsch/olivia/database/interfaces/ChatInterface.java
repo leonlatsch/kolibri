@@ -25,8 +25,7 @@ public class ChatInterface extends BaseInterface {
         if (chat == null) {
             chat = new Chat();
             chat.setCid(cid);
-            chat.setFirstMember(message.getFrom());
-            chat.setSecondMember(message.getTo());
+            //TODO: create new contact
             chat.save();
         }
         message.save();

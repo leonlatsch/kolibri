@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.database.interfaces.PublicKeyInterface;
+import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
-import de.leonlatsch.olivia.database.model.PublicKey;
 import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
@@ -40,7 +40,7 @@ public class UserSearchActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
-    private PublicKeyInterface publicKeyInterface;
+    private ContactInterface contactInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class UserSearchActivity extends AppCompatActivity {
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
-        publicKeyInterface = PublicKeyInterface.getInstance();
+        contactInterface = ContactInterface.getInstance();
 
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
@@ -87,10 +87,7 @@ public class UserSearchActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    PublicKey publicKey = new PublicKey();
-                    publicKey.setKey(response.body().getContent());
-                    publicKey.setUid(user.getUid());
-                    publicKeyInterface.save(publicKey);
+                    contactInterface.save(user, response.body().getContent());
                 }
             }
 

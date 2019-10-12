@@ -10,18 +10,14 @@ public class Chat extends Model {
     @Column(name = "cid", index = true)
     private String cid;
 
-    @Column(name = "first_member")
-    private int firstMember;
-
-    @Column(name = "second_member")
-    private int secondMember;
+    @Column(name = "contact_id")
+    private String contactId;
 
     public Chat() {}
 
-    public Chat(String cid, int firstMember, int secondMember) {
+    public Chat(String cid, String contactId) {
         this.cid = cid;
-        this.firstMember = firstMember;
-        this.secondMember = secondMember;
+        this.contactId = contactId;
     }
 
     public String getCid() {
@@ -32,19 +28,11 @@ public class Chat extends Model {
         this.cid = cid;
     }
 
-    public int getFirstMember() {
-        return firstMember;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setFirstMember(int firstMember) {
-        this.firstMember = firstMember;
-    }
-
-    public int getSecondMember() {
-        return secondMember;
-    }
-
-    public void setSecondMember(int secondMember) {
-        this.secondMember = secondMember;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 }
