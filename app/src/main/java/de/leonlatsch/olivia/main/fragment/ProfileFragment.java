@@ -63,11 +63,9 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     private AuthService authService;
 
     private MainActivity parent;
-    private View view;
     private ImageView profilePicImageView;
     private EditText usernameEditText;
     private EditText emailEditText;
-    private EditText passwordEditText;
     private TextView status_message;
 
     private boolean emailValid;
@@ -75,13 +73,13 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         parent = (MainActivity) getActivity();
         profilePicImageView = view.findViewById(R.id.profile_profile_pic_card).findViewById(R.id.profile_profile_pic);
         usernameEditText = view.findViewById(R.id.profile_username_editText);
         emailEditText = view.findViewById(R.id.profile_email_editText);
-        passwordEditText = view.findViewById(R.id.profile_password_editText);
+        EditText passwordEditText = view.findViewById(R.id.profile_password_editText);
         FloatingActionButton changeProfilePicFab = view.findViewById(R.id.profile_profile_pic_change);
         Button saveBtn = view.findViewById(R.id.profile_saveBtn);
         TextView deleteAccount = view.findViewById(R.id.profile_deleteBtn);
@@ -366,7 +364,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         if (user.getProfilePicTn() != null) {
             profilePicImageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         } else {
-            profilePicImageView.setImageDrawable(ImageUtil.getDefaultProfilePic(parent));
+            profilePicImageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(parent));
         }
         usernameEditText.setText(user.getUsername());
         emailEditText.setText(user.getEmail());

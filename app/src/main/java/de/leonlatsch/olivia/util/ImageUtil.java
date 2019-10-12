@@ -1,6 +1,7 @@
 package de.leonlatsch.olivia.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -29,7 +30,11 @@ public class ImageUtil {
         return Base64.toBase64(bytes);
     }
 
+    public static Drawable getDefaultProfilePicTn(Context context) {
+        return context.getResources().getDrawable(R.drawable.default_profile_pic_tn, context.getTheme());
+    }
+
     public static Drawable getDefaultProfilePic(Context context) {
-        return context.getResources().getDrawable(R.drawable.default_profile_pic_tn);
+        return context.getResources().getDrawable(R.drawable.default_profile_pic, context.getTheme());
     }
 }

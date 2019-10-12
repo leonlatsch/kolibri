@@ -48,7 +48,7 @@ public class UserAdapter extends ArrayAdapter<UserDTO> {
         if (user.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         } else {
-            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePic(mContext));
+            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext));
         }
         viewHolder.textView.setText(user.getUsername());
 

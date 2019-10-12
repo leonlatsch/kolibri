@@ -51,11 +51,11 @@
     <string name="new_password">New Password</string>
     <string name="repeat_new_password">Repeat new Password</string>
     <string name="account_saved">Account Saved</string>
-    <string name="are_you_sure">Are you sure?</string>
     <string name="are_you_sure_delete">Do you really want to delete your account?</string>
     <string name="unsaved_data">Unsaved changes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="are_you_sure">Are you sure?</string>
 
 </resources>
