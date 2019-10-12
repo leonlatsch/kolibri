@@ -321,20 +321,14 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void saveNewUserAndAccessToken(final String newAccessToken) {
-        Call<Container<UserDTO>> call;
-        if (newAccessToken == null) {
-            call = userService.get(userInterface.getAccessToken());
-        } else {
-            call = userService.get(newAccessToken);
-        }
+        Call<Container<UserDTO>> call = userService.get(newAccessToken);
         call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    String accessToken = userInterface.getAccessToken();
                     String privateKey = userInterface.getUser().getPrivateKey();
 
-                    userInterface.save(response.body().getContent(), accessToken, privateKey);
+                    userInterface.save(response.body().getContent(), newAccessToken, privateKey);
                 }
             }
 
