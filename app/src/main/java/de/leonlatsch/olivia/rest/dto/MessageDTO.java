@@ -3,8 +3,8 @@ package de.leonlatsch.olivia.rest.dto;
 public class MessageDTO {
 
     private String mid;
-    private int from;
-    private int to;
+    private String from;
+    private String to;
     private String type;
     private String timestamp;
     private String content;
@@ -12,7 +12,7 @@ public class MessageDTO {
 
     public MessageDTO() {}
 
-    public MessageDTO(String mid, int from, int to, String type, String timestamp, String content, String cid) {
+    public MessageDTO(String mid, String from, String to, String type, String timestamp, String content, String cid) {
         this.mid = mid;
         this.from = from;
         this.to = to;
@@ -30,19 +30,19 @@ public class MessageDTO {
         this.mid = mid;
     }
 
-    public int getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(int from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public int getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(int to) {
+    public void setTo(String to) {
         this.to = to;
     }
 

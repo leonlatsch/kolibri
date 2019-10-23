@@ -49,12 +49,12 @@ public class ProfilePicActivity extends AppCompatActivity {
         progressOverlay = findViewById(R.id.progressOverlay);
 
         title.setText((String) getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_USERNAME));
-        int uid = (int) getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_UID);
+        String uid = (String) getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_UID);
 
         loadProfilePic(uid);
     }
 
-    private void loadProfilePic(int uid) {
+    private void loadProfilePic(String uid) {
         isLoading(true);
         final Context context = this;
         Call<Container<String>> call = userService.loadProfilePic(userInterface.getAccessToken(), uid);

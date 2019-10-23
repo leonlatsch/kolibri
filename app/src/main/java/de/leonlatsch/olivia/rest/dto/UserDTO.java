@@ -2,7 +2,7 @@ package de.leonlatsch.olivia.rest.dto;
 
 public class UserDTO {
 
-    private int uid;
+    private String uid;
     private String username;
     private String email;
     private String password;
@@ -11,7 +11,7 @@ public class UserDTO {
 
     public UserDTO() {}
 
-    public UserDTO(int uid, String username, String email, String password, String profilePic, String profilePicTn) {
+    public UserDTO(String uid, String username, String email, String password, String profilePic, String profilePicTn) {
         this.uid = uid;
         this.username = username;
         this.email = email;
@@ -20,11 +20,11 @@ public class UserDTO {
         this.profilePicTn = profilePicTn;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 

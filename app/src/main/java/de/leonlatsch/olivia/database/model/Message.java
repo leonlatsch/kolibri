@@ -16,10 +16,10 @@ public class Message extends Model {
     private String cid;
 
     @Column(name = "uid_from")
-    private int from;
+    private String from;
 
     @Column(name = "uid_to")
-    private int to;
+    private String to;
 
     @Column(name = "type")
     private String type;
@@ -32,7 +32,7 @@ public class Message extends Model {
 
     public Message() {}
 
-    public Message(String mid, String cid, int from, int to, String type, Timestamp timestamp, String content) {
+    public Message(String mid, String cid, String from, String to, String type, Timestamp timestamp, String content) {
         this.mid = mid;
         this.cid = cid;
         this.from = from;
@@ -58,19 +58,19 @@ public class Message extends Model {
         this.cid = cid;
     }
 
-    public int getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(int from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public int getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(int to) {
+    public void setTo(String to) {
         this.to = to;
     }
 

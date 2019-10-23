@@ -11,7 +11,7 @@ public class Contact extends Model {
     private String contactId;
 
     @Column(name = "uid")
-    private int uid;
+    private String uid;
 
     @Column(name = "username")
     private String username;
@@ -24,7 +24,7 @@ public class Contact extends Model {
 
     public Contact() {}
 
-    public Contact(String contactId, int uid, String username, String profilePicTn, String publicKey) {
+    public Contact(String contactId, String uid, String username, String profilePicTn, String publicKey) {
         this.contactId = contactId;
         this.uid = uid;
         this.username = username;
@@ -40,11 +40,11 @@ public class Contact extends Model {
         this.contactId = contactId;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 

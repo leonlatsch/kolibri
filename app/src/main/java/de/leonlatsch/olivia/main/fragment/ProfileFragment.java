@@ -141,6 +141,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
+                    System.out.println(response.body().getMessage());
                     if (Responses.MSG_FREE.equals(response.body().getMessage())
                             || Responses.MSG_TAKEN_BY_YOU.equals(response.body().getMessage())) {
                         emailValid = true;

@@ -27,7 +27,7 @@ public class ContactInterface extends BaseInterface {
         userInterface = UserInterface.getInstance();
     }
 
-    public Contact getContact(int uid) {
+    public Contact getContactByUid(String uid) {
         return new Select().from(Contact.class).where(QUEUE_UID_WHERE, uid).executeSingle();
     }
 

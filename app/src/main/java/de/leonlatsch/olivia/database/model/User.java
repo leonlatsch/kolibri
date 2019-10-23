@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
 public class User extends Model {
 
     @Column(name = "uid", index = true)
-    private int uid;
+    private String uid;
 
     @Column(name = "username")
     private String username;
@@ -30,7 +30,7 @@ public class User extends Model {
 
     public User() {}
 
-    public User(int uid, String username, String email, String password, String profilePicTn, String accessToken, String privateKey) {
+    public User(String uid, String username, String email, String password, String profilePicTn, String accessToken, String privateKey) {
         this.uid = uid;
         this.username = username;
         this.email = email;
@@ -40,11 +40,11 @@ public class User extends Model {
         this.privateKey = privateKey;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
