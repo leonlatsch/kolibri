@@ -1,6 +1,9 @@
 package de.leonlatsch.olivia.database.interfaces;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+
+import java.util.List;
 
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.database.model.User;
@@ -37,6 +40,10 @@ public class ContactInterface extends BaseInterface {
 
     public void delete(Contact contact) {
         contact.delete();
+    }
+
+    public void deleteAll() {
+        new Delete().from(Contact.class).execute();
     }
 
     public void save(UserDTO userDTO, String publicKey) {

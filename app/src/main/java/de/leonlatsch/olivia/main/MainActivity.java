@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.database.EntityChangedListener;
+import de.leonlatsch.olivia.database.interfaces.ChatInterface;
+import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.database.model.User;
 import de.leonlatsch.olivia.login.LoginActivity;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View progressOverlay;
 
     private UserInterface userInterface;
+    private ContactInterface contactInterface;
+    private ChatInterface chatInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         userInterface = UserInterface.getInstance();
         userInterface.addEntityChangedListener(this);
+        contactInterface = ContactInterface.getInstance();
+        chatInterface = ChatInterface.getInstance();
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -129,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user != null) {
             userInterface.delete(user);
         }
+        contactInterface.deleteAll();
+        chatInterface.deleteAll();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }
