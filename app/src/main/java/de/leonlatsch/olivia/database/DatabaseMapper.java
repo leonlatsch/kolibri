@@ -89,19 +89,6 @@ public class DatabaseMapper {
         return contact;
     }
 
-    public Contact toContact(UserDTO user) {
-        if (user == null) {
-            return null;
-        }
-
-        Contact contact = new Contact();
-        contact.setContactId(Generator.genUUid());
-        contact.setUid(user.getUid());
-        contact.setUsername(user.getUsername());
-        contact.setProfilePicTn(user.getProfilePicTn());
-        return contact;
-    }
-
     public User toUser(Contact contact) {
         if (contact == null) {
             return null;

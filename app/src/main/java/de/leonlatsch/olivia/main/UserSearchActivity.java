@@ -16,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.database.DatabaseMapper;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
-import de.leonlatsch.olivia.main.adapter.ContactAdapter;
+import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.util.AndroidUtils;
@@ -35,8 +34,7 @@ public class UserSearchActivity extends AppCompatActivity {
     private ImageView searchBtn;
     private EditText searchBar;
     private ListView listView;
-    private ContactAdapter contactAdapter;
-    private DatabaseMapper databaseMapper;
+    private UserAdapter userAdapter;
 
     private View progressOverlay;
 
@@ -63,8 +61,7 @@ public class UserSearchActivity extends AppCompatActivity {
         listView = findViewById(R.id.user_search_list_view);
         progressOverlay = findViewById(R.id.progressOverlay);
 
-        contactAdapter = new ContactAdapter(this, new ArrayList<>());
-        databaseMapper = DatabaseMapper.getInstance();
+        userAdapter = new UserAdapter(this, new ArrayList<>());
 
         searchBtn.setOnClickListener(v -> search());
         searchBar.setOnEditorActionListener((v, actionId, event) -> {
@@ -72,26 +69,25 @@ public class UserSearchActivity extends AppCompatActivity {
             return true;
         });
 
-        listView.setAdapter(contactAdapter);
+        listView.setAdapter(userAdapter);
         listView.setOnItemClickListener(itemClickListener);
     }
 
     private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
         Object raw = listView.getItemAtPosition(position);
-        if (raw instanceof Contact) {
-            Contact user = (Contact) raw;
+        if (raw instanceof UserDTO) {
+            UserDTO user = (UserDTO) raw;
             proceedUser(user);
         }
     };
 
-    private void proceedUser(Contact user) {
+    private void proceedUser(UserDTO user) {
         Call<Container<String>> call = userService.getPublicKey(userInterface.getAccessToken(), user.getUid());
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    user.setPublicKey(response.body().getContent());
-                    contactInterface.save(user);
+                    contactInterface.save(user, response.body().getContent());
                 }
             }
 
@@ -110,10 +106,10 @@ public class UserSearchActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         Container<List<UserDTO>> container = response.body();
                         if (container.getContent() != null && !container.getContent().isEmpty()) {
-                            contactAdapter.clear();
+                            userAdapter.clear();
                             for (UserDTO user : container.getContent()) {
                                 if (!user.getUid().equals(userInterface.getUser().getUid())) {
-                                    contactAdapter.add(databaseMapper.toContact(user)); // TODO: start new chat activity and save contact at first message
+                                    userAdapter.add(user);
                                 }
                             }
                         }

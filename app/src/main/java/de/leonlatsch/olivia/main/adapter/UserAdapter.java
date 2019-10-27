@@ -11,13 +11,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.util.ImageUtil;
 
-public class ContactAdapter extends ArrayAdapter<Contact> {
+public class UserAdapter extends ArrayAdapter<UserDTO> {
 
-    private List<Contact> dataset;
+    private List<UserDTO> dataset;
     Context mContext;
 
     private static class ViewHolder {
@@ -25,7 +24,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         TextView textView;
     }
 
-    public ContactAdapter(Context context, List<Contact> users) {
+    public UserAdapter(Context context, List<UserDTO> users) {
         super(context, 0, users);
         this.dataset = users;
         this.mContext = context;
@@ -33,7 +32,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Contact user = getItem(position);
+        UserDTO user = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {

@@ -7,9 +7,13 @@ import java.util.List;
 
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.database.model.User;
+import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ContactInterface extends BaseInterface {
 
@@ -32,10 +36,6 @@ public class ContactInterface extends BaseInterface {
 
     public Contact getContact(String contactId) {
         return new Select().from(Contact.class).where(QUEUE_CONTACT_ID_WHERE, contactId).executeSingle();
-    }
-
-    public List<Contact> getAll() {
-        return new Select().from(Contact.class).execute();
     }
 
     public void delete(Contact contact) {
