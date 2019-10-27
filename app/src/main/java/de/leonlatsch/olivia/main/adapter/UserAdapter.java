@@ -17,7 +17,7 @@ import de.leonlatsch.olivia.util.ImageUtil;
 public class UserAdapter extends ArrayAdapter<UserDTO> {
 
     private List<UserDTO> dataset;
-    Context mContext;
+    private Context mContext;
 
     private static class ViewHolder {
         ImageView imageView;
