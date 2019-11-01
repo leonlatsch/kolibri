@@ -44,4 +44,6 @@
     <string name="username">Nutzername</string>
     <string name="username_hint">Gib einen Nutzernamen ein</string>
     <string name="yes">Ja</string>
+    <string name="send">Senden</string>
+    <string name="enter_message">Nachricht eingeben</string>
 </resources>

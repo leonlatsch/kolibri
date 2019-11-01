@@ -3,6 +3,7 @@ package de.leonlatsch.olivia.main;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -92,7 +93,8 @@ public class UserSearchActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    //TODO: open chat activity
+                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    finish();
                 }
             }
 
