@@ -11,7 +11,7 @@ public class Values {
     public static final String INTENT_KEY_PROFILE_PIC_USERNAME = "intent_profile_pic_username";
 
     // API
-    public static final String API_BASE_URL = "https://olivia.leonlatsch.de/backend/";
+    public static final String API_BASE_URL = "https://olivia.leonlatsch.dev/backend/";
 
     private Values() {
         // Prevent instantiation
