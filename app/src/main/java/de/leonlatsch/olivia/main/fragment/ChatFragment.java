@@ -8,27 +8,37 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.interfaces.ChatInterface;
 import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.main.UserSearchActivity;
+import de.leonlatsch.olivia.main.adapter.ChatListAdapter;
 
 public class ChatFragment extends Fragment {
 
     private MainActivity parent;
     private View view;
+    private ListView listView;
+    private ChatListAdapter chatListAdapter;
+
+    private ChatInterface chatInterface;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.fragment_chats, container, false);
-
         parent = (MainActivity) getActivity();
+        chatInterface = ChatInterface.getInstance();
+
+        listView = view.findViewById(R.id.fragment_chat_list_view);
+        chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
+        listView.setAdapter(chatListAdapter);
 
         FloatingActionButton newChatFab = view.findViewById(R.id.newChatFab);
-
         newChatFab.setOnClickListener(v -> newChat());
 
         return view;

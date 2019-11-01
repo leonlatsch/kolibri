@@ -11,6 +11,7 @@ import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
+import de.leonlatsch.olivia.util.Generator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,17 +47,18 @@ public class ContactInterface extends BaseInterface {
         new Delete().from(Contact.class).execute();
     }
 
-    public void save(UserDTO userDTO, String publicKey) {
-        save(getDatabaseMapper().toModel(userDTO), publicKey);
+    public String save(UserDTO userDTO, String publicKey) {
+        return save(getDatabaseMapper().toModel(userDTO), publicKey);
     }
 
-    public void save(User user, String publicKey) {
+    public String save(User user, String publicKey) {
         Contact contact = getDatabaseMapper().toContact(user);
         contact.setPublicKey(publicKey);
-        save(contact);
+        contact.setContactId(Generator.genUUid());
+        return save(contact);
     }
 
-    public void save(Contact contact) {
+    public String save(Contact contact) {
         Contact saved = new Select().from(Contact.class).where(QUEUE_CONTACT_ID_WHERE, contact.getContactId()).executeSingle();
 
         if (saved != null) {
@@ -64,6 +66,7 @@ public class ContactInterface extends BaseInterface {
         }
 
         contact.save();
+        return contact.getContactId();
     }
 
     public static ContactInterface getInstance() {

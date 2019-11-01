@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.database.interfaces.ChatInterface;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.database.model.Chat;
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
@@ -25,6 +27,7 @@ import de.leonlatsch.olivia.main.adapter.UserAdapter;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.util.AndroidUtils;
+import de.leonlatsch.olivia.util.Generator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +44,7 @@ public class UserSearchActivity extends AppCompatActivity {
     private UserService userService;
     private UserInterface userInterface;
     private ContactInterface contactInterface;
+    private ChatInterface chatInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,7 @@ public class UserSearchActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
+        chatInterface = ChatInterface.getInstance();
 
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
@@ -87,7 +92,7 @@ public class UserSearchActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    contactInterface.save(user, response.body().getContent());
+                    //TODO: open chat activity
                 }
             }
 

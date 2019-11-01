@@ -46,6 +46,10 @@ public class ChatInterface extends BaseInterface {
         new Delete().from(Message.class).execute();
     }
 
+    public List<Chat> getALl() {
+        return new Select().from(Chat.class).execute();
+    }
+
     public Chat getChat(String cid) {
         return new Select().from(Chat.class).where(QUEUE_CID_WHERE, cid).executeSingle();
     }
