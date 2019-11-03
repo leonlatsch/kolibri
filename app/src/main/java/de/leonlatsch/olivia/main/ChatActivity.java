@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.broker.MessageConsumer;
 import de.leonlatsch.olivia.broker.MessageListener;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 
-public class ChatActivity extends AppCompatActivity implements MessageListener {
+public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +33,5 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void receive(MessageDTO message) {
-        //TODO
     }
 }

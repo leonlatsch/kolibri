@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.broker.MessageConsumer;
+import de.leonlatsch.olivia.broker.MessageListener;
 import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.database.interfaces.ChatInterface;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -27,9 +29,10 @@ import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.fragment.ChatFragment;
 import de.leonlatsch.olivia.main.fragment.ProfileFragment;
 import de.leonlatsch.olivia.main.fragment.SettingsFragment;
+import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.util.ImageUtil;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User> {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User>, MessageListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userInterface.addEntityChangedListener(this);
         contactInterface = ContactInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
+
+        MessageConsumer.addMessageListener(this);
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -158,5 +163,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public View getProgressOverlay() {
         return progressOverlay;
+    }
+
+    @Override
+    public void receive(MessageDTO message) {
+        System.out.println("Received " + message + " in " + this);
     }
 }

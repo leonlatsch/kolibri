@@ -1,5 +1,6 @@
 package de.leonlatsch.olivia.broker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -18,40 +19,54 @@ public class MessageConsumer {
 
     private static final String USER_PREFIX = "user.";
     private static final String USER_QUEUE_PREFIX = "queue.user.";
+    private static final String THREAD_NAME = "BROKER-CONN-THREAD";
 
     private static MessageConsumer consumer; // Singleton
 
-    private List<MessageListener> listeners;
+    private ConnectionFactory connectionFactory;
+    private DeliverCallback callback;
+    private UserInterface userInterface;
 
-    private boolean isConnectionEstablished = false;
+    private static List<MessageListener> listeners = new ArrayList<>();
+    private static boolean isRunning = false;
 
     private MessageConsumer() {
-        listeners = new ArrayList<>();
+        initialize();
+    }
 
-        UserInterface userInterface = UserInterface.getInstance();
+    private void initialize() {
+        userInterface = UserInterface.getInstance();
 
         // Initialize config // TODO: use settings
-        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("olivia.leonlatsch.dev");
         connectionFactory.setPort(5672);
         connectionFactory.setUsername(USER_PREFIX + userInterface.getUser().getUid());
         connectionFactory.setPassword(userInterface.getAccessToken());
 
-        DeliverCallback callback = ((consumerTag, message) -> {
-            System.out.println(new String(message.getBody(), StandardCharsets.UTF_8));
+        callback = ((consumerTag, message) -> {
+           MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
+           if (messageDTO != null) {
+               notifyListeners(messageDTO);
+           }
         });
-
-        try {
-            Connection connection = connectionFactory.newConnection();
-            Channel channel = connection.createChannel();
-            channel.basicConsume(USER_QUEUE_PREFIX + userInterface.getUser().getUid(), true, callback, consumerTag -> {});
-            isConnectionEstablished = true;
-        } catch (IOException | TimeoutException e) {
-            isConnectionEstablished = false;
-        }
     }
 
-    public void addMessageListener(MessageListener listener) {
+    private void run() {
+        new Thread(() -> {
+            try {
+                Connection connection = connectionFactory.newConnection();
+                Channel channel = connection.createChannel();
+                channel.basicConsume(USER_QUEUE_PREFIX + userInterface.getUser().getUid(), true, callback, consumerTag -> {
+                });
+                isRunning = true;
+            } catch (IOException | TimeoutException e) {
+                isRunning = false;
+            }
+        }, THREAD_NAME).start();
+    }
+
+    public static void addMessageListener(MessageListener listener) {
         listeners.add(listener);
     }
 
@@ -61,15 +76,17 @@ public class MessageConsumer {
         }
     }
 
-    public static MessageConsumer getInstance() {
-        if (consumer == null) {
-            consumer = new MessageConsumer();
-        }
+    public static void start() {
+        if (!isRunning()) {
+            if (consumer == null) {
+                consumer = new MessageConsumer();
+            }
 
-        return consumer;
+            consumer.run();
+        }
     }
 
-    public boolean isConnectionEstablished() {
-        return isConnectionEstablished;
+    public static boolean isRunning() {
+        return isRunning;
     }
 }
