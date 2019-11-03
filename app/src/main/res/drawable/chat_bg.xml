@@ -2,5 +2,6 @@
 <bitmap android:src="@drawable/login_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:autoMirrored="false"
-    android:gravity="center">
+    android:gravity="center"
+    android:alpha="0.5">
 </bitmap>
