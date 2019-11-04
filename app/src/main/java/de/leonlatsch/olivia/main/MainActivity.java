@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         contactInterface = ContactInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
 
+        MessageConsumer.start();
         MessageConsumer.addMessageListener(this);
 
         navigationView = findViewById(R.id.nav_view);
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         contactInterface.deleteAll();
         chatInterface.deleteAll();
+        MessageConsumer.stop();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }

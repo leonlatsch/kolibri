@@ -34,7 +34,6 @@ public class BootActivity extends AppCompatActivity {
 
         ActiveAndroid.initialize(this);
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-        MessageConsumer.start();
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();

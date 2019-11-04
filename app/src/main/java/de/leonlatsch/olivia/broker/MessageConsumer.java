@@ -26,6 +26,7 @@ public class MessageConsumer {
     private ConnectionFactory connectionFactory;
     private DeliverCallback callback;
     private UserInterface userInterface;
+    private Connection connection;
 
     private static List<MessageListener> listeners = new ArrayList<>();
     private static boolean isRunning = false;
@@ -55,7 +56,7 @@ public class MessageConsumer {
     private void run() {
         new Thread(() -> {
             try {
-                Connection connection = connectionFactory.newConnection();
+                connection = connectionFactory.newConnection();
                 Channel channel = connection.createChannel();
                 channel.basicConsume(USER_QUEUE_PREFIX + userInterface.getUser().getUid(), true, callback, consumerTag -> {
                 });
@@ -63,6 +64,14 @@ public class MessageConsumer {
             } catch (IOException | TimeoutException e) {
                 isRunning = false;
             }
+        }, THREAD_NAME).start();
+    }
+
+    private void disconnect() {
+        new Thread(() -> {
+            try {
+                connection.close();
+            } catch (IOException e) {}
         }, THREAD_NAME).start();
     }
 
@@ -76,6 +85,10 @@ public class MessageConsumer {
         }
     }
 
+    public static boolean isRunning() {
+        return isRunning;
+    }
+
     public static void start() {
         if (!isRunning()) {
             if (consumer == null) {
@@ -86,7 +99,11 @@ public class MessageConsumer {
         }
     }
 
-    public static boolean isRunning() {
-        return isRunning;
+    public static void stop() {
+        if (isRunning()) {
+            consumer.disconnect();
+            consumer = null;
+            isRunning = false;
+        }
     }
 }
