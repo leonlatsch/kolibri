@@ -13,7 +13,7 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.ChatActivity">
+        <activity android:name=".chat.ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.leonlatsch.olivia.main.MainActivity" />

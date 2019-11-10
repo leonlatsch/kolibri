@@ -21,7 +21,7 @@ import de.leonlatsch.olivia.util.ImageUtil;
 public class ChatListAdapter extends ArrayAdapter<Chat> {
 
     private List<Chat> dataset;
-    private Context context;
+    private Context mContext;
     private ContactInterface contactInterface;
 
     private static class ViewHolder {
@@ -34,7 +34,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     public ChatListAdapter(@NonNull Context context, List<Chat> contactList) {
         super(context, 0, contactList);
         this.dataset = contactList;
-        this.context = context;
+        this.mContext = context;
         this.contactInterface = ContactInterface.getInstance();
     }
     
@@ -59,7 +59,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         if (contact.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
         } else {
-            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(context));
+            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext));
         }
         viewHolder.usernameTextView.setText(contact.getUsername());
         viewHolder.lastMessageTextView.setText("Ersetzen mit letzter NAchricht!!!"); //TODO: set last message as text

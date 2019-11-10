@@ -1,4 +1,4 @@
-package de.leonlatsch.olivia.main;
+package de.leonlatsch.olivia.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

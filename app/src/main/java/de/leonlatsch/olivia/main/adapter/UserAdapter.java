@@ -17,7 +17,7 @@ import de.leonlatsch.olivia.util.ImageUtil;
 public class UserAdapter extends ArrayAdapter<UserDTO> {
 
     private List<UserDTO> dataset;
-    private Context context;
+    private Context mContext;
 
     private static class ViewHolder {
         ImageView imageView;
@@ -27,7 +27,7 @@ public class UserAdapter extends ArrayAdapter<UserDTO> {
     public UserAdapter(Context context, List<UserDTO> users) {
         super(context, 0, users);
         this.dataset = users;
-        this.context = context;
+        this.mContext = context;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UserAdapter extends ArrayAdapter<UserDTO> {
         if (user.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
         } else {
-            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(context));
+            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext));
         }
         viewHolder.textView.setText(user.getUsername());
 

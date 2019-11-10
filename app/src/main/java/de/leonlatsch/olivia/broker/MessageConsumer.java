@@ -19,7 +19,7 @@ public class MessageConsumer {
 
     private static final String USER_PREFIX = "user.";
     private static final String USER_QUEUE_PREFIX = "queue.user.";
-    private static final String THREAD_NAME = "BROKER-CONN-THREAD";
+    private static final String THREAD_NAME = "BROKER-NET-THREAD";
 
     private static MessageConsumer consumer; // Singleton
 
