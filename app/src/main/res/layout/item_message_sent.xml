@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="end"
-    android:padding="8dp">
+    android:padding="1dp">
 
     <TextView
         android:text="PLACEHOLDER"
         android:id="@+id/sent_message_timestamp"
         android:textSize="11dp"
+        android:textColor="@android:color/darker_gray"
         android:paddingRight="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:maxWidth="240dp"
+        android:minWidth="50dp"
         android:background="@drawable/rounded_rectangle_light_purple" />
 
 </LinearLayout>
