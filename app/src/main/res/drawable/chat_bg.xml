@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bitmap android:src="@drawable/login_background"
+<bitmap android:src="@drawable/light_flower_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:autoMirrored="false"
     android:gravity="center"
-    android:alpha="0.5">
+    android:alpha="0.3">
 </bitmap>
