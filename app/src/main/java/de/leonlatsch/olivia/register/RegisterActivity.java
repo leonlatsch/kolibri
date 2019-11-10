@@ -25,7 +25,7 @@ import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
-import de.leonlatsch.olivia.security.KeyGenerator;
+import de.leonlatsch.olivia.security.CryptoManager;
 import de.leonlatsch.olivia.util.AndroidUtils;
 import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
@@ -212,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
         userDTO.setUsername(usernameEditText.getText().toString());
         userDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
 
-        KeyPair keyPair = KeyGenerator.genKeyPair();
+        KeyPair keyPair = CryptoManager.genKeyPair();
 
         Call<Container<String>> call = authService.register(userDTO, Base64.toBase64(keyPair.getPublic().getEncoded())); // TODO: SAVE PRIVATE KEY
         call.enqueue(new Callback<Container<String>>() {

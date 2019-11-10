@@ -47,7 +47,7 @@ public class MessageConsumer {
 
         callback = ((consumerTag, message) -> {
            MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
-           if (messageDTO != null) {
+           if (messageDTO != null) { //TODO: decode and decrypt messages
                notifyListeners(messageDTO);
            }
         });

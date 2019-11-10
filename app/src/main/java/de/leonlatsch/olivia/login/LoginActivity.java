@@ -25,7 +25,7 @@ import de.leonlatsch.olivia.rest.service.AuthService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.Hash;
-import de.leonlatsch.olivia.security.KeyGenerator;
+import de.leonlatsch.olivia.security.CryptoManager;
 import de.leonlatsch.olivia.util.AndroidUtils;
 import de.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    KeyPair newKeyPair = KeyGenerator.genKeyPair();
+                    KeyPair newKeyPair = CryptoManager.genKeyPair();
                     userInterface.save(response.body().getContent(), accessToken, Base64.toBase64(newKeyPair.getPrivate().getEncoded()));
                     updatePublicKey(Base64.toBase64(newKeyPair.getPublic().getEncoded()));
                     isLoading(false);
