@@ -5,24 +5,33 @@
     android:gravity="end"
     android:padding="1dp">
 
-    <TextView
-        android:text="PLACEHOLDER"
-        android:id="@+id/sent_message_timestamp"
-        android:textSize="11dp"
-        android:textColor="@android:color/darker_gray"
-        android:paddingRight="2dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
-
-    <TextView
-        android:text="PALCEHOLDER"
-        android:id="@+id/sent_message_body"
+    <LinearLayout
+        android:id="@+id/sent_message_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="6dp"
-        android:maxWidth="240dp"
         android:minWidth="50dp"
-        android:background="@drawable/rounded_rectangle_light_purple" />
+        android:maxWidth="240dp"
+        android:background="@drawable/rounded_rectangle_light_purple">
+
+        <TextView
+            android:text="PLACEHOLDER"
+            android:id="@+id/sent_message_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp" />
+
+        <TextView
+            android:text="00:00"
+            android:id="@+id/sent_message_timestamp"
+            android:textSize="11dp"
+            android:paddingRight="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="24dp"
+            android:minWidth="30dp"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -75,6 +75,8 @@ public class UserSearchActivity extends AppCompatActivity {
 
         listView.setAdapter(userAdapter);
         listView.setOnItemClickListener(itemClickListener);
+
+        searchBar.requestFocus();
     }
 
     private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
