@@ -96,6 +96,8 @@ public class UserSearchActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                     intent.putExtra(Values.INTENT_KEY_CHAT_UID, user.getUid());
+                    intent.putExtra(Values.INTENT_KEY_CHAT_USERNAME, user.getUsername());
+                    intent.putExtra(Values.INTENT_KEY_CHAT_PROFILE_PIC, user.getProfilePicTn());
                     startActivity(intent);
                     finish();
                 }
