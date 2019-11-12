@@ -18,6 +18,7 @@ import java.util.List;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chat.ChatActivity;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.interfaces.ChatInterface;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
@@ -93,7 +94,9 @@ public class UserSearchActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 if (response.isSuccessful()) {
-                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    intent.putExtra(Values.INTENT_KEY_CHAT_UID, user.getUid());
+                    startActivity(intent);
                     finish();
                 }
             }

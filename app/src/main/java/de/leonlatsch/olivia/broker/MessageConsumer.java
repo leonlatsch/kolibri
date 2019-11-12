@@ -14,6 +14,9 @@ import java.util.concurrent.TimeoutException;
 
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
+import de.leonlatsch.olivia.security.CryptoManager;
+
+import static de.leonlatsch.olivia.constants.MessageType.*;
 
 public class MessageConsumer {
 
@@ -47,8 +50,23 @@ public class MessageConsumer {
 
         callback = ((consumerTag, message) -> {
            MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
-           if (messageDTO != null) { //TODO: decode and decrypt messages
-               notifyListeners(messageDTO);
+           if (messageDTO != null) {
+               switch (messageDTO.getType()) {
+                   case TEXT:
+                       processTextMessage(messageDTO);
+                       break;
+                   case IMAGE:
+                       //TODO: Process Image
+                       break;
+                   case AUDIO:
+                       //TODO: Process Audio
+                       break;
+                   case VIDEO:
+                       //TODO Process Video
+                       break;
+                   default:
+                       break;
+               }
            }
         });
     }
@@ -65,6 +83,13 @@ public class MessageConsumer {
                 isRunning = false;
             }
         }, THREAD_NAME).start();
+    }
+
+    private void processTextMessage(MessageDTO message) {
+        byte[] decryptedData = CryptoManager.decryptAndDecode(message.getContent(), userInterface.getUser().getPrivateKey());
+        String content = new String(decryptedData, StandardCharsets.UTF_8);
+        message.setContent(content);
+        notifyListeners(message);
     }
 
     private void disconnect() {

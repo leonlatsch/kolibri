@@ -14,9 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.constants.Values;
+import de.leonlatsch.olivia.database.model.Chat;
 import de.leonlatsch.olivia.database.model.Message;
 
 public class ChatActivity extends AppCompatActivity {
+
+    private Chat chat;
+    private String chatUid;
 
     private RecyclerView messageRecycler;
     private MessageListAdapter messageListAdapter;
@@ -31,6 +36,8 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        chatUid = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_UID);
+
         List<Message> messageList = new ArrayList<>(); // Mock data for test
         messageList.add(new Message("qhsgfdeagde", "abcde", "be414f01-989a-47de-8b5f-b6642a58dec3", "ae414f01-989a-47de-8b5f-b6642a58dec3", "TEXT", new Timestamp(21426), "Hallo ich bins"));
         messageList.add(new Message("shdfgssfjgh", "abcde", "ae414f01-989a-47de-8b5f-b6642a58dec3", "be414f01-989a-47de-8b5f-b6642a58dec4", "TEXT", new Timestamp(21426), "Moin"));
@@ -43,7 +50,6 @@ public class ChatActivity extends AppCompatActivity {
         messageListAdapter = new MessageListAdapter(this, messageList);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
         messageRecycler.setAdapter(messageListAdapter);
-
     }
 
     @Override
