@@ -2,6 +2,7 @@ package de.leonlatsch.olivia.boot;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,19 +38,21 @@ public class BootActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
 
-        userInterface.loadUser();
+        new Handler().postDelayed(() -> {
+            userInterface.loadUser();
 
-        Intent intent = null;
+            Intent intent = null;
 
-        if (isValidUserSaved()) {
-            intent = new Intent(getApplicationContext(), MainActivity.class);
-        } else {
-            intent = new Intent(getApplicationContext(), LoginActivity.class);
-        }
+            if (isValidUserSaved()) {
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+            } else {
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
+            }
 
-        startActivity(intent);
-        // Make it so you cant go back to this activity
-        finish();
+            startActivity(intent);
+            // Make it so you cant go back to this activity
+            finish();
+        }, 100);
     }
 
     /**

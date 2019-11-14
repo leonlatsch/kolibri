@@ -32,9 +32,12 @@ import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.rest.service.ChatService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
+import de.leonlatsch.olivia.security.CryptoManager;
 import de.leonlatsch.olivia.util.Generator;
 import de.leonlatsch.olivia.util.ImageUtil;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity implements MessageListener {
 
@@ -74,7 +77,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
 
         List<Message> messageList;
         if (!isTemp) {
-             messageList = chatInterface.getMessagesForChat(chat.getCid());
+            messageList = chatInterface.getMessagesForChat(chat.getCid());
         } else {
             messageList = new ArrayList<>();
         }
@@ -106,6 +109,16 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         }
     }
 
+    private Callback<Container<String>> sendMessageCallback = new Callback<Container<String>>() {
+        @Override
+        public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {}
+
+        @Override
+        public void onFailure(Call<Container<String>> call, Throwable t) {
+            //TODO: add message to queue if sending fails
+        }
+    };
+
     private void onSendPressed() {
         if (!messageEditText.getText().toString().isEmpty()) {
             Message message = constructMessage();
@@ -114,12 +127,16 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
                 contactInterface.save(contact);
                 isTemp = false;
             }
-            chatInterface.saveMessage(message); //TODO: add message to queue if sending fails
+            chatInterface.saveMessage(message);
             messageListAdapter.add(message);
             messageEditText.setText(Values.EMPTY);
             messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
             messageEditText.requestFocus();
-            Call<Container<String>> call = chatService.send(userInterface.getAccessToken(), DatabaseMapper.getInstance().toDto(message));
+
+            MessageDTO encryptedMessage = DatabaseMapper.getInstance().toDto(message);
+            encryptedMessage.setContent(CryptoManager.encryptAndEncode(encryptedMessage.getContent().getBytes(), contact.getPublicKey()));
+            Call<Container<String>> call = chatService.send(userInterface.getAccessToken(), encryptedMessage);
+            call.enqueue(sendMessageCallback);
         }
     }
 
@@ -175,7 +192,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
     }
 
     @Override
-    public void receive(MessageDTO message) {
-
+    public void receive(MessageDTO messageDTO) {
+        Message message = DatabaseMapper.getInstance().toModel(messageDTO);
     }
 }
