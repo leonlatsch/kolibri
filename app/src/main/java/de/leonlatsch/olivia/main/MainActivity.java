@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.broker.MessageConsumer;
-import de.leonlatsch.olivia.broker.MessageListener;
 import de.leonlatsch.olivia.database.EntityChangedListener;
 import de.leonlatsch.olivia.database.interfaces.ChatInterface;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -29,7 +28,6 @@ import de.leonlatsch.olivia.login.LoginActivity;
 import de.leonlatsch.olivia.main.fragment.ChatFragment;
 import de.leonlatsch.olivia.main.fragment.ProfileFragment;
 import de.leonlatsch.olivia.main.fragment.SettingsFragment;
-import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.util.ImageUtil;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User> {

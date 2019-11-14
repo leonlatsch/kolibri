@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.broker.MessageConsumer;
 import de.leonlatsch.olivia.broker.MessageListener;
 import de.leonlatsch.olivia.constants.Formats;
 import de.leonlatsch.olivia.constants.MessageType;
@@ -124,6 +125,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
     private void onSendPressed() {
         if (!messageEditText.getText().toString().isEmpty()) {
             Message message = constructMessage();
+            MessageConsumer.addMessageListener(this);
             if (isTemp) { // If this is the first message save the temo chat and contact
                 chatInterface.saveChat(chat);
                 contactInterface.save(contact);

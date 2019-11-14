@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.broker.MessageConsumer;
 import de.leonlatsch.olivia.broker.MessageListener;
 import de.leonlatsch.olivia.chat.ChatActivity;
 import de.leonlatsch.olivia.constants.Values;
@@ -38,7 +38,6 @@ import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChatFragment extends Fragment implements MessageListener {
@@ -60,6 +59,7 @@ public class ChatFragment extends Fragment implements MessageListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.fragment_chats, container, false);
         parent = (MainActivity) getActivity();
+        MessageConsumer.addMessageListener(this);
 
         userInterface = UserInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
