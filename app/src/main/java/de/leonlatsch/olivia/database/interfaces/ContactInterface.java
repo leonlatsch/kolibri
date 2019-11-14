@@ -23,8 +23,8 @@ public class ContactInterface extends BaseInterface {
         userInterface = UserInterface.getInstance();
     }
 
-    public Contact getContact(String contactId) {
-        return new Select().from(Contact.class).where(QUEUE_UID_WHERE, contactId).executeSingle();
+    public Contact getContact(String uid) {
+        return new Select().from(Contact.class).where(QUEUE_UID_WHERE, uid).executeSingle();
     }
 
     public void delete(Contact contact) {

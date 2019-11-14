@@ -17,19 +17,14 @@ public class ChatInterface extends BaseInterface {
 
     private static ChatInterface chatInterface; // Singleton
 
-    private ChatInterface() {}
+    private ChatInterface() {
+    }
 
     public void saveMessage(Message message) {
-        String cid = message.getCid();
-        Chat chat = new Select().from(Chat.class).where(QUEUE_CID_WHERE, cid).executeSingle();
-
-        if (chat == null) {
-            chat = new Chat();
-            chat.setCid(cid);
-            //TODO: create new contact
-            chat.save();
+        Message savedMessage = new Select().from(Message.class).where(QUEUE_MID_WHERE, message.getMid()).executeSingle();
+        if (savedMessage != null) {
+            message.save();
         }
-        message.save();
     }
 
     public void saveChat(Chat chat) {
