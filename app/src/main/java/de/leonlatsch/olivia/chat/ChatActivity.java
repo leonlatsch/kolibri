@@ -1,12 +1,14 @@
 package de.leonlatsch.olivia.chat;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -69,6 +71,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        MessageConsumer.addMessageListener(this);
         contactInterface = ContactInterface.getInstance();
         userInterface = UserInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
@@ -149,7 +152,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         if (isActive && messageDTO.getCid().equals(chat.getCid()) && !isTemp) {
             Message message = DatabaseMapper.getInstance().toModel(messageDTO);
             chatInterface.saveMessage(message);
-            messageListAdapter.add(message);
+            new Handler(getApplicationContext().getMainLooper()).post(() -> messageListAdapter.add(message)); // Invoke on main thread
         }
     }
 

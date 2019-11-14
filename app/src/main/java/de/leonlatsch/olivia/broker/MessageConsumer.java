@@ -1,6 +1,7 @@
 package de.leonlatsch.olivia.broker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.AlreadyClosedException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -96,7 +97,7 @@ public class MessageConsumer {
         new Thread(() -> {
             try {
                 connection.close();
-            } catch (IOException e) {}
+            } catch (IOException | AlreadyClosedException e) {}
         }, THREAD_NAME).start();
     }
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,6 @@ public class ChatFragment extends Fragment implements MessageListener {
 
         databaseMapper = DatabaseMapper.getInstance();
 
-        List<Chat> vea = chatInterface.getALl();
         listView = view.findViewById(R.id.fragment_chat_list_view);
         chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
         listView.setAdapter(chatListAdapter);
@@ -107,8 +107,8 @@ public class ChatFragment extends Fragment implements MessageListener {
                         Chat chat = new Chat(message.getCid(), contact.getUid());
                         if (!chatInterface.chatExists(chat)) {
                             chatInterface.saveChat(chat);
-                            chatListAdapter.add(chat);
                             contactInterface.save(contact);
+                            new Handler(parent.getApplicationContext().getMainLooper()).post(() -> chatListAdapter.add(chat)); // Invoke on main thread
                         }
 
                         chatInterface.saveMessage(message);
