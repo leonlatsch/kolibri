@@ -32,7 +32,7 @@ import de.leonlatsch.olivia.main.fragment.SettingsFragment;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.util.ImageUtil;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User>, MessageListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User> {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chatInterface = ChatInterface.getInstance();
 
         MessageConsumer.start();
-        MessageConsumer.addMessageListener(this);
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -163,10 +162,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public View getProgressOverlay() {
         return progressOverlay;
-    }
-
-    @Override
-    public void receive(MessageDTO message) {
-        System.out.println("Received " + message + " in " + this);
     }
 }

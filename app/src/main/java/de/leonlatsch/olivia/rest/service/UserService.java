@@ -18,6 +18,9 @@ public interface UserService {
     @GET("user/get")
     Call<Container<UserDTO>> get(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
+    @GET("user/get/{uid}")
+    Call<Container<UserDTO>> get(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") String uid);
+
     @GET("user/search/top100/{username}")
     Call<Container<List<UserDTO>>> search(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 

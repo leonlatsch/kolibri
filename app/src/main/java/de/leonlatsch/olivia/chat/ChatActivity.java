@@ -41,6 +41,8 @@ import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity implements MessageListener {
 
+    public static boolean isActive;
+
     private Chat chat;
     private Contact contact;
     private boolean isTemp;
@@ -140,6 +142,15 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         }
     }
 
+    @Override
+    public void receive(MessageDTO messageDTO) {
+        if (isActive && messageDTO.getCid().equals(chat.getCid()) && !isTemp) {
+            Message message = DatabaseMapper.getInstance().toModel(messageDTO);
+            chatInterface.saveMessage(message);
+            messageListAdapter.add(message);
+        }
+    }
+
     private Message constructMessage() {
         String messageText = messageEditText.getText().toString();
 
@@ -192,7 +203,14 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
     }
 
     @Override
-    public void receive(MessageDTO messageDTO) {
-        Message message = DatabaseMapper.getInstance().toModel(messageDTO);
+    public void onStart() {
+        super.onStart();
+        isActive = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isActive = false;
     }
 }
