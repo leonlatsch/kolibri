@@ -70,7 +70,7 @@ public class ChatFragment extends Fragment implements MessageListener {
 
         List<Chat> vea = chatInterface.getALl();
         listView = view.findViewById(R.id.fragment_chat_list_view);
-        reload();
+        chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
         listView.setAdapter(chatListAdapter);
         listView.setOnItemClickListener(itemClickListener);
 
@@ -104,22 +104,20 @@ public class ChatFragment extends Fragment implements MessageListener {
                         Contact contact = databaseMapper.toContact(databaseMapper.toModel(userResponse.body().getContent()));
                         contact.setPublicKey(publicKeyResponse.body().getContent());
 
-                        contactInterface.save(userResponse.body().getContent(), publicKeyResponse.body().getContent());
                         Chat chat = new Chat(message.getCid(), contact.getUid());
-                        chatInterface.saveChat(chat);
-                        chatInterface.saveMessage(message);
+                        if (!chatInterface.chatExists(chat)) {
+                            chatInterface.saveChat(chat);
+                            chatListAdapter.add(chat);
+                            contactInterface.save(contact);
+                        }
 
-                        reload();
+                        chatInterface.saveMessage(message);
                     }
                 } catch (IOException e) {
                     //Nothing
                 }
             }).start();
         }
-    }
-
-    private void reload() {
-        chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
     }
 
     private void newChat() {

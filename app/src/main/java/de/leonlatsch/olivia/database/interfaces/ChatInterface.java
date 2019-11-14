@@ -28,7 +28,13 @@ public class ChatInterface extends BaseInterface {
     }
 
     public void saveChat(Chat chat) {
-        chat.save();
+        if (!chatExists(chat)) {
+            chat.save();
+        }
+    }
+
+    public boolean chatExists(Chat chat) {
+        return new Select().from(Chat.class).where(QUEUE_CID_WHERE, chat.getCid()).executeSingle() != null;
     }
 
     public void saveMessage(MessageDTO message) {
