@@ -82,7 +82,6 @@ public class DatabaseMapper {
         }
 
         Contact contact = new Contact();
-        contact.setContactId(Generator.genUUid());
         contact.setUid(user.getUid());
         contact.setUsername(user.getUsername());
         contact.setProfilePicTn(user.getProfilePicTn());

@@ -80,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            style="@style/CommonEditText"
+            android:inputType="textCapSentences"
             android:maxLines="6"/>
 
         <ImageButton
@@ -88,6 +88,7 @@
             android:tint="@color/colorPrimaryLight"
             android:id="@+id/chat_button_send"
             android:background="?attr/selectableItemBackground"
+            android:focusable="true"
             android:clickable="true"
             android:layout_width="50dp"
             android:layout_height="50dp"

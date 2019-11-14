@@ -10,14 +10,14 @@ public class Chat extends Model {
     @Column(name = "cid", index = true)
     private String cid;
 
-    @Column(name = "contact_id")
-    private String contactId;
+    @Column(name = "uid")
+    private String uid;
 
     public Chat() {}
 
-    public Chat(String cid, String contactId) {
+    public Chat(String cid, String uid) {
         this.cid = cid;
-        this.contactId = contactId;
+        this.uid = uid;
     }
 
     public String getCid() {
@@ -28,11 +28,11 @@ public class Chat extends Model {
         this.cid = cid;
     }
 
-    public String getContactId() {
-        return contactId;
+    public String getUid() {
+        return uid;
     }
 
-    public void setContactId(String contactId) {
-        this.contactId = contactId;
+    public void setUid(String contactId) {
+        this.uid = contactId;
     }
 }

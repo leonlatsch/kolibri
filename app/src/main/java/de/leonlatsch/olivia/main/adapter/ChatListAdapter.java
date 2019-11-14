@@ -55,7 +55,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Contact contact = contactInterface.getContact(chat.getContactId());
+        Contact contact = contactInterface.getContact(chat.getUid());
         if (contact.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
         } else {

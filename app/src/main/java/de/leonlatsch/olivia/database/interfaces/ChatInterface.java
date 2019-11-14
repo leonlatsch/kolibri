@@ -13,6 +13,7 @@ public class ChatInterface extends BaseInterface {
 
     private static final String QUEUE_CID_WHERE = "cid = ?";
     private static final String QUEUE_MID_WHERE = "mid = ?";
+    private static final String QUEUE_UID_WHERE = "uid = ?";
 
     private static ChatInterface chatInterface; // Singleton
 
@@ -29,6 +30,10 @@ public class ChatInterface extends BaseInterface {
             chat.save();
         }
         message.save();
+    }
+
+    public void saveChat(Chat chat) {
+        chat.save();
     }
 
     public void saveMessage(MessageDTO message) {
@@ -52,6 +57,10 @@ public class ChatInterface extends BaseInterface {
 
     public Chat getChat(String cid) {
         return new Select().from(Chat.class).where(QUEUE_CID_WHERE, cid).executeSingle();
+    }
+
+    public Chat getChatForContact(String uid) {
+        return new Select().from(Chat.class).where(QUEUE_UID_WHERE, uid).executeSingle();
     }
 
     public List<Message> getMessagesForChat(String cid) {

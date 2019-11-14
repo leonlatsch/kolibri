@@ -3,22 +3,14 @@ package de.leonlatsch.olivia.database.interfaces;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
-import java.util.List;
-
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.database.model.User;
-import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
 import de.leonlatsch.olivia.rest.service.UserService;
-import de.leonlatsch.olivia.util.Generator;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ContactInterface extends BaseInterface {
 
-    private static final String QUEUE_CONTACT_ID_WHERE = "contact_id = ?";
     private static final String QUEUE_UID_WHERE = "uid = ?";
 
     private static ContactInterface contactInterface; // Singleton
@@ -31,12 +23,8 @@ public class ContactInterface extends BaseInterface {
         userInterface = UserInterface.getInstance();
     }
 
-    public Contact getContactByUid(String uid) {
-        return new Select().from(Contact.class).where(QUEUE_UID_WHERE, uid).executeSingle();
-    }
-
     public Contact getContact(String contactId) {
-        return new Select().from(Contact.class).where(QUEUE_CONTACT_ID_WHERE, contactId).executeSingle();
+        return new Select().from(Contact.class).where(QUEUE_UID_WHERE, contactId).executeSingle();
     }
 
     public void delete(Contact contact) {
@@ -54,19 +42,19 @@ public class ContactInterface extends BaseInterface {
     public String save(User user, String publicKey) {
         Contact contact = getDatabaseMapper().toContact(user);
         contact.setPublicKey(publicKey);
-        contact.setContactId(Generator.genUUid());
+        contact.setUid(user.getUid());
         return save(contact);
     }
 
     public String save(Contact contact) {
-        Contact saved = new Select().from(Contact.class).where(QUEUE_CONTACT_ID_WHERE, contact.getContactId()).executeSingle();
+        Contact saved = new Select().from(Contact.class).where(QUEUE_UID_WHERE, contact.getUid()).executeSingle();
 
         if (saved != null) {
             saved.delete();
         }
 
         contact.save();
-        return contact.getContactId();
+        return contact.getUid();
     }
 
     public static ContactInterface getInstance() {

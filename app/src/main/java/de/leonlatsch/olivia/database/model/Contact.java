@@ -7,10 +7,7 @@ import com.activeandroid.annotation.Table;
 @Table(name = "contact")
 public class Contact extends Model {
 
-    @Column(name = "contact_id", index = true)
-    private String contactId;
-
-    @Column(name = "uid")
+    @Column(name = "uid", index = true)
     private String uid;
 
     @Column(name = "username")
@@ -24,20 +21,11 @@ public class Contact extends Model {
 
     public Contact() {}
 
-    public Contact(String contactId, String uid, String username, String profilePicTn, String publicKey) {
-        this.contactId = contactId;
+    public Contact(String uid, String username, String profilePicTn, String publicKey) {
         this.uid = uid;
         this.username = username;
         this.profilePicTn = profilePicTn;
         this.publicKey = publicKey;
-    }
-
-    public String getContactId() {
-        return contactId;
-    }
-
-    public void setContactId(String contactId) {
-        this.contactId = contactId;
     }
 
     public String getUid() {
