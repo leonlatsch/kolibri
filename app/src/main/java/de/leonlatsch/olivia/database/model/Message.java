@@ -4,8 +4,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.sql.Timestamp;
-
 @Table(name = "message")
 public class Message extends Model {
 
@@ -25,14 +23,14 @@ public class Message extends Model {
     private String type;
 
     @Column(name = "timestamp")
-    private Timestamp timestamp;
+    private String timestamp;
 
     @Column(name = "content")
     private String content;
 
     public Message() {}
 
-    public Message(String mid, String cid, String from, String to, String type, Timestamp timestamp, String content) {
+    public Message(String mid, String cid, String from, String to, String type, String timestamp, String content) {
         this.mid = mid;
         this.cid = cid;
         this.from = from;
@@ -82,11 +80,11 @@ public class Message extends Model {
         this.type = type;
     }
 
-    public Timestamp getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

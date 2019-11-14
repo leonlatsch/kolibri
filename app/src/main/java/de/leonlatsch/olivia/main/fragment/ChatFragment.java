@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.chat.ChatActivity;
@@ -43,6 +44,7 @@ public class ChatFragment extends Fragment {
         chatInterface = ChatInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
 
+        List<Chat> vea = chatInterface.getALl();
         listView = view.findViewById(R.id.fragment_chat_list_view);
         chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
         listView.setAdapter(chatListAdapter);

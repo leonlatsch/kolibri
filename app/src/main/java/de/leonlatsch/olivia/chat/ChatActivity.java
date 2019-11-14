@@ -18,6 +18,7 @@ import java.util.List;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.broker.MessageListener;
+import de.leonlatsch.olivia.constants.Formats;
 import de.leonlatsch.olivia.constants.MessageType;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.DatabaseMapper;
@@ -31,7 +32,6 @@ import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.rest.service.ChatService;
 import de.leonlatsch.olivia.rest.service.RestServiceFactory;
-import de.leonlatsch.olivia.security.CryptoManager;
 import de.leonlatsch.olivia.util.Generator;
 import de.leonlatsch.olivia.util.ImageUtil;
 import retrofit2.Call;
@@ -68,8 +68,6 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         chatInterface = ChatInterface.getInstance();
         chatService = RestServiceFactory.getChatService();
 
-        String uid = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_UID);
-        String publicKey = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_PUBLIC_KEY);
         initData();
 
         messageRecycler = findViewById(R.id.chat_recycler_view);
@@ -93,7 +91,9 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         Contact contact = contactInterface.getContact(chat.getUid());
         if (contact != null) {
             usernameEditText.setText(contact.getUsername());
-            profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
+            if (this.contact.getProfilePicTn() != null) {
+                profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
+            }
         } else {
             String username = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_USERNAME);
             String profilePic = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_PROFILE_PIC);
@@ -132,7 +132,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         message.setTo(contact.getUid());
         message.setMid(Generator.genUUid());
         message.setType(MessageType.TEXT);
-        message.setTimestamp(new Timestamp(System.currentTimeMillis()));
+        message.setTimestamp(Formats.DATE_FORMAT.format(new Timestamp(System.currentTimeMillis())));
         message.setContent(messageText);
         return message;
     }

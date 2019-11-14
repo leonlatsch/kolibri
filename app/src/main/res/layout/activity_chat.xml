@@ -29,6 +29,7 @@
             android:elevation="12dp">
             <ImageView
                 android:id="@+id/chat_profile_pic_image_view"
+                android:src="@drawable/default_profile_pic_tn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"/>

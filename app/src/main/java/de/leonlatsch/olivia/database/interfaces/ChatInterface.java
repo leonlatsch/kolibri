@@ -22,7 +22,7 @@ public class ChatInterface extends BaseInterface {
 
     public void saveMessage(Message message) {
         Message savedMessage = new Select().from(Message.class).where(QUEUE_MID_WHERE, message.getMid()).executeSingle();
-        if (savedMessage != null) {
+        if (savedMessage == null) {
             message.save();
         }
     }

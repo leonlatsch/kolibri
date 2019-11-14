@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.activeandroid.ActiveAndroid;
 
 import de.leonlatsch.olivia.R;
-import de.leonlatsch.olivia.broker.MessageConsumer;
 import de.leonlatsch.olivia.constants.Responses;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.rest.dto.Container;

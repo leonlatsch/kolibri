@@ -19,6 +19,7 @@
 
         <ImageView
             android:id="@+id/profile_profile_pic"
+            android:src="@drawable/default_profile_pic_tn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />

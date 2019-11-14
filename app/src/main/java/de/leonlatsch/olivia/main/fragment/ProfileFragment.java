@@ -363,8 +363,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         isReloadMode = true;
         if (user.getProfilePicTn() != null) {
             profilePicImageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
-        } else {
-            profilePicImageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(parent));
         }
         usernameEditText.setText(user.getUsername());
         emailEditText.setText(user.getEmail());

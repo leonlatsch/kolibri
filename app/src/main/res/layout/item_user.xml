@@ -15,6 +15,7 @@
         app:cardCornerRadius="30dp">
             <ImageView
             android:id="@+id/item_user_search_image_view"
+                android:src="@drawable/default_profile_pic_tn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </androidx.cardview.widget.CardView>

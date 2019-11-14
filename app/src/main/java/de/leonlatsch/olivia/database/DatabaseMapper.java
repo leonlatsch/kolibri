@@ -1,16 +1,10 @@
 package de.leonlatsch.olivia.database;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.util.Date;
-
-import de.leonlatsch.olivia.constants.Formats;
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.rest.dto.UserDTO;
 import de.leonlatsch.olivia.database.model.Message;
 import de.leonlatsch.olivia.database.model.User;
-import de.leonlatsch.olivia.util.Generator;
 
 public class DatabaseMapper {
 
@@ -55,7 +49,7 @@ public class DatabaseMapper {
         message.setFrom(dto.getFrom());
         message.setTo(dto.getTo());
         message.setType(dto.getType());
-        message.setTimestamp(stringToTimestamp(dto.getTimestamp()));
+        message.setTimestamp(dto.getTimestamp());
         message.setContent(dto.getContent());
         return message;
     }
@@ -98,15 +92,6 @@ public class DatabaseMapper {
         user.setUsername(contact.getUsername());
         user.setProfilePicTn(contact.getProfilePicTn());
         return user;
-    }
-
-    private Timestamp stringToTimestamp(String timestamp) {
-        try {
-            Date parsed = Formats.DATE_FORMAT.parse(timestamp);
-            return new Timestamp(parsed.getTime());
-        } catch (ParseException e) {
-            return null;
-        }
     }
 
 
