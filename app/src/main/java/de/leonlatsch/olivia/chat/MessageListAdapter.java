@@ -112,4 +112,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageTimestamp.setText(message.getTimestamp().toString().substring(11, 16)); // Hard code for the moment
         }
     }
+
+    public void add(Message message) {
+        mMessageList.add(message);
+        notifyItemInserted(mMessageList.size() - 1);
+    }
+
+    public int getLastPosition() {
+        return mMessageList.size() - 1;
+    }
 }

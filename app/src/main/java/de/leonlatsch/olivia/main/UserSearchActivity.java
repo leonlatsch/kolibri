@@ -98,6 +98,7 @@ public class UserSearchActivity extends AppCompatActivity {
                     intent.putExtra(Values.INTENT_KEY_CHAT_UID, user.getUid());
                     intent.putExtra(Values.INTENT_KEY_CHAT_USERNAME, user.getUsername());
                     intent.putExtra(Values.INTENT_KEY_CHAT_PROFILE_PIC, user.getProfilePicTn());
+                    intent.putExtra(Values.INTENT_KEY_CHAT_PUBLIC_KEY, response.body().getContent());
                     startActivity(intent);
                     finish();
                 }
