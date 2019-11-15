@@ -70,6 +70,10 @@ public class DatabaseMapper {
         return dto;
     }
 
+    public Contact toContact(UserDTO userDTO) {
+        return toContact(toModel(userDTO));
+    }
+
     public Contact toContact(User user) {
         if (user == null) {
             return null;

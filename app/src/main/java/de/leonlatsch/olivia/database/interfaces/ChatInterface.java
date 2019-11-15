@@ -33,6 +33,10 @@ public class ChatInterface extends BaseInterface {
         }
     }
 
+    public boolean messageExists(Message message) {
+        return new Select().from(Message.class).where(QUEUE_MID_WHERE, message.getMid()).executeSingle() != null;
+    }
+
     public boolean chatExists(Chat chat) {
         return new Select().from(Chat.class).where(QUEUE_CID_WHERE, chat.getCid()).executeSingle() != null;
     }

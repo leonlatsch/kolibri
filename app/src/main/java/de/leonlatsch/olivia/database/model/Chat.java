@@ -13,11 +13,15 @@ public class Chat extends Model {
     @Column(name = "uid")
     private String uid;
 
+    @Column(name = "unread_messages")
+    private int unreadMessages;
+
     public Chat() {}
 
-    public Chat(String cid, String uid) {
+    public Chat(String cid, String uid, int unreadMessages) {
         this.cid = cid;
         this.uid = uid;
+        this.unreadMessages = unreadMessages;
     }
 
     public String getCid() {
@@ -32,7 +36,15 @@ public class Chat extends Model {
         return uid;
     }
 
-    public void setUid(String contactId) {
-        this.uid = contactId;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public int getUnreadMessages() {
+        return unreadMessages;
+    }
+
+    public void setUnreadMessages(int unreadMessages) {
+        this.unreadMessages = unreadMessages;
     }
 }

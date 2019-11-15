@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +19,7 @@ import java.util.List;
 
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.broker.MessageConsumer;
-import de.leonlatsch.olivia.broker.MessageListener;
+import de.leonlatsch.olivia.broker.MessageRecyclerChangeListener;
 import de.leonlatsch.olivia.constants.Formats;
 import de.leonlatsch.olivia.constants.MessageType;
 import de.leonlatsch.olivia.constants.Values;
@@ -42,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatActivity extends AppCompatActivity implements MessageListener {
+public class ChatActivity extends AppCompatActivity implements MessageRecyclerChangeListener {
 
     public static boolean isActive;
 
@@ -71,7 +70,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        MessageConsumer.addMessageListener(this);
+        MessageConsumer.setMessageRecyclerChangeListener(this);
         contactInterface = ContactInterface.getInstance();
         userInterface = UserInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
@@ -128,7 +127,6 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
     private void onSendPressed() {
         if (!messageEditText.getText().toString().isEmpty()) {
             Message message = constructMessage();
-            MessageConsumer.addMessageListener(this);
             if (isTemp) { // If this is the first message save the temo chat and contact
                 chatInterface.saveChat(chat);
                 contactInterface.save(contact);
@@ -148,10 +146,8 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
     }
 
     @Override
-    public void receive(MessageDTO messageDTO) {
-        if (isActive && messageDTO.getCid().equals(chat.getCid()) && !isTemp) {
-            Message message = DatabaseMapper.getInstance().toModel(messageDTO);
-            chatInterface.saveMessage(message);
+    public void receive(Message message) {
+        if (isActive && message.getCid().equals(chat.getCid()) && !isTemp) {
             new Handler(getApplicationContext().getMainLooper()).post(() -> messageListAdapter.add(message)); // Invoke on main thread
         }
     }
@@ -191,7 +187,7 @@ public class ChatActivity extends AppCompatActivity implements MessageListener {
             this.contact.setUsername(username);
             this.contact.setProfilePicTn(profilePic);
             this.contact.setPublicKey(publicKey);
-            chat = new Chat(Generator.genUUid(), this.contact.getUid());
+            chat = new Chat(Generator.genUUid(), this.contact.getUid(), 0);
             isTemp = true;
         }
     }

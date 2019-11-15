@@ -9,13 +9,22 @@ import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import de.leonlatsch.olivia.chat.ChatActivity;
+import de.leonlatsch.olivia.database.DatabaseMapper;
+import de.leonlatsch.olivia.database.interfaces.ChatInterface;
+import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.interfaces.UserInterface;
+import de.leonlatsch.olivia.database.model.Chat;
+import de.leonlatsch.olivia.database.model.Message;
+import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
+import de.leonlatsch.olivia.rest.dto.UserDTO;
+import de.leonlatsch.olivia.rest.service.RestServiceFactory;
+import de.leonlatsch.olivia.rest.service.UserService;
 import de.leonlatsch.olivia.security.CryptoManager;
+import retrofit2.Response;
 
 import static de.leonlatsch.olivia.constants.MessageType.*;
 
@@ -29,10 +38,16 @@ public class MessageConsumer {
 
     private ConnectionFactory connectionFactory;
     private DeliverCallback callback;
-    private UserInterface userInterface;
     private Connection connection;
 
-    private static List<MessageListener> listeners = new ArrayList<>();
+    private UserInterface userInterface;
+    private ContactInterface contactInterface;
+    private ChatInterface chatInterface;
+    private UserService userService;
+    private DatabaseMapper databaseMapper;
+
+    private static MessageRecyclerChangeListener messageRecyclerChangeListener;
+    private static ChatListChangeListener chatListChangeListener;
     private static boolean isRunning = false;
 
     private MessageConsumer() {
@@ -41,6 +56,10 @@ public class MessageConsumer {
 
     private void initialize() {
         userInterface = UserInterface.getInstance();
+        contactInterface = ContactInterface.getInstance();
+        chatInterface = ChatInterface.getInstance();
+        userService = RestServiceFactory.getUserService();
+        databaseMapper = DatabaseMapper.getInstance();
 
         // Initialize config // TODO: use settings
         connectionFactory = new ConnectionFactory();
@@ -54,7 +73,7 @@ public class MessageConsumer {
            if (messageDTO != null) {
                switch (messageDTO.getType()) {
                    case TEXT:
-                       processTextMessage(messageDTO);
+                       processTextMessage(databaseMapper.toModel(messageDTO));
                        break;
                    case IMAGE:
                        //TODO: Process Image
@@ -86,11 +105,32 @@ public class MessageConsumer {
         }, THREAD_NAME).start();
     }
 
-    private void processTextMessage(MessageDTO message) {
+    private void processTextMessage(Message message) {
         byte[] decryptedData = CryptoManager.decryptAndDecode(message.getContent(), userInterface.getUser().getPrivateKey());
         String content = new String(decryptedData, StandardCharsets.UTF_8);
         message.setContent(content);
-        notifyListeners(message);
+        if (!chatInterface.messageExists(message)) {
+            Chat chat = chatInterface.getChat(message.getCid());
+
+            if (chat == null) {
+                try {
+                    Response<Container<UserDTO>> userResponse = userService.get(userInterface.getAccessToken(), message.getFrom()).execute();
+                    Response<Container<String>> publicKeyResponse = userService.getPublicKey(userInterface.getAccessToken(), message.getFrom()).execute();
+
+                    if (userResponse.isSuccessful()) {
+                        contactInterface.save(userResponse.body().getContent(), publicKeyResponse.body().getContent());
+                        chat = new Chat(message.getCid(), message.getFrom(), 0);
+                        chatInterface.saveChat(chat);
+                        notifyChatListChangeListener(chat);
+                    }
+                } catch (IOException e) {}
+            }
+
+            chatInterface.saveMessage(message);
+            if (ChatActivity.isActive) {
+                notifyMessageRecyclerChangeListener(message);
+            }
+        }
     }
 
     private void disconnect() {
@@ -101,14 +141,20 @@ public class MessageConsumer {
         }, THREAD_NAME).start();
     }
 
-    public static void addMessageListener(MessageListener listener) {
-        listeners.add(listener);
+    public static void setMessageRecyclerChangeListener(MessageRecyclerChangeListener listener) {
+        messageRecyclerChangeListener = listener;
     }
 
-    private void notifyListeners(MessageDTO message) {
-        for (MessageListener listener : listeners) {
-            listener.receive(message);
-        }
+    public static void setChatListChangeListener(ChatListChangeListener listener) {
+        chatListChangeListener = listener;
+    }
+
+    private void notifyMessageRecyclerChangeListener(Message message) {
+        messageRecyclerChangeListener.receive(message);
+    }
+
+    private void notifyChatListChangeListener(Chat chat) {
+        chatListChangeListener.addChat(chat);
     }
 
     public static boolean isRunning() {

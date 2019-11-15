@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,6 +48,8 @@ public class UserAdapter extends ArrayAdapter<UserDTO> {
 
         if (user.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()));
+        } else {
+            viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext));
         }
         viewHolder.textView.setText(user.getUsername());
 
