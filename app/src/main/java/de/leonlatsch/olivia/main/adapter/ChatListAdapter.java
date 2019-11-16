@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.model.Chat;
 import de.leonlatsch.olivia.database.model.Contact;
@@ -29,6 +30,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         TextView usernameTextView;
         TextView lastMessageTextView;
         TextView lastDateTextView;
+        TextView unreadMessagesTextView;
     }
 
     public ChatListAdapter(@NonNull Context context, List<Chat> contactList) {
@@ -62,8 +64,15 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext));
         }
         viewHolder.usernameTextView.setText(contact.getUsername());
-        viewHolder.lastMessageTextView.setText("Ersetzen mit letzter NAchricht!!!"); //TODO: set last message as text
-        viewHolder.lastDateTextView.setText("21.12.2019"); // TODO: Ersetzen mit datum letzter nachricht
+        viewHolder.lastMessageTextView.setText(chat.getLastMessage());
+        viewHolder.lastDateTextView.setText(chat.getLastTimestamp().substring(11, 16));
+        if (chat.getUnreadMessages() > 0) {
+            viewHolder.unreadMessagesTextView.setVisibility(View.VISIBLE);
+            viewHolder.unreadMessagesTextView.setText(String.valueOf(chat.getUnreadMessages()));
+        } else {
+            viewHolder.unreadMessagesTextView.setText(Values.EMPTY);
+            viewHolder.unreadMessagesTextView.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

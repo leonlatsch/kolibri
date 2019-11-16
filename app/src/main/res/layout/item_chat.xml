@@ -28,6 +28,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:text="Username"
             android:id="@+id/item_chat_list_username"
             android:textColor="@android:color/black"
             android:layout_width="wrap_content"
@@ -35,6 +36,7 @@
             android:textSize="18sp"/>
 
         <TextView
+            android:text="Last Message"
             android:id="@+id/item_chat_list_last_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,13 +44,28 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/item_chat_list_last_date"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="datetime"
-        android:textSize="11sp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"/>
+        android:orientation="vertical">
+        <TextView
+            android:text="21.12.2019"
+            android:id="@+id/item_chat_list_last_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="datetime"
+            android:textSize="11sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="15dp"/>
+
+        <TextView
+            android:id="@+id/item_chat_list_unread_messages"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle"/>
+
+    </LinearLayout>
 
 </LinearLayout>

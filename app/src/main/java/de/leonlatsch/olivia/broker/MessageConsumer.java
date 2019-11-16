@@ -119,17 +119,24 @@ public class MessageConsumer {
 
                     if (userResponse.isSuccessful()) {
                         contactInterface.save(userResponse.body().getContent(), publicKeyResponse.body().getContent());
-                        chat = new Chat(message.getCid(), message.getFrom(), 0);
+                        chat = new Chat(message.getCid(), message.getFrom(), 0, message.getContent(), message.getTimestamp());
                         chatInterface.saveChat(chat);
                         notifyChatListChangeListener(chat);
                     }
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                    return;
+                }
+            } else {
+                chat.setLastMessage(message.getContent());
+                chat.setLastTimestamp(message.getTimestamp());
+                if (ChatActivity.isActive) {
+                    notifyMessageRecyclerChangeListener(message);
+                } else {
+                    chat.setUnreadMessages(chat.getUnreadMessages() + 1);
+                }
+                notifyChatListChangeListener(chat);
             }
-
             chatInterface.saveMessage(message);
-            if (ChatActivity.isActive) {
-                notifyMessageRecyclerChangeListener(message);
-            }
         }
     }
 

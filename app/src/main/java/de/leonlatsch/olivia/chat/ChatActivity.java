@@ -130,6 +130,8 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             Message message = constructMessage();
 
             if (isTemp) { // If this is the first message save the temo chat and contact
+                chat.setLastTimestamp(message.getTimestamp());
+                chat.setLastMessage(message.getContent());
                 chatInterface.saveChat(chat);
                 contactInterface.save(contact);
                 MessageConsumer.notifyChatListChangedFromExternal(chat);
@@ -193,7 +195,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             this.contact.setUsername(username);
             this.contact.setProfilePicTn(profilePic);
             this.contact.setPublicKey(publicKey);
-            chat = new Chat(Generator.genUUid(), this.contact.getUid(), 0);
+            chat = new Chat(Generator.genUUid(), this.contact.getUid(), 0, null, null);
             isTemp = true;
         }
     }
