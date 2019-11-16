@@ -30,6 +30,7 @@ import de.leonlatsch.olivia.database.interfaces.UserInterface;
 import de.leonlatsch.olivia.database.model.Chat;
 import de.leonlatsch.olivia.database.model.Contact;
 import de.leonlatsch.olivia.database.model.Message;
+import de.leonlatsch.olivia.main.MainActivity;
 import de.leonlatsch.olivia.rest.dto.Container;
 import de.leonlatsch.olivia.rest.dto.MessageDTO;
 import de.leonlatsch.olivia.rest.service.ChatService;
@@ -53,6 +54,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
     private RecyclerView messageRecycler;
 
     private MessageListAdapter messageListAdapter;
+    private MainActivity outerParent;
 
     private ContactInterface contactInterface;
     private UserInterface userInterface;
@@ -77,7 +79,6 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         chatService = RestServiceFactory.getChatService();
 
         initData();
-
         messageRecycler = findViewById(R.id.chat_recycler_view);
 
         List<Message> messageList;
@@ -127,9 +128,11 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
     private void onSendPressed() {
         if (!messageEditText.getText().toString().isEmpty()) {
             Message message = constructMessage();
+
             if (isTemp) { // If this is the first message save the temo chat and contact
                 chatInterface.saveChat(chat);
                 contactInterface.save(contact);
+                MessageConsumer.notifyChatListChangedFromExternal(chat);
                 isTemp = false;
             }
             chatInterface.saveMessage(message);
@@ -148,7 +151,10 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
     @Override
     public void receive(Message message) {
         if (isActive && message.getCid().equals(chat.getCid()) && !isTemp) {
-            new Handler(getApplicationContext().getMainLooper()).post(() -> messageListAdapter.add(message)); // Invoke on main thread
+            new Handler(getApplicationContext().getMainLooper()).post(() -> {
+                messageListAdapter.add(message);
+                messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
+            }); // Invoke on main thread
         }
     }
 

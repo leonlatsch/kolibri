@@ -141,6 +141,10 @@ public class MessageConsumer {
         }, THREAD_NAME).start();
     }
 
+    public static void notifyChatListChangedFromExternal(Chat chat) {
+        consumer.notifyChatListChangeListener(chat);
+    }
+
     public static void setMessageRecyclerChangeListener(MessageRecyclerChangeListener listener) {
         messageRecyclerChangeListener = listener;
     }
