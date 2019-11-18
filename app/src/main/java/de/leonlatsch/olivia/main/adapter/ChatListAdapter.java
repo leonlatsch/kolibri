@@ -39,6 +39,15 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         this.mContext = context;
         this.contactInterface = ContactInterface.getInstance();
     }
+
+    public boolean chatIsPresent(Chat chat) {
+        for (Chat data : dataset) {
+            if (data.getCid().equals(chat.getCid())) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,6 +61,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             viewHolder.usernameTextView = convertView.findViewById(R.id.item_chat_list_username);
             viewHolder.lastMessageTextView = convertView.findViewById(R.id.item_chat_list_last_message);
             viewHolder.lastDateTextView = convertView.findViewById(R.id.item_chat_list_last_date);
+            viewHolder.unreadMessagesTextView = convertView.findViewById(R.id.item_chat_list_unread_messages);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
