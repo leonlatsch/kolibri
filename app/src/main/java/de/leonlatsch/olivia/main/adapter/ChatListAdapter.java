@@ -48,6 +48,14 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         }
         return false;
     }
+
+    public void chatChanged(Chat chat) {
+        for (int i = 0; i < dataset.size(); i++) {
+            if (dataset.get(i).getCid().equals(chat.getCid())) {
+                dataset.set(i, chat);
+            }
+        }
+    }
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

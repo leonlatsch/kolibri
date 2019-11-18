@@ -134,6 +134,7 @@ public class MessageConsumer {
                 } else {
                     chat.setUnreadMessages(chat.getUnreadMessages() + 1);
                 }
+                chatInterface.updateChat(chat);
                 notifyChatListChangeListener(chat);
             }
             chatInterface.saveMessage(message);

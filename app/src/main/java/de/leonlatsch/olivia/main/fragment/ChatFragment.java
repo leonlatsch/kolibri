@@ -74,6 +74,8 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
     public void addChat(Chat chat) {
         if (!chatListAdapter.chatIsPresent(chat)) {
             new Handler(parent.getApplicationContext().getMainLooper()).post(() -> chatListAdapter.add(chat)); // Invoke in main thread
+        } else {
+            new Handler(parent.getApplicationContext().getMainLooper()).post(() -> chatListAdapter.chatChanged(chat)); // Invoke on main thread
         }
     }
 }

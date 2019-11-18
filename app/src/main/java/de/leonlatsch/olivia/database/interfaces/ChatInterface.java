@@ -2,6 +2,7 @@ package de.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Update;
 
 import java.util.List;
 
@@ -33,17 +34,18 @@ public class ChatInterface extends BaseInterface {
         }
     }
 
+    public void updateChat(Chat chat) {
+        new Update(Chat.class).set("cid = ?, uid = ?, unread_messages = ?, last_message = ?, last_timestamp = ?", chat.getCid(),
+                chat.getUid(), chat.getUnreadMessages(), chat.getLastMessage(), chat.getLastTimestamp())
+                .where(QUEUE_CID_WHERE, chat.getCid()).execute();
+    }
+
     public boolean messageExists(Message message) {
         return new Select().from(Message.class).where(QUEUE_MID_WHERE, message.getMid()).executeSingle() != null;
     }
 
     public boolean chatExists(Chat chat) {
         return new Select().from(Chat.class).where(QUEUE_CID_WHERE, chat.getCid()).executeSingle() != null;
-    }
-
-    public void saveMessage(MessageDTO message) {
-        Message model = getDatabaseMapper().toModel(message);
-        saveMessage(model);
     }
 
     public void deleteChat(String cid) {
