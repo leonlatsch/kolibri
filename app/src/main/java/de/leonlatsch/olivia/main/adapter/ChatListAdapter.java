@@ -55,6 +55,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
                 dataset.set(i, chat);
             }
         }
+        notifyDataSetChanged();
     }
     
     @Override

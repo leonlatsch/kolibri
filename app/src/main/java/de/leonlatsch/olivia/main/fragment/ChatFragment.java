@@ -62,6 +62,11 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
             Intent intent = new Intent(this.parent.getApplicationContext(), ChatActivity.class);
             intent.putExtra(Values.INTENT_KEY_CHAT_UID, chat.getUid());
             startActivity(intent);
+            if (chat.getUnreadMessages() > 0) {
+                chat.setUnreadMessages(0);
+                chatInterface.updateChat(chat);
+                chatListAdapter.chatChanged(chat);
+            }
         }
     };
 
