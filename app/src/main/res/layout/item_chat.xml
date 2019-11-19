@@ -22,7 +22,7 @@
 
     <LinearLayout
         android:id="@+id/item_chat_list_linear_layout"
-        android:layout_width="260dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:orientation="vertical">
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:text="21.12.2019"
+            android:text="11:30"
             android:id="@+id/item_chat_list_last_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

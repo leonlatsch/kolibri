@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
     private MainActivity parent;
     private View view;
     private ListView listView;
+    private TextView hintTextView;
     private ChatListAdapter chatListAdapter;
 
     private ChatInterface chatInterface;
@@ -45,6 +47,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
         MessageConsumer.setChatListChangeListener(this);
 
         listView = view.findViewById(R.id.fragment_chat_list_view);
+        hintTextView = view.findViewById(R.id.fragment_chat_hint);
         chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
         listView.setAdapter(chatListAdapter);
         listView.setOnItemClickListener(itemClickListener);
