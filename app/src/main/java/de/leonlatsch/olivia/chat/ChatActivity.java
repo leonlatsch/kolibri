@@ -137,6 +137,11 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
                 MessageConsumer.notifyChatListChangedFromExternal(chat);
                 isTemp = false;
             }
+            chat.setLastMessage(message.getContent());
+            chat.setLastTimestamp(message.getTimestamp());
+            chatInterface.updateChat(chat);
+            MessageConsumer.getChatListChangeListener().addChat(chat);
+
             chatInterface.saveMessage(message);
             messageListAdapter.add(message);
             messageEditText.setText(Values.EMPTY);

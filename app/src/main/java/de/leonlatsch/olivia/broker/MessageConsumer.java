@@ -161,6 +161,10 @@ public class MessageConsumer {
         chatListChangeListener = listener;
     }
 
+    public static ChatListChangeListener getChatListChangeListener() {
+        return chatListChangeListener;
+    }
+
     private void notifyMessageRecyclerChangeListener(Message message) {
         messageRecyclerChangeListener.receive(message);
     }
