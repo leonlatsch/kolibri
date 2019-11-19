@@ -119,7 +119,8 @@ public class MessageConsumer {
 
                     if (userResponse.isSuccessful()) {
                         contactInterface.save(userResponse.body().getContent(), publicKeyResponse.body().getContent());
-                        chat = new Chat(message.getCid(), message.getFrom(), 0, message.getContent(), message.getTimestamp());
+                        int unreadMessages = ChatActivity.isActive ? 0 : 1;
+                        chat = new Chat(message.getCid(), message.getFrom(), unreadMessages, message.getContent(), message.getTimestamp());
                         chatInterface.saveChat(chat);
                         notifyChatListChangeListener(chat);
                     }
