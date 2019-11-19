@@ -59,6 +59,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="send">Send</string>
     <string name="enter_message">Enter Message</string>
-    <string name="new_chat_hint">You have not chats</string>
+    <string name="new_chat_hint">You have no chats</string>
 
 </resources>
