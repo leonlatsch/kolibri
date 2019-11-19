@@ -46,5 +46,5 @@
     <string name="yes">Ja</string>
     <string name="send">Senden</string>
     <string name="enter_message">Nachricht eingeben</string>
-    <string name="new_chat_hint">Du hast keine Chats. Starte doch einen.</string>
+    <string name="new_chat_hint">Du hast keine Chats</string>
 </resources>

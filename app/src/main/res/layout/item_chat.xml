@@ -60,6 +60,7 @@
 
         <TextView
             android:id="@+id/item_chat_list_unread_messages"
+            android:textColor="#FFFF"
             android:visibility="gone"
             android:textAlignment="center"
             android:layout_width="20dp"

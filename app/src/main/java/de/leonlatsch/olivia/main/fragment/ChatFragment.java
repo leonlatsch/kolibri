@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import de.leonlatsch.olivia.R;
 import de.leonlatsch.olivia.broker.ChatListChangeListener;
 import de.leonlatsch.olivia.broker.MessageConsumer;
@@ -40,7 +42,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view =  inflater.inflate(R.layout.fragment_chats, container, false);
+        view = inflater.inflate(R.layout.fragment_chats, container, false);
         parent = (MainActivity) getActivity();
 
         chatInterface = ChatInterface.getInstance();
@@ -48,7 +50,11 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         listView = view.findViewById(R.id.fragment_chat_list_view);
         hintTextView = view.findViewById(R.id.fragment_chat_hint);
-        chatListAdapter = new ChatListAdapter(parent, chatInterface.getALl());
+        List<Chat> chatList = chatInterface.getALl();
+
+        setChatListVisible(!chatList.isEmpty());
+
+        chatListAdapter = new ChatListAdapter(parent, chatList);
         listView.setAdapter(chatListAdapter);
         listView.setOnItemClickListener(itemClickListener);
 
@@ -78,10 +84,23 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
         startActivity(intent);
     }
 
+    private void setChatListVisible(boolean visible) {
+        if (visible) {
+            hintTextView.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            hintTextView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void addChat(Chat chat) {
         if (!chatListAdapter.chatIsPresent(chat)) {
-            new Handler(parent.getApplicationContext().getMainLooper()).post(() -> chatListAdapter.add(chat)); // Invoke in main thread
+            new Handler(parent.getApplicationContext().getMainLooper()).post(() -> {
+                chatListAdapter.add(chat);
+                setChatListVisible(true);
+            }); // Invoke in main thread
         } else {
             new Handler(parent.getApplicationContext().getMainLooper()).post(() -> chatListAdapter.chatChanged(chat)); // Invoke on main thread
         }
