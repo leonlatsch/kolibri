@@ -92,21 +92,25 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         messageRecycler.setAdapter(messageListAdapter);
 
         messageEditText = findViewById(R.id.chat_edit_text);
-        TextView usernameEditText = findViewById(R.id.chat_username_textview);
+        TextView usernameTextView = findViewById(R.id.chat_username_textview);
         ImageView profilePicImageView = findViewById(R.id.chat_profile_pic_image_view);
         ImageButton sendButton = findViewById(R.id.chat_button_send);
         sendButton.setOnClickListener(v -> onSendPressed());
+        messageEditText.setOnEditorActionListener((v, actionId, event) -> {
+            onSendPressed();
+            return true;
+        });
 
         Contact contact = contactInterface.getContact(chat.getUid());
         if (contact != null) {
-            usernameEditText.setText(contact.getUsername());
+            usernameTextView.setText(contact.getUsername());
             if (this.contact.getProfilePicTn() != null) {
                 profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
             }
         } else {
             String username = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_USERNAME);
             String profilePic = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_PROFILE_PIC);
-            usernameEditText.setText(username);
+            usernameTextView.setText(username);
             if (profilePic != null) {
                 profilePicImageView.setImageBitmap(ImageUtil.createBitmap(profilePic));
             } else {
