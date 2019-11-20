@@ -64,6 +64,10 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(v -> register());
 
         loginBtn.setOnClickListener(v -> login());
+        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+            login();
+            return true;
+        });
     }
 
     private void login() {

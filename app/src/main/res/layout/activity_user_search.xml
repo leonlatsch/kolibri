@@ -24,7 +24,9 @@
             android:layout_marginTop="3dp"
             android:hint="@string/user_search_hint"
             android:inputType="text"
-            android:imeOptions="actionSearch"/>
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:maxLength="50"/>
 
         <ImageView
             android:id="@+id/userSearchBtn"

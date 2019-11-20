@@ -34,7 +34,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/oliviaLettering"
-        app:layout_constraintVertical_bias="0.216" />
+        app:layout_constraintVertical_bias="0.216"
+        android:singleLine="true"
+        android:maxLength="150"/>
 
     <ImageView
         android:id="@+id/oliviaLettering"
@@ -84,7 +86,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/oliviaLettering"
-        app:layout_constraintVertical_bias="0.975" />
+        app:layout_constraintVertical_bias="0.975"
+        android:singleLine="true"
+        android:maxLength="30" />
 
     <EditText
         android:id="@+id/registerPasswordEditText"
@@ -99,7 +103,8 @@
         style="@style/LightEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/registerPasswordConfirmEditText"
