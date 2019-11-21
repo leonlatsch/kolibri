@@ -15,6 +15,7 @@ import dev.leonlatsch.olivia.chat.ChatActivity;
 import dev.leonlatsch.olivia.database.DatabaseMapper;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
+import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.database.model.Message;
@@ -43,6 +44,7 @@ public class MessageConsumer {
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
+    private KeyPairInterface keyPairInterface;
     private UserService userService;
     private DatabaseMapper databaseMapper;
 
@@ -58,6 +60,7 @@ public class MessageConsumer {
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
+        keyPairInterface = KeyPairInterface.getInstance();
         userService = RestServiceFactory.getUserService();
         databaseMapper = DatabaseMapper.getInstance();
 
@@ -106,7 +109,7 @@ public class MessageConsumer {
     }
 
     private void processTextMessage(Message message) {
-        byte[] decryptedData = CryptoManager.decryptAndDecode(message.getContent(), userInterface.getUser().getPrivateKey());
+        byte[] decryptedData = CryptoManager.decryptAndDecode(message.getContent(), keyPairInterface.get(userInterface.getUser().getUid()).getPrivateKey());
         String content = new String(decryptedData, StandardCharsets.UTF_8);
         message.setContent(content);
         if (!chatInterface.messageExists(message)) {

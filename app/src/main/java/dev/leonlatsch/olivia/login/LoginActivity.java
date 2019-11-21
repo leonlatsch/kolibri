@@ -2,32 +2,33 @@ package dev.leonlatsch.olivia.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.security.KeyPair;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.regex.Pattern;
 
 import dev.leonlatsch.olivia.R;
-import dev.leonlatsch.olivia.database.interfaces.UserInterface;
-import dev.leonlatsch.olivia.rest.dto.Container;
-import dev.leonlatsch.olivia.main.MainActivity;
-import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Regex;
+import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
-import dev.leonlatsch.olivia.rest.dto.UserDTO;
+import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
+import dev.leonlatsch.olivia.database.interfaces.UserInterface;
+import dev.leonlatsch.olivia.database.model.KeyPair;
+import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.register.RegisterActivity;
+import dev.leonlatsch.olivia.rest.dto.Container;
+import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.AuthService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
-import dev.leonlatsch.olivia.security.Hash;
 import dev.leonlatsch.olivia.security.CryptoManager;
+import dev.leonlatsch.olivia.security.Hash;
 import dev.leonlatsch.olivia.util.AndroidUtils;
-import dev.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private UserService userService;
     private AuthService authService;
     private UserInterface userInterface;
+    private KeyPairInterface keyPairInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
+        keyPairInterface = KeyPairInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
@@ -108,9 +111,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    KeyPair newKeyPair = CryptoManager.genKeyPair();
-                    userInterface.save(response.body().getContent(), accessToken, Base64.toBase64(newKeyPair.getPrivate().getEncoded()));
-                    updatePublicKey(Base64.toBase64(newKeyPair.getPublic().getEncoded()));
+
+                    KeyPair newKeyPair = keyPairInterface.createOrGet(CryptoManager.genKeyPair(), response.body().getContent().getUid());
+                    userInterface.save(response.body().getContent(), accessToken);
+                    updatePublicKey(newKeyPair.getPublicKey());
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

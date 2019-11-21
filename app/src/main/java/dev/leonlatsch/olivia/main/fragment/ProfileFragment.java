@@ -333,9 +333,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    String privateKey = userInterface.getUser().getPrivateKey();
-
-                    userInterface.save(response.body().getContent(), accessToken, privateKey);
+                    userInterface.save(response.body().getContent(), accessToken);
                 }
             }
 
