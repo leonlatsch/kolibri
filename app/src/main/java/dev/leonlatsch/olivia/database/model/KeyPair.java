@@ -1,10 +1,11 @@
 package dev.leonlatsch.olivia.database.model;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 @Table(name = "key_pair")
-public class KeyPair {
+public class KeyPair extends Model {
 
     @Column(name = "uid", index = true)
     private String uid;

@@ -15,13 +15,8 @@ public class ContactInterface extends BaseInterface {
 
     private static ContactInterface contactInterface; // Singleton
 
-    private UserService userService;
-    private UserInterface userInterface;
 
-    private ContactInterface() {
-        userService = RestServiceFactory.getUserService();
-        userInterface = UserInterface.getInstance();
-    }
+    private ContactInterface() {}
 
     public Contact getContact(String uid) {
         return new Select().from(Contact.class).where(QUEUE_UID_WHERE, uid).executeSingle();
