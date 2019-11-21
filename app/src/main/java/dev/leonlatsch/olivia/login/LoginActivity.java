@@ -16,6 +16,7 @@ import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.constants.Regex;
 import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
+import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.KeyPair;
 import dev.leonlatsch.olivia.main.MainActivity;
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private UserService userService;
     private AuthService authService;
     private UserInterface userInterface;
+    private KeyPairInterface keyPairInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
+        keyPairInterface = KeyPairInterface.getInstance();
 
         emailEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
@@ -108,8 +111,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    KeyPair newKeyPair = CryptoManager.genKeyPair();
-                    userInterface.save(response.body().getContent(), accessToken, newKeyPair.getPrivateKey());
+
+                    KeyPair newKeyPair = keyPairInterface.createOrGet(CryptoManager.genKeyPair(), response.body().getContent().getUid());
+                    userInterface.save(response.body().getContent(), accessToken);
                     updatePublicKey(newKeyPair.getPublicKey());
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);

@@ -2,32 +2,33 @@ package dev.leonlatsch.olivia.register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.regex.Pattern;
 
 import dev.leonlatsch.olivia.R;
-import dev.leonlatsch.olivia.database.model.KeyPair;
-import dev.leonlatsch.olivia.rest.dto.Container;
-import dev.leonlatsch.olivia.main.MainActivity;
-import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Regex;
+import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
-import dev.leonlatsch.olivia.rest.dto.UserDTO;
+import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
+import dev.leonlatsch.olivia.database.model.KeyPair;
+import dev.leonlatsch.olivia.main.MainActivity;
+import dev.leonlatsch.olivia.rest.dto.Container;
+import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.AuthService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
-import dev.leonlatsch.olivia.security.Hash;
 import dev.leonlatsch.olivia.security.CryptoManager;
+import dev.leonlatsch.olivia.security.Hash;
 import dev.leonlatsch.olivia.util.AndroidUtils;
-import dev.leonlatsch.olivia.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private UserService userService;
     private AuthService authService;
     private UserInterface userInterface;
+    private KeyPairInterface keyPairInterface;
 
     private boolean usernameValid;
     private boolean emailValid;
@@ -64,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         userService = RestServiceFactory.getUserService();
         authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
+        keyPairInterface = KeyPairInterface.getInstance();
 
         registerBtn.setOnClickListener(v -> register());
 
@@ -220,7 +223,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 isLoading(false);
                 if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
-                    saveUserAndStartMain(response.body().getContent(), keyPair.getPrivateKey());
+                    saveUserAndStartMain(response.body().getContent(), keyPair);
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
@@ -234,13 +237,15 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserAndStartMain(final String accessToken, final String privateKey) {
+    private void saveUserAndStartMain(final String accessToken, final KeyPair keyPair) {
         Call<Container<UserDTO>> call = userService.get(accessToken);
         call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-                    userInterface.save(response.body().getContent(), accessToken, privateKey);
+                    keyPair.setUid(response.body().getContent().getUid());
+                    keyPairInterface.createOrGet(keyPair);
+                    userInterface.save(response.body().getContent(), accessToken);
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

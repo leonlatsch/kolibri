@@ -28,7 +28,7 @@ public class UserInterface extends CacheInterface<User> {
                 setModel(null);
             }
         } else {
-            throw new RuntimeException("more than one user in database");
+            throw new RuntimeException("more than one user in database"); // Should never happen case
         }
     }
 
@@ -47,10 +47,9 @@ public class UserInterface extends CacheInterface<User> {
         return getModel().getAccessToken();
     }
 
-    public void save(UserDTO userDto, String accessToken, String privateKey) {
+    public void save(UserDTO userDto, String accessToken) {
         User user = getDatabaseMapper().toModel(userDto);
         user.setAccessToken(accessToken);
-        user.setPrivateKey(privateKey);
         save(user);
     }
 

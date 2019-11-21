@@ -2,6 +2,8 @@ package dev.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Select;
 
+import java.security.Key;
+
 import dev.leonlatsch.olivia.database.model.KeyPair;
 
 public class KeyPairInterface extends BaseInterface{
@@ -12,7 +14,11 @@ public class KeyPairInterface extends BaseInterface{
 
     private KeyPairInterface() {}
 
-    public KeyPair create(KeyPair keyPair) {
+    public KeyPair createOrGet(KeyPair keyPair) {
+        if (keyPair == null || keyPair.getUid() == null) {
+            return null;
+        }
+
         KeyPair saved = new Select().from(KeyPair.class).where(QUEUE_UID_WHERE, keyPair.getUid()).executeSingle();
 
         if (saved == null) {
@@ -21,6 +27,15 @@ public class KeyPairInterface extends BaseInterface{
         } else {
             return saved;
         }
+    }
+
+    public KeyPair createOrGet(KeyPair keyPair, String uid) {
+        if (keyPair == null) {
+            return null;
+        }
+
+        keyPair.setUid(uid);
+        return createOrGet(keyPair);
     }
 
     public KeyPair get(String uid) {

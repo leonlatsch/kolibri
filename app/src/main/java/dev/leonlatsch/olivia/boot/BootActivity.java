@@ -70,7 +70,7 @@ public class BootActivity extends AppCompatActivity {
                     public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                         if (response.code() == Responses.CODE_OK) {
                             // Update saved user
-                            userInterface.save(response.body().getContent(), savedUser.getAccessToken(), savedUser.getPrivateKey());
+                            userInterface.save(response.body().getContent(), savedUser.getAccessToken());
                         } else {
                             // if the saved user is not in the backend finish this boot and the chatlist and start another boot
                             userInterface.delete(savedUser);
