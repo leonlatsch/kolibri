@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.leonlatsch.olivia.chat.ChatActivity"
+    tools:context="dev.leonlatsch.olivia.chat.ChatActivity"
     android:background="@drawable/chat_bg">
 
     <androidx.appcompat.widget.Toolbar
