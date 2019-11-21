@@ -2,7 +2,6 @@ package dev.leonlatsch.olivia.security;
 
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -13,6 +12,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
+import dev.leonlatsch.olivia.database.model.KeyPair;
 import dev.leonlatsch.olivia.util.Base64;
 
 public class CryptoManager {
@@ -24,7 +24,8 @@ public class CryptoManager {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(RSA);
             keyPairGenerator.initialize(KEY_SIZE);
-            return keyPairGenerator.genKeyPair();
+            java.security.KeyPair keyPair = keyPairGenerator.genKeyPair();
+            return new KeyPair(null, Base64.toBase64(keyPair.getPublic().getEncoded()), Base64.toBase64(keyPair.getPrivate().getEncoded()));
         } catch (NoSuchAlgorithmException e) {
             return null; // Should never happen case
         }

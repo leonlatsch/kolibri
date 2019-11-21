@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.security.KeyPair;
 import java.util.regex.Pattern;
 
 import dev.leonlatsch.olivia.R;
+import dev.leonlatsch.olivia.database.model.KeyPair;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.constants.Responses;
@@ -214,13 +214,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         KeyPair keyPair = CryptoManager.genKeyPair();
 
-        Call<Container<String>> call = authService.register(userDTO, Base64.toBase64(keyPair.getPublic().getEncoded())); // TODO: SAVE PRIVATE KEY
+        Call<Container<String>> call = authService.register(userDTO, keyPair.getPublicKey());
         call.enqueue(new Callback<Container<String>>() {
             @Override
             public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                 isLoading(false);
                 if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
-                    saveUserAndStartMain(response.body().getContent(), Base64.toBase64(keyPair.getPrivate().getEncoded()));
+                    saveUserAndStartMain(response.body().getContent(), keyPair.getPrivateKey());
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error));
                 }
