@@ -10,9 +10,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import de.leonlatsch.olivia.R;
+import de.leonlatsch.olivia.constants.Formats;
 import de.leonlatsch.olivia.constants.Values;
 import de.leonlatsch.olivia.database.interfaces.ContactInterface;
 import de.leonlatsch.olivia.database.model.Chat;
@@ -35,6 +40,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
     public ChatListAdapter(@NonNull Context context, List<Chat> contactList) {
         super(context, 0, contactList);
+        Collections.sort(contactList, chatComparator);
         this.dataset = contactList;
         this.mContext = context;
         this.contactInterface = ContactInterface.getInstance();
@@ -55,7 +61,14 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
                 dataset.set(i, chat);
             }
         }
+        Collections.sort(dataset, chatComparator);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(Chat chat) {
+        super.add(chat);
+        Collections.sort(dataset, chatComparator);
     }
     
     @Override
@@ -95,4 +108,14 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
         return convertView;
     }
+
+    private static Comparator<Chat> chatComparator = (obj1, obj2) -> {
+        try {
+            Date obj1Date = Formats.DATE_FORMAT.parse(obj1.getLastTimestamp());
+            Date obj2Date = Formats.DATE_FORMAT.parse(obj2.getLastTimestamp());
+            return obj2Date.compareTo(obj1Date);
+        } catch (ParseException e) {
+            return 0;
+        }
+    };
 }
