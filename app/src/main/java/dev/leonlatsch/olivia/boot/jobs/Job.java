@@ -14,13 +14,6 @@ public abstract class Job {
 
     public abstract void execute(JobResultCallback jobResultCallback);
 
-    public void postExecute() {
-    }
-
-    protected Thread getThread() {
-        return thread;
-    }
-
     private String getThreadName() {
         return this.getClass().getName() + "-THREAD";
     }

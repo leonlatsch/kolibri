@@ -36,7 +36,7 @@ public class BootActivity extends AppCompatActivity {
             userInterface.loadUser();
 
 
-            CheckUserJob job = new CheckUserJob(getApplicationContext());
+            CheckUserJob job = new CheckUserJob(this);
             job.execute(jobResult -> new Handler(getApplicationContext().getMainLooper()).post(() -> {
                 if (jobResult.isSuccessful()) {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));

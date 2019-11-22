@@ -2,9 +2,7 @@ package dev.leonlatsch.olivia.boot.jobs;
 
 import android.content.Context;
 import android.content.Intent;
-
-import java.io.IOException;
-import java.util.logging.Handler;
+import android.os.Handler;
 
 import dev.leonlatsch.olivia.boot.BootActivity;
 import dev.leonlatsch.olivia.constants.Responses;
@@ -44,36 +42,33 @@ public class CheckUserJob extends Job {
 
             if (savedUser != null) {
                 jobResultCallback.onResult(new JobResult<Void>(true, null));
+
+                Call<Container<UserDTO>> call = userService.get(userInterface.getAccessToken());
+                call.enqueue(new Callback<Container<UserDTO>>() {
+                    @Override
+                    public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
+                        if (response.code() == Responses.CODE_OK) { // Update saved user
+                            userInterface.save(response.body().getContent(), savedUser.getAccessToken());
+                        } else {
+                            // if the saved user is not in the backend
+                            userInterface.delete(savedUser);
+                            contactInterface.deleteAll();
+                            chatInterface.deleteAll();
+                            new Handler(getContext().getMainLooper()).post(() -> {
+                                Intent intent = new Intent(getContext(), BootActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getContext().startActivity(intent);
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
+
+                    }
+                });
             } else {
                 jobResultCallback.onResult(new JobResult<Void>(false, null));
-            }
-        });
-
-        postExecute();
-    }
-
-    @Override
-    public void postExecute() {
-        User savedUser = userInterface.getUser();
-
-        Call<Container<UserDTO>> call = userService.get(userInterface.getAccessToken());
-        call.enqueue(new Callback<Container<UserDTO>>() {
-            @Override
-            public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
-                if (response.code() == Responses.CODE_OK) { // Update saved user
-                    userInterface.save(response.body().getContent(), savedUser.getAccessToken());
-                } else {
-                    // if the saved user is not in the backend
-                    userInterface.delete(savedUser);
-                    contactInterface.deleteAll();
-                    chatInterface.deleteAll();
-                    getContext().startActivity(new Intent(getContext(), BootActivity.class));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Container<UserDTO>> call, Throwable t) {
-
             }
         });
     }
