@@ -2,9 +2,11 @@ package dev.leonlatsch.olivia.boot.jobs;
 
 public class JobResult<T> {
 
-    private final boolean successful;
+    private boolean successful;
 
-    private final T result;
+    private T result;
+
+    public JobResult() {}
 
     public JobResult(boolean successful, T result) {
         this.successful = successful;
@@ -15,7 +17,15 @@ public class JobResult<T> {
         return successful;
     }
 
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
+    }
+
     public T getResult() {
         return result;
+    }
+
+    public void setResult(T result) {
+        this.result = result;
     }
 }

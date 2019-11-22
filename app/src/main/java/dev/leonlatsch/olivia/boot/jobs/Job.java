@@ -12,13 +12,25 @@ public abstract class Job {
         this.context = context;
     }
 
-    abstract void execute(JobResultCallback jobResultCallback);
+    public abstract void execute(JobResultCallback jobResultCallback);
+
+    public void postExecute() {
+    }
 
     protected Thread getThread() {
         return thread;
     }
 
-    protected String getThreadName() {
+    private String getThreadName() {
         return this.getClass().getName() + "-THREAD";
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    protected void run(Runnable runnable) {
+        thread = new Thread(runnable, getThreadName());
+        thread.start();
     }
 }
