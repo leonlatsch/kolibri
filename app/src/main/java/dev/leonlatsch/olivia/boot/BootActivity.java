@@ -9,18 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.activeandroid.ActiveAndroid;
 
 import dev.leonlatsch.olivia.R;
-import dev.leonlatsch.olivia.constants.Responses;
+import dev.leonlatsch.olivia.boot.jobs.CheckUserJob;
+import dev.leonlatsch.olivia.boot.jobs.UpdateContactsJob;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
-import dev.leonlatsch.olivia.rest.dto.Container;
-import dev.leonlatsch.olivia.rest.dto.UserDTO;
-import dev.leonlatsch.olivia.database.model.User;
 import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BootActivity extends AppCompatActivity {
 
@@ -33,7 +28,6 @@ public class BootActivity extends AppCompatActivity {
         setContentView(R.layout.activity_boot);
 
         ActiveAndroid.initialize(this);
-        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
@@ -41,54 +35,17 @@ public class BootActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             userInterface.loadUser();
 
-            Intent intent = null;
 
-            if (isValidUserSaved()) {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-            } else {
-                intent = new Intent(getApplicationContext(), LoginActivity.class);
-            }
-
-            startActivity(intent);
-            // Make it so you cant go back to this activity
-            finish();
+            CheckUserJob job = new CheckUserJob(this);
+            job.execute(jobResult -> new Handler(getApplicationContext().getMainLooper()).post(() -> {
+                if (jobResult.isSuccessful()) {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    new UpdateContactsJob(this).execute(null);
+                } else {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
+                finish();
+            }));
         }, 100);
-    }
-
-    /**
-     * Checks if a user is saved and checks if the saved user is still in the backend
-     * Deleted the saved user and restarts this Activity if the saved user is not in the backend
-     * @return
-     */
-    private boolean isValidUserSaved() {
-        try {
-            final User savedUser = userInterface.getUser();
-            if (savedUser != null) {
-                Call<Container<UserDTO>> call = userService.get(savedUser.getAccessToken());
-                call.enqueue(new Callback<Container<UserDTO>>() {
-                    @Override
-                    public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
-                        if (response.code() == Responses.CODE_OK) {
-                            // Update saved user
-                            userInterface.save(response.body().getContent(), savedUser.getAccessToken());
-                        } else {
-                            // if the saved user is not in the backend finish this boot and the chatlist and start another boot
-                            userInterface.delete(savedUser);
-                            Intent intent = new Intent(getApplicationContext(), BootActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Container<UserDTO>> call, Throwable t) {}
-                });
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
     }
 }
