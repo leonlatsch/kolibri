@@ -39,6 +39,10 @@ public class ChatInterface extends BaseInterface {
                 .where(QUEUE_CID_WHERE, chat.getCid()).execute();
     }
 
+    public void setMessageSent(Message message) {
+        new Update(Message.class).set("sent = ?", true).where(QUEUE_MID_WHERE, message.getMid()).execute();
+    }
+
     public boolean messageExists(Message message) {
         return new Select().from(Message.class).where(QUEUE_MID_WHERE, message.getMid()).executeSingle() != null;
     }
@@ -59,6 +63,10 @@ public class ChatInterface extends BaseInterface {
 
     public List<Chat> getALl() {
         return new Select().from(Chat.class).execute();
+    }
+
+    public List<Message> getAllUnsentMessages() {
+        return new Select().from(Message.class).where("sent = ?", false).execute();
     }
 
     public Chat getChat(String cid) {

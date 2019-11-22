@@ -28,6 +28,9 @@ public class Message extends Model {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "sent")
+    private boolean sent;
+
     public Message() {}
 
     public Message(String mid, String cid, String from, String to, String type, String timestamp, String content) {
@@ -38,6 +41,7 @@ public class Message extends Model {
         this.type = type;
         this.timestamp = timestamp;
         this.content = content;
+        this.sent = false;
     }
 
     public String getMid() {
@@ -94,5 +98,13 @@ public class Message extends Model {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isSent() {
+        return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
     }
 }
