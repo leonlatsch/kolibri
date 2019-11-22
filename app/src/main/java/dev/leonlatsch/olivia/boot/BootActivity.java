@@ -10,6 +10,7 @@ import com.activeandroid.ActiveAndroid;
 
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.boot.jobs.CheckUserJob;
+import dev.leonlatsch.olivia.boot.jobs.UpdateContactsJob;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
@@ -27,7 +28,6 @@ public class BootActivity extends AppCompatActivity {
         setContentView(R.layout.activity_boot);
 
         ActiveAndroid.initialize(this);
-        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
@@ -40,6 +40,7 @@ public class BootActivity extends AppCompatActivity {
             job.execute(jobResult -> new Handler(getApplicationContext().getMainLooper()).post(() -> {
                 if (jobResult.isSuccessful()) {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    new UpdateContactsJob(this).execute(null);
                 } else {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }

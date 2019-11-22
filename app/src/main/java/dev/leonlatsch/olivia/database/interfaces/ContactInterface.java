@@ -2,6 +2,9 @@ package dev.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Update;
+
+import java.util.List;
 
 import dev.leonlatsch.olivia.database.model.Contact;
 import dev.leonlatsch.olivia.database.model.User;
@@ -20,6 +23,10 @@ public class ContactInterface extends BaseInterface {
 
     public Contact getContact(String uid) {
         return new Select().from(Contact.class).where(QUEUE_UID_WHERE, uid).executeSingle();
+    }
+
+    public List<Contact> getALl() {
+        return new Select().from(Contact.class).execute();
     }
 
     public void delete(Contact contact) {
@@ -50,6 +57,18 @@ public class ContactInterface extends BaseInterface {
 
         contact.save();
         return contact.getUid();
+    }
+
+    public void updateContact(Contact contact) {
+        if (contact.getProfilePicTn() != null) {
+            new Update(Contact.class).set("uid = ?, username = ?, profile_pic_tn = ?, public_key = ?",
+                    contact.getUid(), contact.getUsername(), contact.getProfilePicTn(), contact.getPublicKey())
+                    .where(QUEUE_UID_WHERE, contact.getUid()).execute();
+        } else {
+            new Update(Contact.class).set("uid = ?, username = ?, public_key = ?",
+                    contact.getUid(), contact.getUsername(), contact.getPublicKey())
+                    .where(QUEUE_UID_WHERE, contact.getUid()).execute();
+        }
     }
 
     public static ContactInterface getInstance() {
