@@ -43,9 +43,8 @@ public class BootActivity extends AppCompatActivity {
                 } else {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
+                finish();
             }));
-
-            finish();
         }, 100);
     }
 }
