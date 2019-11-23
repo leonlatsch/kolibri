@@ -119,16 +119,6 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         }
     }
 
-    private Callback<Container<String>> sendMessageCallback = new Callback<Container<String>>() {
-        @Override
-        public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {}
-
-        @Override
-        public void onFailure(Call<Container<String>> call, Throwable t) {
-            //TODO: add message to queue if sending fails
-        }
-    };
-
     private void onSendPressed() {
         if (!messageEditText.getText().toString().isEmpty()) {
             Message message = constructMessage();
@@ -145,7 +135,6 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             chatInterface.updateChat(chat);
             MessageConsumer.notifyChatListChangedFromExternal(chat);
 
-            chatInterface.saveMessage(message);
             messageListAdapter.add(message);
             messageEditText.setText(Values.EMPTY);
             messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
@@ -154,7 +143,19 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             MessageDTO encryptedMessage = DatabaseMapper.getInstance().toDto(message);
             encryptedMessage.setContent(CryptoManager.encryptAndEncode(encryptedMessage.getContent().getBytes(), contact.getPublicKey()));
             Call<Container<String>> call = chatService.send(userInterface.getAccessToken(), encryptedMessage);
-            call.enqueue(sendMessageCallback);
+            call.enqueue(new Callback<Container<String>>() {
+                @Override
+                public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
+                    message.setSent(true);
+                    chatInterface.saveMessage(message);
+                }
+
+                @Override
+                public void onFailure(Call<Container<String>> call, Throwable t) {
+                    message.setSent(false);
+                    chatInterface.saveMessage(message);
+                }
+            });
         }
     }
 

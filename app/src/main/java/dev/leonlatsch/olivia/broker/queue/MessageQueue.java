@@ -16,6 +16,7 @@ public class MessageQueue {
 
     private static final String THREAD_NAME = "MESSAGE-QUEUE-THREAD";
 
+    private static boolean running = false;
     private static MessageQueue messageQueue; // Singleton
 
     private ChatService chatService;
@@ -31,13 +32,13 @@ public class MessageQueue {
         userInterface = UserInterface.getInstance();
         databaseMapper = DatabaseMapper.getInstance();
 
-        thread = new Thread(runnable);
+        thread = new Thread(runnable, THREAD_NAME);
     }
 
     private Runnable runnable = () -> {
-        while (true) {
+        while (running) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
 
                 List<Message> messages = chatInterface.getAllUnsentMessages();
 
@@ -55,11 +56,16 @@ public class MessageQueue {
         return thread;
     }
 
-    public static void Start() {
-        if (messageQueue == null) {
-            messageQueue = new MessageQueue();
-        }
+    public static void stop() {
+        running = false;
+    }
 
-        messageQueue.getThread().start();
+    public static void start() {
+        if(!running) {
+            messageQueue = new MessageQueue();
+
+            running = true;
+            messageQueue.getThread().start();
+        }
     }
 }

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.broker.MessageConsumer;
+import dev.leonlatsch.olivia.broker.queue.MessageQueue;
 import dev.leonlatsch.olivia.database.EntityChangedListener;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chatInterface = ChatInterface.getInstance();
 
         MessageConsumer.start();
+        MessageQueue.start();
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
