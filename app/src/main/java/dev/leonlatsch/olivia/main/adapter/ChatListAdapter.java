@@ -48,7 +48,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
     public boolean chatIsPresent(Chat chat) {
         for (Chat data : dataset) {
-            if (data.getCid().equals(chat.getCid())) {
+            if (data.getCid().equals(chat.getCid()) || data.getUid().equals(chat.getUid())) {
                 return true;
             }
         }

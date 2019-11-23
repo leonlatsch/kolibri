@@ -73,6 +73,10 @@ public class ChatInterface extends BaseInterface {
         return new Select().from(Chat.class).where(QUEUE_CID_WHERE, cid).executeSingle();
     }
 
+    public Chat getChatFromMessage(Message message) {
+        return new Select().from(Chat.class).where(QUEUE_UID_WHERE, message.getFrom()).executeSingle();
+    }
+
     public Chat getChatForContact(String uid) {
         return new Select().from(Chat.class).where(QUEUE_UID_WHERE, uid).executeSingle();
     }

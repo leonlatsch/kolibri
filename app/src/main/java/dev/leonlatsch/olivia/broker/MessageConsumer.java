@@ -114,6 +114,12 @@ public class MessageConsumer {
         message.setContent(content);
         if (!chatInterface.messageExists(message)) {
             Chat chat = chatInterface.getChat(message.getCid());
+            if (chat == null) {
+                chat = chatInterface.getChatFromMessage(message);
+                if (chat != null) {
+                    message.setCid(chat.getCid());
+                }
+            }
 
             if (chat == null) {
                 try {
