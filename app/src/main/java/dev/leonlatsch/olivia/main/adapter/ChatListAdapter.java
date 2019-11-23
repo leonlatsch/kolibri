@@ -55,6 +55,11 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         return false;
     }
 
+    public void reload(List<Chat> newChats) {
+        this.dataset = newChats;
+        notifyDataSetChanged();
+    }
+
     public void chatChanged(Chat chat) {
         for (int i = 0; i < dataset.size(); i++) {
             if (dataset.get(i).getCid().equals(chat.getCid())) {

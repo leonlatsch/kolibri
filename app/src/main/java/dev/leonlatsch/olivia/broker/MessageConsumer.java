@@ -160,7 +160,9 @@ public class MessageConsumer {
     }
 
     public static void notifyChatListChangedFromExternal(Chat chat) {
-        consumer.notifyChatListChangeListener(chat);
+        if (consumer != null) {
+            consumer.notifyChatListChangeListener(chat);
+        }
     }
 
     public static void setMessageRecyclerChangeListener(MessageRecyclerChangeListener listener) {
@@ -172,11 +174,15 @@ public class MessageConsumer {
     }
 
     private void notifyMessageRecyclerChangeListener(Message message) {
-        messageRecyclerChangeListener.receive(message);
+        if (messageRecyclerChangeListener != null) {
+            messageRecyclerChangeListener.receive(message);
+        }
     }
 
     private void notifyChatListChangeListener(Chat chat) {
-        chatListChangeListener.addChat(chat);
+        if (chatListChangeListener != null) {
+            chatListChangeListener.chatChanged(chat);
+        }
     }
 
     public static boolean isRunning() {

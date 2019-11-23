@@ -5,7 +5,9 @@ import android.content.Context;
 import java.io.IOException;
 import java.util.List;
 
+import dev.leonlatsch.olivia.broker.MessageConsumer;
 import dev.leonlatsch.olivia.database.DatabaseMapper;
+import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.Contact;
@@ -17,16 +19,16 @@ import retrofit2.Response;
 
 public class UpdateContactsJob extends Job {
 
-    private DatabaseMapper databaseMapper;
     private UserInterface userInterface;
     private ContactInterface contactInterface;
+    private ChatInterface chatInterface;
     private UserService userService;
 
     public UpdateContactsJob(Context context) {
         super(context);
-        databaseMapper = DatabaseMapper.getInstance();
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
+        chatInterface = ChatInterface.getInstance();
         userService = RestServiceFactory.getUserService();
     }
 
@@ -66,6 +68,7 @@ public class UpdateContactsJob extends Job {
 
                         if (changed) {
                             contactInterface.updateContact(contact);
+                            MessageConsumer.notifyChatListChangedFromExternal(chatInterface.getChatForContact(contact.getUid()));
                             contactsUpdated++;
                         }
                     }
