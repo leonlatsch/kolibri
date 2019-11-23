@@ -2,6 +2,7 @@ package dev.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Set;
 import com.activeandroid.query.Update;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class ChatInterface extends BaseInterface {
     }
 
     public void setMessageSent(Message message) {
-        new Update(Message.class).set("sent = ?", true).where(QUEUE_MID_WHERE, message.getMid()).execute();
+        new Update(Message.class).set("sent = ?", message.isSent() ? 1 : 0).where(QUEUE_MID_WHERE, message.getMid()).execute();
     }
 
     public boolean messageExists(Message message) {

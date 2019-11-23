@@ -96,7 +96,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
     @Override
     public void chatChanged(Chat chat) {
-        if (!chatListAdapter.chatIsPresent(chat)) {
+        if (!chatListAdapter.isChatPresent(chat)) {
             new Handler(parent.getApplicationContext().getMainLooper()).post(() -> {
                 chatListAdapter.add(chat);
                 setChatListVisible(true);

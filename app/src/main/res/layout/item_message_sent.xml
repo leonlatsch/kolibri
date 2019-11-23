@@ -36,6 +36,14 @@
             android:text="00:00"
             android:textSize="11dp" />
 
+        <ImageView
+            android:src="@drawable/ic_check"
+            android:id="@+id/sent_message_sent_indicator"
+            android:tint="@android:color/primary_text_light"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="bottom"/>
+
     </LinearLayout>
 
 </LinearLayout>

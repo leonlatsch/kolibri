@@ -54,7 +54,6 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
     private RecyclerView messageRecycler;
 
     private MessageListAdapter messageListAdapter;
-    private MainActivity outerParent;
 
     private ContactInterface contactInterface;
     private UserInterface userInterface;
@@ -130,6 +129,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
                 contactInterface.save(contact);
                 isTemp = false;
             }
+
             chat.setLastMessage(message.getContent());
             chat.setLastTimestamp(message.getTimestamp());
             chatInterface.updateChat(chat);
@@ -148,6 +148,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
                 public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                     message.setSent(true);
                     chatInterface.saveMessage(message);
+                    messageListAdapter.updateMessageStatus(message);
                 }
 
                 @Override
@@ -163,8 +164,12 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
     public void receive(Message message) {
         if (isActive && message.getCid().equals(chat.getCid()) && !isTemp) {
             new Handler(getApplicationContext().getMainLooper()).post(() -> {
-                messageListAdapter.add(message);
-                messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
+                if (messageListAdapter.isMessagePresent(message)) {
+                    messageListAdapter.updateMessageStatus(message);
+                } else {
+                    messageListAdapter.add(message);
+                    messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
+                }
             }); // Invoke on main thread
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,26 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void updateMessageStatus(Message message) {
+        for (int i = 0; i < mMessageList.size(); i++) {
+            if (mMessageList.get(i).getMid().equals(message.getMid())) {
+                mMessageList.get(i).setSent(message.isSent());
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
+    public boolean isMessagePresent(Message message) {
+        for (Message data : mMessageList) {
+            if (data.getMid().equals(message.getMid())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -82,17 +103,24 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private class SentMessageHolder extends RecyclerView.ViewHolder {
 
         TextView messageBody, messageTimestamp;
+        ImageView sentIndicator;
 
         public SentMessageHolder(@NonNull View itemView) {
             super(itemView);
 
             messageBody = itemView.findViewById(R.id.sent_message_body);
             messageTimestamp = itemView.findViewById(R.id.sent_message_timestamp);
+            sentIndicator = itemView.findViewById(R.id.sent_message_sent_indicator);
         }
 
         void bind(Message message) {
-            messageBody.setText(message.getContent()); //TODO: implement decoding and decryption in MessageConsumer
-            messageTimestamp.setText(message.getTimestamp().toString().substring(11, 16)); // Hard code for the moment
+            messageBody.setText(message.getContent());
+            messageTimestamp.setText(message.getTimestamp().substring(11, 16)); // Hard code for the moment
+            if (message.isSent()) {
+                sentIndicator.setImageDrawable(mContext.getDrawable(R.drawable.ic_check));
+            } else {
+                sentIndicator.setImageDrawable(mContext.getDrawable(R.drawable.ic_watch));
+            }
         }
     }
 
@@ -108,7 +136,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageBody.setText(message.getContent()); //TODO: implement decoding and decryption in MessageConsumer
+            messageBody.setText(message.getContent());
             messageTimestamp.setText(message.getTimestamp().toString().substring(11, 16)); // Hard code for the moment
         }
     }

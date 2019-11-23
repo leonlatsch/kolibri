@@ -46,18 +46,13 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         this.contactInterface = ContactInterface.getInstance();
     }
 
-    public boolean chatIsPresent(Chat chat) {
+    public boolean isChatPresent(Chat chat) {
         for (Chat data : dataset) {
             if (data.getCid().equals(chat.getCid()) || data.getUid().equals(chat.getUid())) {
                 return true;
             }
         }
         return false;
-    }
-
-    public void reload(List<Chat> newChats) {
-        this.dataset = newChats;
-        notifyDataSetChanged();
     }
 
     public void chatChanged(Chat chat) {

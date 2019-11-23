@@ -165,6 +165,12 @@ public class MessageConsumer {
         }
     }
 
+    public static void notifyMessageRecyclerChnagedFromExternal(Message message) {
+        if (messageRecyclerChangeListener != null) {
+            messageRecyclerChangeListener.receive(message);
+        }
+    }
+
     public static void setMessageRecyclerChangeListener(MessageRecyclerChangeListener listener) {
         messageRecyclerChangeListener = listener;
     }

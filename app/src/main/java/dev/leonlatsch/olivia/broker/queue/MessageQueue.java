@@ -3,6 +3,7 @@ package dev.leonlatsch.olivia.broker.queue;
 import java.io.IOException;
 import java.util.List;
 
+import dev.leonlatsch.olivia.broker.MessageConsumer;
 import dev.leonlatsch.olivia.database.DatabaseMapper;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
@@ -45,7 +46,9 @@ public class MessageQueue {
                 for (Message message : messages) {
                     Response<Container<String>> response = chatService.send(userInterface.getAccessToken(), databaseMapper.toDto(message)).execute();
                     if (response.isSuccessful()) {
+                        message.setSent(true);
                         chatInterface.setMessageSent(message);
+                        MessageConsumer.notifyMessageRecyclerChnagedFromExternal(message);
                     }
                 }
             } catch (InterruptedException | IOException e) {}
