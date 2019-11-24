@@ -23,6 +23,7 @@
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <TextView
+                android:id="@+id/main_toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ice_valley"
