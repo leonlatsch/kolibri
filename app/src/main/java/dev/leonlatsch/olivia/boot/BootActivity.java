@@ -14,12 +14,9 @@ import dev.leonlatsch.olivia.boot.jobs.UpdateContactsJob;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
-import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
-import dev.leonlatsch.olivia.rest.service.UserService;
 
 public class BootActivity extends AppCompatActivity {
 
-    private UserService userService;
     private UserInterface userInterface;
 
     @Override
@@ -29,12 +26,10 @@ public class BootActivity extends AppCompatActivity {
 
         ActiveAndroid.initialize(this);
 
-        userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
 
-        new Handler().postDelayed(() -> {
+        new Handler().postDelayed(() -> { // Delay execution for 100 ms to show splash screen
             userInterface.loadUser();
-
 
             CheckUserJob job = new CheckUserJob(this);
             job.execute(jobResult -> new Handler(getApplicationContext().getMainLooper()).post(() -> {

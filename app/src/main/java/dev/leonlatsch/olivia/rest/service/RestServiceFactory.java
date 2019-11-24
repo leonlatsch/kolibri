@@ -4,6 +4,7 @@ import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.rest.http.OliviaHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RestServiceFactory {
 
@@ -13,12 +14,14 @@ public class RestServiceFactory {
     private static UserService userService;
     private static AuthService authService;
     private static ChatService chatService;
+    private static CommonService commonService;
 
     private static void provideRetrofit() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Values.API_BASE_URL)
                     .client(OliviaHttpClient.getOliviaHttpClient())
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(JacksonConverterFactory.create())
                     .build();
         }
@@ -46,5 +49,14 @@ public class RestServiceFactory {
             chatService = retrofit.create(ChatService.class);
         }
         return chatService;
+    }
+
+    public static CommonService getCommonService() {
+        provideRetrofit();
+        if (commonService == null) {
+            commonService = retrofit.create(CommonService.class);
+        }
+
+        return commonService;
     }
 }
