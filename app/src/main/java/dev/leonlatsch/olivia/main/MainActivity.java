@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private View progressOverlay;
+    private TextView titleTextView;
 
     private UserInterface userInterface;
     private ContactInterface contactInterface;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         progressOverlay = findViewById(R.id.progressOverlay);
+        titleTextView = findViewById(R.id.main_toolbar_title);
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -87,16 +89,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_chat:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ChatFragment()).commit();
+                titleTextView.setText(getString(R.string.app_name));
+
                 break;
 
             case R.id.nav_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ProfileFragment()).commit();
+                titleTextView.setText(getString(R.string.profile));
                 break;
 
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new SettingsFragment()).commit();
+                titleTextView.setText(getString(R.string.settings));
                 break;
 
             case R.id.nav_help:
