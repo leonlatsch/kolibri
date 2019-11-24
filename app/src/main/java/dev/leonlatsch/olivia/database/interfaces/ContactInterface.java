@@ -9,8 +9,6 @@ import java.util.List;
 import dev.leonlatsch.olivia.database.model.Contact;
 import dev.leonlatsch.olivia.database.model.User;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
-import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
-import dev.leonlatsch.olivia.rest.service.UserService;
 
 public class ContactInterface extends BaseInterface {
 

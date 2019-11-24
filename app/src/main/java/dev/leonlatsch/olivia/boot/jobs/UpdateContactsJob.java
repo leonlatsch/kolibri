@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 import dev.leonlatsch.olivia.broker.MessageConsumer;
-import dev.leonlatsch.olivia.database.DatabaseMapper;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;

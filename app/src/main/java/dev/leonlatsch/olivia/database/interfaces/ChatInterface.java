@@ -2,7 +2,6 @@ package dev.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
-import com.activeandroid.query.Set;
 import com.activeandroid.query.Update;
 
 import java.util.List;

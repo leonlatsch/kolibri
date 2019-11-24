@@ -2,8 +2,6 @@ package dev.leonlatsch.olivia.database.interfaces;
 
 import com.activeandroid.query.Select;
 
-import java.security.Key;
-
 import dev.leonlatsch.olivia.database.model.KeyPair;
 
 public class KeyPairInterface extends BaseInterface{

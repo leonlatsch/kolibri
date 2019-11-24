@@ -6,6 +6,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.ShutdownListener;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -94,10 +95,16 @@ public class MessageConsumer {
         });
     }
 
+    private ShutdownListener shutdownListener = cause -> {
+        initialize();
+        run();
+    };
+
     private void run() {
         new Thread(() -> {
             try {
                 connection = connectionFactory.newConnection();
+                connection.addShutdownListener(shutdownListener);
                 Channel channel = connection.createChannel();
                 channel.basicConsume(USER_QUEUE_PREFIX + userInterface.getUser().getUid(), true, callback, consumerTag -> {
                 });
@@ -165,7 +172,7 @@ public class MessageConsumer {
         }
     }
 
-    public static void notifyMessageRecyclerChnagedFromExternal(Message message) {
+    public static void notifyMessageRecyclerChangedFromExternal(Message message) {
         if (messageRecyclerChangeListener != null) {
             messageRecyclerChangeListener.receive(message);
         }

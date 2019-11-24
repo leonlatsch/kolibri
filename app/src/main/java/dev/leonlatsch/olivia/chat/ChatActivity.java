@@ -30,7 +30,6 @@ import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.database.model.Contact;
 import dev.leonlatsch.olivia.database.model.Message;
-import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.dto.MessageDTO;
 import dev.leonlatsch.olivia.rest.service.ChatService;

@@ -48,7 +48,7 @@ public class MessageQueue {
                     if (response.isSuccessful()) {
                         message.setSent(true);
                         chatInterface.setMessageSent(message);
-                        MessageConsumer.notifyMessageRecyclerChnagedFromExternal(message);
+                        MessageConsumer.notifyMessageRecyclerChangedFromExternal(message);
                     }
                 }
             } catch (InterruptedException | IOException e) {}
