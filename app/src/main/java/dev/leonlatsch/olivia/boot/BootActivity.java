@@ -14,6 +14,7 @@ import dev.leonlatsch.olivia.boot.jobs.UpdateContactsJob;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
+import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 
 public class BootActivity extends AppCompatActivity {
 
@@ -25,6 +26,7 @@ public class BootActivity extends AppCompatActivity {
         setContentView(R.layout.activity_boot);
 
         ActiveAndroid.initialize(this);
+        RestServiceFactory.initialize(this);
 
         userInterface = UserInterface.getInstance();
 

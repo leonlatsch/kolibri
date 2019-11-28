@@ -5,6 +5,9 @@ import android.content.Context;
 import java.io.IOException;
 import java.util.List;
 
+import dev.leonlatsch.olivia.boot.jobs.base.Job;
+import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
+import dev.leonlatsch.olivia.boot.jobs.base.JobResultCallback;
 import dev.leonlatsch.olivia.broker.MessageConsumer;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;

@@ -1,4 +1,4 @@
-package dev.leonlatsch.olivia.boot.jobs;
+package dev.leonlatsch.olivia.boot.jobs.base;
 
 public class JobResult<T> {
 
