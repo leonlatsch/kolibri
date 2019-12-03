@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.IOException;
 import java.util.List;
 
-import dev.leonlatsch.olivia.boot.jobs.base.Job;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResultCallback;
 import dev.leonlatsch.olivia.broker.MessageConsumer;
@@ -19,14 +19,14 @@ import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
 import retrofit2.Response;
 
-public class UpdateContactsJob extends Job {
+public class UpdateContactsAsyncJob extends AsyncJob {
 
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
     private UserService userService;
 
-    public UpdateContactsJob(Context context) {
+    public UpdateContactsAsyncJob(Context context) {
         super(context);
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();

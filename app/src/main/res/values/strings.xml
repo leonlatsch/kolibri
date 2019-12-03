@@ -60,5 +60,8 @@
     <string name="send">Send</string>
     <string name="enter_message">Enter Message</string>
     <string name="new_chat_hint">You have no chats</string>
+    <string name="connect_a_backend">Connect a backend</string>
+    <string name="CONNECT">CONNECT</string>
+    <string name="hostname_or_url">Hostname or Url</string>
 
 </resources>

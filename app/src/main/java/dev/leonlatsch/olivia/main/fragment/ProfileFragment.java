@@ -182,7 +182,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
         builder.setTitle(getString(R.string.password));
 
-        final View view = getLayoutInflater().inflate(R.layout.popup_password, null);
+        final View view = getLayoutInflater().inflate(R.layout.dialog_password, null);
         builder.setView(view);
 
         builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {

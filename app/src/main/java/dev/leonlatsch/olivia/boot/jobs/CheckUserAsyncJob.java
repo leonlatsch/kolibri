@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 
 import dev.leonlatsch.olivia.boot.BootActivity;
-import dev.leonlatsch.olivia.boot.jobs.base.Job;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResultCallback;
 import dev.leonlatsch.olivia.constants.Responses;
@@ -21,14 +21,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CheckUserJob extends Job {
+public class CheckUserAsyncJob extends AsyncJob {
 
     private UserService userService;
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
 
-    public CheckUserJob(Context context) {
+    public CheckUserAsyncJob(Context context) {
         super(context);
         userInterface = UserInterface.getInstance();
         userService = RestServiceFactory.getUserService();
