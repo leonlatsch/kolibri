@@ -48,6 +48,6 @@
     <string name="enter_message">Nachricht eingeben</string>
     <string name="new_chat_hint">Du hast keine Chats</string>
     <string name="connect_a_backend">Mit Server verbinden</string>
-    <string name="CONNECT">CONNECT</string>
+    <string name="CONNECT">VERBINDEN</string>
     <string name="hostname_or_url">Hostnamen oder Url</string>
 </resources>

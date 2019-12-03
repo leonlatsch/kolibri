@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.activeandroid.ActiveAndroid;
 
@@ -42,7 +43,12 @@ public class BootActivity extends AppCompatActivity {
                     finish();
                 }));
             } else {
-                new BackendDialog(this).show();
+                BackendDialog dialog = new BackendDialog(this);
+                dialog.setOnDismissListener(dialogInterface -> {
+                    startActivity(new Intent(getApplicationContext(), BootActivity.class));
+                    finish();
+                });
+                dialog.show();
             }
         }, 100);
     }

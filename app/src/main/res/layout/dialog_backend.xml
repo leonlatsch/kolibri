@@ -21,21 +21,14 @@
         android:singleLine="true"
         android:inputType="textUri"
         style="@style/CommonEditText"
-        android:maxWidth="220dp"
+        android:maxWidth="280dp"
         android:imeOptions="actionGo"
         android:textAlignment="center"
         android:hint="@string/hostname_or_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:width="250dp"
         android:maxLength="80" />
-
-    <TextView
-        android:id="@+id/dialog_backend_button"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/CONNECT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"/>
 
     <ProgressBar
         android:id="@+id/dialog_backend_progressbar"
@@ -44,5 +37,18 @@
         android:layout_height="50dp"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/dialog_backend_success_indicator"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/dialog_backend_button"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/CONNECT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"/>
 
 </LinearLayout>
