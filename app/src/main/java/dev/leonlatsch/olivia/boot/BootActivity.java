@@ -21,16 +21,12 @@ import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 
 public class BootActivity extends AppCompatActivity {
 
-    private UserInterface userInterface;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boot);
 
         ActiveAndroid.initialize(this);
-
-        userInterface = UserInterface.getInstance();
 
         new Handler().postDelayed(() -> { // Delay execution for 100 ms to show splash screen
             JobResult<Void> result = new ValidateBackendAsyncJob(this).execute();

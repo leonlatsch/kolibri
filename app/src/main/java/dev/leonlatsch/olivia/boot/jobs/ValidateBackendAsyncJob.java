@@ -3,11 +3,8 @@ package dev.leonlatsch.olivia.boot.jobs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.base.Job;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
-import dev.leonlatsch.olivia.boot.jobs.base.JobResultCallback;
-import dev.leonlatsch.olivia.rest.service.CommonService;
 import dev.leonlatsch.olivia.settings.Config;
 
 import static dev.leonlatsch.olivia.settings.Config.*;

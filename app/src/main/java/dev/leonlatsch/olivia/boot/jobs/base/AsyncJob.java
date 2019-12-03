@@ -10,7 +10,7 @@ public abstract class AsyncJob extends BaseJob {
         super(context);
     }
 
-    public abstract void execute(JobResultCallback jobResultCallback);
+    public abstract void execute(AsyncJobCallback asyncJobCallback);
 
     private String getThreadName() {
         return this.getClass().getName() + "-THREAD";

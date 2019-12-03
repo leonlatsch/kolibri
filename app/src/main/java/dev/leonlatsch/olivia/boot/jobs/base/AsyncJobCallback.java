@@ -1,6 +1,6 @@
 package dev.leonlatsch.olivia.boot.jobs.base;
 
-public interface JobResultCallback {
+public interface AsyncJobCallback {
 
     void onResult(JobResult jobResult);
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
-import dev.leonlatsch.olivia.boot.jobs.base.JobResultCallback;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJobCallback;
 import dev.leonlatsch.olivia.broker.MessageConsumer;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -35,7 +35,7 @@ public class UpdateContactsAsyncJob extends AsyncJob {
     }
 
     @Override
-    public void execute(JobResultCallback jobResultCallback) { //TODO: create backend function to get a list of contacts in one request
+    public void execute(AsyncJobCallback asyncJobCallback) { //TODO: create backend function to get a list of contacts in one request
         run(() -> {
             List<Contact> contacts = contactInterface.getALl();
 
@@ -79,8 +79,8 @@ public class UpdateContactsAsyncJob extends AsyncJob {
                 }
             }
 
-            if (jobResultCallback != null) {
-                jobResultCallback.onResult(new JobResult<>(success, contactsUpdated));
+            if (asyncJobCallback != null) {
+                asyncJobCallback.onResult(new JobResult<>(success, contactsUpdated));
             }
         });
     }

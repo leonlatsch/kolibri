@@ -7,7 +7,7 @@ import android.os.Handler;
 import dev.leonlatsch.olivia.boot.BootActivity;
 import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
-import dev.leonlatsch.olivia.boot.jobs.base.JobResultCallback;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJobCallback;
 import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -37,14 +37,14 @@ public class CheckUserAsyncJob extends AsyncJob {
     }
 
     @Override
-    public void execute(JobResultCallback jobResultCallback) {
+    public void execute(AsyncJobCallback asyncJobCallback) {
         run(() -> {
             userInterface.loadUser();
 
             User savedUser = userInterface.getUser();
 
             if (savedUser != null) {
-                jobResultCallback.onResult(new JobResult<Void>(true, null));
+                asyncJobCallback.onResult(new JobResult<Void>(true, null));
 
                 Call<Container<UserDTO>> call = userService.get(userInterface.getAccessToken());
                 call.enqueue(new Callback<Container<UserDTO>>() {
@@ -71,7 +71,7 @@ public class CheckUserAsyncJob extends AsyncJob {
                     }
                 });
             } else {
-                jobResultCallback.onResult(new JobResult<Void>(false, null));
+                asyncJobCallback.onResult(new JobResult<Void>(false, null));
             }
         });
     }
