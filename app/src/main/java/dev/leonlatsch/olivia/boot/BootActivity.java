@@ -12,9 +12,8 @@ import com.activeandroid.ActiveAndroid;
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.boot.jobs.CheckUserAsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.UpdateContactsAsyncJob;
-import dev.leonlatsch.olivia.boot.jobs.ValidateBackendAsyncJob;
+import dev.leonlatsch.olivia.boot.jobs.ValidateBackendJob;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
-import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
@@ -29,7 +28,7 @@ public class BootActivity extends AppCompatActivity {
         ActiveAndroid.initialize(this);
 
         new Handler().postDelayed(() -> { // Delay execution for 100 ms to show splash screen
-            JobResult<Void> result = new ValidateBackendAsyncJob(this).execute();
+            JobResult<Void> result = new ValidateBackendJob(this).execute();
             if (result.isSuccessful()) {
                 RestServiceFactory.initialize(this);
                 CheckUserAsyncJob job = new CheckUserAsyncJob(this);
@@ -43,10 +42,7 @@ public class BootActivity extends AppCompatActivity {
                     finish();
                 }));
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setView(getLayoutInflater().inflate(R.layout.dialog_backend, null));
-                builder.setCancelable(false);
-                builder.create().show();
+                new BackendDialog(this).show();
             }
         }, 100);
     }

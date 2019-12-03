@@ -19,6 +19,7 @@
     <EditText
         android:id="@+id/dialog_backend_edit_text"
         android:singleLine="true"
+        android:inputType="textUri"
         style="@style/CommonEditText"
         android:maxWidth="220dp"
         android:imeOptions="actionGo"

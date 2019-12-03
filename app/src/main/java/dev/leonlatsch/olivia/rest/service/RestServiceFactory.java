@@ -30,6 +30,12 @@ public class RestServiceFactory {
         recreateServices();
     }
 
+    public static void initialize(String baseUrl) {
+        BASE_URL = baseUrl;
+        provideRetrofit();
+        recreateServices();
+    }
+
     private static void recreateServices() { //TODO: find other solution for this
         if (userService != null) {
             userService = retrofit.create(UserService.class);

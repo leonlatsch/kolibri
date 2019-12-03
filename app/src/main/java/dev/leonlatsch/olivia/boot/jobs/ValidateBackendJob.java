@@ -9,11 +9,11 @@ import dev.leonlatsch.olivia.settings.Config;
 
 import static dev.leonlatsch.olivia.settings.Config.*;
 
-public class ValidateBackendAsyncJob extends Job {
+public class ValidateBackendJob extends Job {
 
     private SharedPreferences preferences;
 
-    public ValidateBackendAsyncJob(Context context) {
+    public ValidateBackendJob(Context context) {
         super(context);
         preferences = Config.getSharedPreferences(context);
     }
