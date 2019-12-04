@@ -55,14 +55,12 @@ public class RestServiceFactory {
     }
 
     private static void provideRetrofit() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(OliviaHttpClient.getOliviaHttpClient())
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(JacksonConverterFactory.create())
-                    .build();
-        }
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(OliviaHttpClient.getOliviaHttpClient())
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
     }
 
     public static UserService getUserService() {
