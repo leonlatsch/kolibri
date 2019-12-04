@@ -63,5 +63,6 @@
     <string name="connect_a_backend">Connect a backend</string>
     <string name="CONNECT">CONNECT</string>
     <string name="hostname_or_url">Hostname or Url</string>
+    <string name="are_you_sure_disconnect">Are you sure you want to disconnect from the backend?</string>
 
 </resources>

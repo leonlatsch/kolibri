@@ -19,7 +19,6 @@ import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.service.CommonService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.settings.Config;
-import dev.leonlatsch.olivia.util.AndroidUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +27,7 @@ public class BackendDialog extends AlertDialog {
 
     private static final String DEFAULT_SUFFIX = "backend/";
     private static final String SLASH = "/";
-    private static final String HTTPS = "https:///";
+    private static final String HTTPS = "https://";
     private static final String HTTP = "http://";
 
     private TextView connectButton;
@@ -149,7 +148,7 @@ public class BackendDialog extends AlertDialog {
                     editor.apply();
                     isLoading(false);
                     success(true);
-                    new Handler().postDelayed(() -> dismiss(), 1000);
+                    new Handler().postDelayed(() -> dismiss(), 1000); // Wait 1 sec before dismissing
                 }
             }
 
