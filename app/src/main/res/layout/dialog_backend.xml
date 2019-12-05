@@ -22,7 +22,7 @@
         android:inputType="textUri"
         style="@style/CommonEditText"
         android:maxWidth="280dp"
-        android:imeOptions="actionGo"
+        android:imeOptions="actionDone"
         android:textAlignment="center"
         android:hint="@string/hostname_or_url"
         android:layout_width="wrap_content"

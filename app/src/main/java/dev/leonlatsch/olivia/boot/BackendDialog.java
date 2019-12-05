@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +48,10 @@ public class BackendDialog extends AlertDialog {
         successImageView = view.findViewById(R.id.dialog_backend_success_indicator);
 
         connectButton.setOnClickListener(view1 -> connect());
+        hostnameEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            connect();
+            return true;
+        });
 
         setCancelable(false);
         setView(view);
@@ -114,9 +119,12 @@ public class BackendDialog extends AlertDialog {
         successImageView.setVisibility(View.VISIBLE);
         if (success) {
             successImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_checked_48, getContext().getTheme()));
-
+            connectButton.setText(R.string.CONNECTED);
+            connectButton.setOnClickListener(null);
         } else {
             successImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_cancel_48, getContext().getTheme()));
+            connectButton.setText(R.string.CONNECT);
+            connectButton.setOnClickListener(view -> connect());
         }
     }
 
