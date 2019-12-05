@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.constants.Regex;
+import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.service.CommonService;
@@ -70,7 +71,7 @@ public class BackendDialog extends AlertDialog {
         commonService.healthcheck().enqueue(new Callback<Container<Void>>() {
             @Override
             public void onResponse(Call<Container<Void>> call, Response<Container<Void>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
                     saveConfig(url, commonService);
                 } else {
                     if (url.endsWith(DEFAULT_SUFFIX)) {
