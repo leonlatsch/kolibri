@@ -43,8 +43,6 @@ public class UserSearchActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
-    private ContactInterface contactInterface;
-    private ChatInterface chatInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +56,6 @@ public class UserSearchActivity extends AppCompatActivity {
 
         userService = RestServiceFactory.getUserService();
         userInterface = UserInterface.getInstance();
-        contactInterface = ContactInterface.getInstance();
-        chatInterface = ChatInterface.getInstance();
 
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
@@ -120,11 +116,7 @@ public class UserSearchActivity extends AppCompatActivity {
                         Container<List<UserDTO>> container = response.body();
                         if (container.getContent() != null && !container.getContent().isEmpty()) {
                             userAdapter.clear();
-                            for (UserDTO user : container.getContent()) {
-                                if (!user.getUid().equals(userInterface.getUser().getUid())) {
-                                    userAdapter.add(user);
-                                }
-                            }
+                            userAdapter.addAll(container.getContent());
                         }
                     }
                     isLoading(false);
