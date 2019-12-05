@@ -11,4 +11,7 @@ public interface CommonService {
 
     @GET("version")
     Call<String> getVersion();
+
+    @GET("broker-port")
+    Call<Integer> getBrokerPort();
 }

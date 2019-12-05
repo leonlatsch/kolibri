@@ -1,10 +1,13 @@
 package dev.leonlatsch.olivia.login;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -13,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.regex.Pattern;
 
 import dev.leonlatsch.olivia.R;
+import dev.leonlatsch.olivia.boot.BootActivity;
 import dev.leonlatsch.olivia.constants.Regex;
 import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
@@ -28,6 +32,7 @@ import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
 import dev.leonlatsch.olivia.security.CryptoManager;
 import dev.leonlatsch.olivia.security.Hash;
+import dev.leonlatsch.olivia.settings.Config;
 import dev.leonlatsch.olivia.util.AndroidUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private TextView errorText;
     private View progressOverlay;
+    private ImageView disconnectButton;
 
     private UserService userService;
     private AuthService authService;
@@ -63,14 +69,34 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         progressOverlay = findViewById(R.id.progressOverlay);
         errorText = findViewById(R.id.loginErrorTextView);
+        disconnectButton = findViewById(R.id.disconnectButton);
 
         registerBtn.setOnClickListener(v -> register());
+        disconnectButton.setOnClickListener(v -> disconnect());
 
         loginBtn.setOnClickListener(v -> login());
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             login();
             return true;
         });
+    }
+
+    private void disconnect() {
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                SharedPreferences.Editor editor = Config.getSharedPreferences(this).edit();
+                editor.remove(Config.KEY_BACKEND_HTTP_BASEURL);
+                editor.remove(Config.KEY_BACKEND_BROKER_HOST);
+                editor.remove(Config.KEY_BACKEND_BROKER_PORT);
+                editor.apply();
+                startActivity(new Intent(getApplicationContext(), BootActivity.class));
+                finish();
+            }
+        };
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.AlertDialogCustom);
+        builder.setMessage(getString(R.string.are_you_sure_disconnect)).setPositiveButton(getString(R.string.yes), onClickListener)
+                .setNegativeButton(getString(R.string.no), onClickListener).show();
     }
 
     private void login() {

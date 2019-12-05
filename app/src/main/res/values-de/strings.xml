@@ -47,4 +47,8 @@
     <string name="send">Senden</string>
     <string name="enter_message">Nachricht eingeben</string>
     <string name="new_chat_hint">Du hast keine Chats</string>
+    <string name="connect_a_backend">Mit Server verbinden</string>
+    <string name="CONNECT">VERBINDEN</string>
+    <string name="hostname_or_url">Hostnamen oder Url</string>
+    <string name="are_you_sure_disconnect">Willst du die Verbindung zum Server wirklich trennen?</string>
 </resources>

@@ -5,6 +5,9 @@ import android.content.Context;
 import java.io.IOException;
 import java.util.List;
 
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
+import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJobCallback;
 import dev.leonlatsch.olivia.broker.MessageConsumer;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -16,14 +19,14 @@ import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
 import retrofit2.Response;
 
-public class UpdateContactsJob extends Job {
+public class UpdateContactsAsyncJob extends AsyncJob {
 
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
     private UserService userService;
 
-    public UpdateContactsJob(Context context) {
+    public UpdateContactsAsyncJob(Context context) {
         super(context);
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
@@ -32,7 +35,7 @@ public class UpdateContactsJob extends Job {
     }
 
     @Override
-    public void execute(JobResultCallback jobResultCallback) { //TODO: create backend function to get a list of contacts in one request
+    public void execute(AsyncJobCallback asyncJobCallback) { //TODO: create backend function to get a list of contacts in one request
         run(() -> {
             List<Contact> contacts = contactInterface.getALl();
 
@@ -76,8 +79,8 @@ public class UpdateContactsJob extends Job {
                 }
             }
 
-            if (jobResultCallback != null) {
-                jobResultCallback.onResult(new JobResult<>(success, contactsUpdated));
+            if (asyncJobCallback != null) {
+                asyncJobCallback.onResult(new JobResult<>(success, contactsUpdated));
             }
         });
     }

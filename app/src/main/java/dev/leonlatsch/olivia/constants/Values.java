@@ -16,9 +16,6 @@ public class Values {
     public static final String INTENT_KEY_CHAT_PROFILE_PIC = "intent_chat_profile_pic";
     public static final String INTENT_KEY_CHAT_PUBLIC_KEY = "intent_chat_public_key";
 
-    // API
-    public static final String API_BASE_URL = "https://olivia.leonlatsch.dev/backend/";
-
     private Values() {
         // Prevent instantiation
     }

@@ -1,13 +1,19 @@
 package dev.leonlatsch.olivia.rest.service;
 
-import dev.leonlatsch.olivia.constants.Values;
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import dev.leonlatsch.olivia.rest.http.OliviaHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import static dev.leonlatsch.olivia.settings.Config.KEY_BACKEND_HTTP_BASEURL;
+import static dev.leonlatsch.olivia.settings.Config.getSharedPreferences;
+
 public class RestServiceFactory {
 
+    private static String BASE_URL = null;
 
     private static Retrofit retrofit;
 
@@ -16,19 +22,48 @@ public class RestServiceFactory {
     private static ChatService chatService;
     private static CommonService commonService;
 
-    private static void provideRetrofit() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Values.API_BASE_URL)
-                    .client(OliviaHttpClient.getOliviaHttpClient())
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(JacksonConverterFactory.create())
-                    .build();
+    public static void initialize(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        BASE_URL = sharedPreferences.getString(KEY_BACKEND_HTTP_BASEURL, null);
+
+        provideRetrofit();
+        recreateServices();
+    }
+
+    public static void initialize(String baseUrl) {
+        BASE_URL = baseUrl;
+        provideRetrofit();
+        recreateServices();
+    }
+
+    private static void recreateServices() { //TODO: find other solution for this
+        if (userService != null) {
+            userService = retrofit.create(UserService.class);
+        }
+
+        if (authService != null) {
+            authService = retrofit.create(AuthService.class);
+        }
+
+        if (chatService != null) {
+            chatService = retrofit.create(ChatService.class);
+        }
+
+        if (commonService != null) {
+            commonService = retrofit.create(CommonService.class);
         }
     }
 
+    private static void provideRetrofit() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(OliviaHttpClient.getOliviaHttpClient())
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+    }
+
     public static UserService getUserService() {
-        provideRetrofit();
         if (userService == null) {
             userService = retrofit.create(UserService.class);
         }
@@ -36,7 +71,6 @@ public class RestServiceFactory {
     }
 
     public static AuthService getAuthService() {
-        provideRetrofit();
         if (authService == null) {
             authService = retrofit.create(AuthService.class);
         }
@@ -44,7 +78,6 @@ public class RestServiceFactory {
     }
 
     public static ChatService getChatService() {
-        provideRetrofit();
         if (chatService == null) {
             chatService = retrofit.create(ChatService.class);
         }
@@ -52,7 +85,6 @@ public class RestServiceFactory {
     }
 
     public static CommonService getCommonService() {
-        provideRetrofit();
         if (commonService == null) {
             commonService = retrofit.create(CommonService.class);
         }

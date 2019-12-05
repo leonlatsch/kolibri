@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Handler;
 
 import dev.leonlatsch.olivia.boot.BootActivity;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
+import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
+import dev.leonlatsch.olivia.boot.jobs.base.AsyncJobCallback;
 import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -18,14 +21,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CheckUserJob extends Job {
+public class CheckUserAsyncJob extends AsyncJob {
 
     private UserService userService;
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
 
-    public CheckUserJob(Context context) {
+    public CheckUserAsyncJob(Context context) {
         super(context);
         userInterface = UserInterface.getInstance();
         userService = RestServiceFactory.getUserService();
@@ -34,14 +37,14 @@ public class CheckUserJob extends Job {
     }
 
     @Override
-    public void execute(JobResultCallback jobResultCallback) {
+    public void execute(AsyncJobCallback asyncJobCallback) {
         run(() -> {
             userInterface.loadUser();
 
             User savedUser = userInterface.getUser();
 
             if (savedUser != null) {
-                jobResultCallback.onResult(new JobResult<Void>(true, null));
+                asyncJobCallback.onResult(new JobResult<Void>(true, null));
 
                 Call<Container<UserDTO>> call = userService.get(userInterface.getAccessToken());
                 call.enqueue(new Callback<Container<UserDTO>>() {
@@ -68,7 +71,7 @@ public class CheckUserJob extends Job {
                     }
                 });
             } else {
-                jobResultCallback.onResult(new JobResult<Void>(false, null));
+                asyncJobCallback.onResult(new JobResult<Void>(false, null));
             }
         });
     }
