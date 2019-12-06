@@ -137,7 +137,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageBody.setText(message.getContent());
-            messageTimestamp.setText(message.getTimestamp().toString().substring(11, 16)); // Hard code for the moment
+            messageTimestamp.setText(message.getTimestamp().substring(11, 16)); // Hard code for the moment
         }
     }
 

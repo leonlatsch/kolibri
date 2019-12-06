@@ -65,7 +65,7 @@ public class DatabaseMapper {
         dto.setFrom(message.getFrom());
         dto.setTo(message.getTo());
         dto.setType(message.getType());
-        dto.setTimestamp(message.getTimestamp().toString());
+        dto.setTimestamp(message.getTimestamp());
         dto.setContent(message.getContent());
         return dto;
     }

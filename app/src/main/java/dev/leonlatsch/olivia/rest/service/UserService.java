@@ -23,6 +23,7 @@ public interface UserService {
 
     @GET("user/search/{username}")
     Call<Container<List<UserDTO>>> search(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
+
     @PUT("user/update")
     Call<Container<String>> update(@Header(Headers.ACCESS_TOKEN) String accessToken, @Body UserDTO user);
 
