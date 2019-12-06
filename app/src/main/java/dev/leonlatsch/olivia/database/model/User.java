@@ -4,6 +4,10 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 @Table(name = "user")
 public class User extends Model {
 

@@ -17,6 +17,10 @@ import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class BootActivity extends AppCompatActivity {
 
     @Override

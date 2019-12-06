@@ -9,6 +9,12 @@ import java.io.ByteArrayOutputStream;
 
 import dev.leonlatsch.olivia.R;
 
+/**
+ * A util class to load and convert images, drawables and bitmaps
+ *
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ImageUtil {
 
     /**

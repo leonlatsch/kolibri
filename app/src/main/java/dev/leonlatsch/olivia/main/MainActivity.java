@@ -31,6 +31,10 @@ import dev.leonlatsch.olivia.main.fragment.ProfileFragment;
 import dev.leonlatsch.olivia.main.fragment.SettingsFragment;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, EntityChangedListener<User> {
 
     private DrawerLayout drawerLayout;

@@ -1,5 +1,9 @@
 package dev.leonlatsch.olivia.rest.dto;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class Container<T> {
 
     private int code;

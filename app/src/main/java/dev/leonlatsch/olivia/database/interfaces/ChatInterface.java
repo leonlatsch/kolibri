@@ -9,6 +9,10 @@ import java.util.List;
 import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.database.model.Message;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ChatInterface extends BaseInterface {
 
     private static final String QUEUE_CID_WHERE = "cid = ?";

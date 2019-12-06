@@ -2,6 +2,10 @@ package dev.leonlatsch.olivia.database;
 
 import com.activeandroid.Model;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public interface EntityChangedListener<T extends Model> {
 
     /**

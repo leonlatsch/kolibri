@@ -12,6 +12,9 @@ import dev.leonlatsch.olivia.database.EntityChangedListener;
  * The cached model needs to be
  *
  * @param <T> extends Model
+ *
+ * @author Leon Latsch
+ * @since 1.0.0
  */
 public abstract class CacheInterface<T extends Model> extends BaseInterface {
 

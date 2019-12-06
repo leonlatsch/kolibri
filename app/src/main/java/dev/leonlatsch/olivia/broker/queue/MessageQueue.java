@@ -13,6 +13,10 @@ import dev.leonlatsch.olivia.rest.service.ChatService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import retrofit2.Response;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class MessageQueue {
 
     private static final String THREAD_NAME = "MESSAGE-QUEUE-THREAD";

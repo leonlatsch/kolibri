@@ -9,6 +9,10 @@ import dev.leonlatsch.olivia.settings.Config;
 
 import static dev.leonlatsch.olivia.settings.Config.*;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ValidateBackendJob extends Job {
 
     private SharedPreferences preferences;

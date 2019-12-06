@@ -1,5 +1,9 @@
 package dev.leonlatsch.olivia.util;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class Base64 {
 
     public static String toBase64(byte[] bytes) {

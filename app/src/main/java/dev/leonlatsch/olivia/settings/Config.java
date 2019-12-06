@@ -3,6 +3,12 @@ package dev.leonlatsch.olivia.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * A class that holds config keys and values for shares preferences
+ *
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class Config {
 
     private static final String FILE_NAME = "olivia-preferences"; // Filename will be olivia-preferences.xml

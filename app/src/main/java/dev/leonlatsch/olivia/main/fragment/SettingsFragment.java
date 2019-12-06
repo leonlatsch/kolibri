@@ -13,6 +13,10 @@ import androidx.fragment.app.Fragment;
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.settings.Config;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class SettingsFragment extends Fragment {
 
     private SharedPreferences preferences;

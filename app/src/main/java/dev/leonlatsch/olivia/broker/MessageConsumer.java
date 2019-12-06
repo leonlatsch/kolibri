@@ -34,6 +34,10 @@ import retrofit2.Response;
 
 import static dev.leonlatsch.olivia.constants.MessageType.*;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class MessageConsumer {
 
     private static final String USER_PREFIX = "user.";

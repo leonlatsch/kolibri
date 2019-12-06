@@ -10,6 +10,9 @@ import dev.leonlatsch.olivia.database.model.User;
 /**
  *  Child of {@link CacheInterface}
  *  Syncs the database table 'user' and the Entity {@link User}
+ *
+ * @author Leon Latsch
+ * @since 1.0.0
  */
 public class UserInterface extends CacheInterface<User> {
 

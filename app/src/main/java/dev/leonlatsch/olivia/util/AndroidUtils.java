@@ -7,6 +7,10 @@ import android.view.View;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class AndroidUtils {
 
     /**

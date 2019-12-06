@@ -9,6 +9,12 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ *
+ * A OkHttp Client that accepts every SSL certificate
+ */
 public class OliviaHttpClient {
 
     public static OkHttpClient getOliviaHttpClient() {

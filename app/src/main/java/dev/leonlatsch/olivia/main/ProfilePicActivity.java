@@ -24,6 +24,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ProfilePicActivity extends AppCompatActivity {
 
     private UserInterface userInterface;

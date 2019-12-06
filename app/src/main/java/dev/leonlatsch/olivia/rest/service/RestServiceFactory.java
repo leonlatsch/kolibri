@@ -11,17 +11,27 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import static dev.leonlatsch.olivia.settings.Config.KEY_BACKEND_HTTP_BASEURL;
 import static dev.leonlatsch.olivia.settings.Config.getSharedPreferences;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class RestServiceFactory {
 
-    private static String BASE_URL = null;
+    private static String BASE_URL = null; // The base url for the rest api
 
     private static Retrofit retrofit;
 
+    // Singleton services
     private static UserService userService;
     private static AuthService authService;
     private static ChatService chatService;
     private static CommonService commonService;
 
+    /**
+     * Initialize the factory from shared preferences
+     *
+     * @param context
+     */
     public static void initialize(Context context) {
         SharedPreferences sharedPreferences = getSharedPreferences(context);
         BASE_URL = sharedPreferences.getString(KEY_BACKEND_HTTP_BASEURL, null);
@@ -30,6 +40,11 @@ public class RestServiceFactory {
         recreateServices();
     }
 
+    /**
+     * Initialize the factory with a url
+     *
+     * @param baseUrl
+     */
     public static void initialize(String baseUrl) {
         BASE_URL = baseUrl;
         provideRetrofit();
@@ -54,6 +69,7 @@ public class RestServiceFactory {
         }
     }
 
+    // Constrict the Retrofit object
     private static void provideRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

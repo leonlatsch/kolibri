@@ -29,6 +29,10 @@ import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.main.UserSearchActivity;
 import dev.leonlatsch.olivia.main.adapter.ChatListAdapter;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ChatFragment extends Fragment implements ChatListChangeListener {
 
     private MainActivity parent;

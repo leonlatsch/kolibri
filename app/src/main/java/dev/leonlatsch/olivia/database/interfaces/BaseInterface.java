@@ -3,7 +3,8 @@ package dev.leonlatsch.olivia.database.interfaces;
 import dev.leonlatsch.olivia.database.DatabaseMapper;
 
 /**
- * BaseInterface
+ * @author Leon Latsch
+ * @since 1.0.0
  */
 public abstract class BaseInterface {
 

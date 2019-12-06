@@ -4,6 +4,10 @@ import com.activeandroid.query.Select;
 
 import dev.leonlatsch.olivia.database.model.KeyPair;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class KeyPairInterface extends BaseInterface{
 
     private static final String QUEUE_UID_WHERE = "uid = ?";

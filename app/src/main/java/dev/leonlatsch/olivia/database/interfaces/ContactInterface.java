@@ -10,6 +10,10 @@ import dev.leonlatsch.olivia.database.model.Contact;
 import dev.leonlatsch.olivia.database.model.User;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ContactInterface extends BaseInterface {
 
     private static final String QUEUE_UID_WHERE = "uid = ?";

@@ -19,6 +19,10 @@ import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
 import retrofit2.Response;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class UpdateContactsAsyncJob extends AsyncJob {
 
     private UserInterface userInterface;

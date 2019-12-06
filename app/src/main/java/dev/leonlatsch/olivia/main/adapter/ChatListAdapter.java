@@ -24,6 +24,10 @@ import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.database.model.Contact;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class ChatListAdapter extends ArrayAdapter<Chat> {
 
     private List<Chat> dataset;

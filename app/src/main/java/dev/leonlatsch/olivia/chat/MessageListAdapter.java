@@ -16,6 +16,10 @@ import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.Message;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class MessageListAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;

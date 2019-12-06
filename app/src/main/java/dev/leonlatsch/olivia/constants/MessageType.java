@@ -1,5 +1,9 @@
 package dev.leonlatsch.olivia.constants;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class MessageType {
 
     private static final String UNDEFINED = "UNDEFINED";

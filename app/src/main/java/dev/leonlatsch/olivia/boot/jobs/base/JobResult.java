@@ -1,5 +1,9 @@
 package dev.leonlatsch.olivia.boot.jobs.base;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class JobResult<T> {
 
     private boolean successful;

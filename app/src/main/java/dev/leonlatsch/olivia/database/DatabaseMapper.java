@@ -6,6 +6,10 @@ import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.database.model.Message;
 import dev.leonlatsch.olivia.database.model.User;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class DatabaseMapper {
 
     private static DatabaseMapper databaseMapper;

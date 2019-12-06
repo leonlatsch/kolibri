@@ -14,6 +14,10 @@ import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ */
 public class UserAdapter extends ArrayAdapter<UserDTO> {
 
     private List<UserDTO> dataset;

@@ -15,11 +15,22 @@ import javax.crypto.Cipher;
 import dev.leonlatsch.olivia.database.model.KeyPair;
 import dev.leonlatsch.olivia.util.Base64;
 
+/**
+ * @author Leon Latsch
+ * @since 1.0.0
+ *
+ * A Util class to manage end-to-end encryption of messages
+ */
 public class CryptoManager {
 
     private static final String RSA = "RSA";
     private static final int KEY_SIZE = 2048;
 
+    /**
+     * Generate a {@link KeyPair} with RSA 2048 bit
+     *
+     * @return The generated RSA KeyPair
+     */
     public static KeyPair genKeyPair() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(RSA);
@@ -31,6 +42,12 @@ public class CryptoManager {
         }
     }
 
+    /**
+     * Decode a base64 public key received from the backend
+     *
+     * @param encodedPublicKey
+     * @return The decoded public key
+     */
     private static PublicKey decodePublicKey(String encodedPublicKey) {
         PublicKey publicKey;
 
@@ -45,6 +62,12 @@ public class CryptoManager {
         return publicKey;
     }
 
+    /**
+     * Decode a base64 private key
+     *
+     * @param encodedPrivateKey
+     * @return The decoded private key
+     */
     private static PrivateKey decodePrivateKey(String encodedPrivateKey) {
         PrivateKey privateKey;
 
@@ -59,6 +82,14 @@ public class CryptoManager {
         return privateKey;
     }
 
+    /**
+     * Encrypt a byte[] with a decoded public key
+     *
+     * @param data The plain byte[]
+     * @param publicKey The public key to use for encryption
+     * @return The encrypted data
+     * @throws GeneralSecurityException
+     */
     private static byte[] encrypt(byte[] data, PublicKey publicKey) throws GeneralSecurityException {
         try {
             Cipher cipher = Cipher.getInstance(RSA);
@@ -69,6 +100,14 @@ public class CryptoManager {
         }
     }
 
+    /**
+     * Decrypt a byte[] with a decoded private key
+     *
+     * @param data The encrypted byte[]
+     * @param privateKey The decoded private key
+     * @return The decrypted plain byte[]
+     * @throws GeneralSecurityException
+     */
     private static byte[] decrypt(byte[] data, PrivateKey privateKey) throws GeneralSecurityException {
         try {
             Cipher cipher = Cipher.getInstance(RSA);
@@ -79,6 +118,13 @@ public class CryptoManager {
         }
     }
 
+    /**
+     * Encrypt and encode a byte[] to a base64 String
+     *
+     * @param data The plain byte[]
+     * @param encodedPublicKey The encoded public key
+     * @return The encrypted data as a base64 encoded String
+     */
     public static String encryptAndEncode(byte[] data, String encodedPublicKey) {
         try {
             PublicKey publicKey = decodePublicKey(encodedPublicKey);
@@ -89,6 +135,13 @@ public class CryptoManager {
         }
     }
 
+    /**
+     * Decrypt and decode a encoded base64 String
+     *
+     * @param encodedData The encoded base64 String
+     * @param encodedPrivateKey The encoded private key
+     * @return The decrypted data as plain byte[]
+     */
     public static byte[] decryptAndDecode(String encodedData, String encodedPrivateKey) {
         try {
             PrivateKey privateKey = decodePrivateKey(encodedPrivateKey);
