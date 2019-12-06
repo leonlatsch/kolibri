@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         contactInterface = ContactInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
 
-        MessageConsumer.start();
+        MessageConsumer.start(this);
         MessageQueue.start();
 
         navigationView = findViewById(R.id.nav_view);

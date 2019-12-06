@@ -1,5 +1,8 @@
 package dev.leonlatsch.olivia.broker;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AlreadyClosedException;
 import com.rabbitmq.client.Channel;
@@ -26,6 +29,7 @@ import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
 import dev.leonlatsch.olivia.security.CryptoManager;
+import dev.leonlatsch.olivia.settings.Config;
 import retrofit2.Response;
 
 import static dev.leonlatsch.olivia.constants.MessageType.*;
@@ -41,6 +45,7 @@ public class MessageConsumer {
     private ConnectionFactory connectionFactory;
     private DeliverCallback callback;
     private Connection connection;
+    private Context context;
 
     private UserInterface userInterface;
     private ContactInterface contactInterface;
@@ -53,22 +58,24 @@ public class MessageConsumer {
     private static ChatListChangeListener chatListChangeListener;
     private static boolean isRunning = false;
 
-    private MessageConsumer() {
-        initialize();
+    private MessageConsumer(Context context) {
+        initialize(context);
     }
 
-    private void initialize() {
+    private void initialize(Context context) {
+        this.context = context;
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
         keyPairInterface = KeyPairInterface.getInstance();
         userService = RestServiceFactory.getUserService();
         databaseMapper = DatabaseMapper.getInstance();
+        SharedPreferences preferences = Config.getSharedPreferences(context);
 
-        // Initialize config // TODO: use settings
+        // Initialize config
         connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("olivia.leonlatsch.dev");
-        connectionFactory.setPort(5672);
+        connectionFactory.setHost(preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null));
+        connectionFactory.setPort(preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0));
         connectionFactory.setUsername(USER_PREFIX + userInterface.getUser().getUid());
         connectionFactory.setPassword(userInterface.getAccessToken());
 
@@ -96,7 +103,7 @@ public class MessageConsumer {
     }
 
     private ShutdownListener shutdownListener = cause -> {
-        initialize();
+        initialize(context);
         run();
     };
 
@@ -202,10 +209,10 @@ public class MessageConsumer {
         return isRunning;
     }
 
-    public static void start() {
+    public static void start(Context context) {
         if (!isRunning()) {
             if (consumer == null) {
-                consumer = new MessageConsumer();
+                consumer = new MessageConsumer(context);
             }
 
             consumer.run();
