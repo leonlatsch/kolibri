@@ -9,6 +9,14 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class AndroidUtils {
 
+    /**
+     * Animate a view with a specific Visibility and a alpha value
+     * Used for the loading animation overlay
+     *
+     * @param view
+     * @param toVisibility
+     * @param toAlpha
+     */
     public static void animateView(final View view, final int toVisibility, float toAlpha) {
         boolean show = toVisibility == View.VISIBLE;
         if (show) {
@@ -25,6 +33,12 @@ public class AndroidUtils {
                 });
     }
 
+    /**
+     * Create a ImageCropper Activity with specific default values
+     *
+     * @param title
+     * @return The CropImage Activity
+     */
     public static CropImage.ActivityBuilder createImageCropper(String title) {
         return CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
