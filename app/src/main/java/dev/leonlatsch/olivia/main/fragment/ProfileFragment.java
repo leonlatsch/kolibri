@@ -50,6 +50,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Fragment for displaying and changing the logged in user
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -131,6 +133,9 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         validateEmail();
     }
 
+    /**
+     * Validate the email address
+     */
     private void validateEmail() {
         final String email = emailEditText.getText().toString();
         if (email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)) {
@@ -171,6 +176,9 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         }
     }
 
+    /**
+     * Called when the user clicks the profile pic.
+     */
     private void showProfilePic() {
         Intent intent = new Intent(parent.getApplicationContext(), ProfilePicActivity.class);
         intent.putExtra(Values.INTENT_KEY_PROFILE_PIC_UID, userInterface.getUser().getUid());
@@ -182,6 +190,10 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         status_message.setText(message);
     }
 
+    /**
+     * Called when the user clicks the password EditText.
+     * Show a standalone dialog that handles the password changing.
+     */
     private void changePassword() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
         builder.setTitle(getString(R.string.password));
@@ -243,6 +255,10 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         });
     }
 
+    /**
+     * Called when the user clicks the delete account button.
+     * Deletes the logged in user in the backend and logs out.
+     */
     private void deleteAccount() {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which){
@@ -280,11 +296,17 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 .setNegativeButton(getString(R.string.no), dialogClickListener).show();
     }
 
+    /**
+     * Called when the save button is pressed.
+     */
     private void saveBtn() {
         isLoading(true);
         validate();
     }
 
+    /**
+     * Validate all changed data, save it in the backend and notify other components.
+     */
     private void save() {
         final User user = mapViewToUser();
         UserDTO dto = databaseMapper.toDto(user);
@@ -322,6 +344,11 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         });
     }
 
+    /**
+     * Save the new user and the new access token.
+     *
+     * @param newAccessToken
+     */
     private void saveNewUserAndAccessToken(final String newAccessToken) {
         Call<Container<UserDTO>> call;
         String accessToken;
@@ -361,6 +388,10 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         AndroidUtils.createImageCropper(getString(R.string.apply)).start(getContext(), this);
     }
 
+    /**
+     * Display a {@link User} at the fragments view.
+     * @param user
+     */
     private void mapUserToView(User user) {
         isReloadMode = true;
         if (user.getProfilePicTn() != null) {
@@ -371,6 +402,10 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         isReloadMode = false;
     }
 
+    /**
+     * Extract the views values and create a {@link User} from it.
+     * @return
+     */
     private User mapViewToUser() {
         User savedUser = userInterface.getUser();
         savedUser.setEmail(emailEditText.getText().toString());
@@ -383,6 +418,13 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
         return savedUser;
     }
 
+    /**
+     * Called when the image cropper returns with a url.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {

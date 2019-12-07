@@ -30,6 +30,8 @@ import dev.leonlatsch.olivia.main.UserSearchActivity;
 import dev.leonlatsch.olivia.main.adapter.ChatListAdapter;
 
 /**
+ * Fragment to show a list of chats
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -98,6 +100,12 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
         }
     }
 
+    /**
+     * Called when a chat has changed.
+     * Eg. when a new message arrives or a profile picture has changed.
+     *
+     * @param chat
+     */
     @Override
     public void chatChanged(Chat chat) {
         if (!chatListAdapter.isChatPresent(chat)) {

@@ -14,6 +14,8 @@ import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.settings.Config;
 
 /**
+ * Fragment for the setting
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
