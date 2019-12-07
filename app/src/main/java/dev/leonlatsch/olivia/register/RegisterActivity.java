@@ -34,6 +34,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Activity for registration
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -120,6 +122,11 @@ public class RegisterActivity extends AppCompatActivity {
         usernameEditText.requestFocus();
     }
 
+    /**
+     * Validate the value in the password EditText wit Regex and
+     * compare with the confirm EditText.
+     * Show a icon at the password edit text.
+     */
     private void validatePassword() {
         final String password = passwordEditText.getText().toString();
         final String passwordConfirm = passwordConfirmEditText.getText().toString();
@@ -141,8 +148,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Validate the value in the email EditText with regex and backend.
+     * Show an icon at the email EditText.
+     */
     private void validateEmail() {
         final String email = emailEditText.getText().toString();
+
         if (email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)) {
             showStatusIcon(emailEditText, R.drawable.icons8_cancel_48);
             emailValid = false;
@@ -172,6 +184,10 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validate the values in the username EditText.
+     * Show an icon at the username EditText.
+     */
     private void validateUsername() {
         final String username = usernameEditText.getText().toString();
         if (username.isEmpty() || username.length() < 3) {
@@ -203,9 +219,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Called when the register button is pressed.
+     */
     private void register() {
         isLoading(true);
 
+        // Validate all input
         validateUsername();
         validateEmail();
         validatePassword();
@@ -214,6 +234,7 @@ public class RegisterActivity extends AppCompatActivity {
             isLoading(false);
             return;
         }
+
         final UserDTO userDTO = new UserDTO();
         userDTO.setEmail(emailEditText.getText().toString());
         userDTO.setUsername(usernameEditText.getText().toString());
@@ -241,6 +262,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Save the new registered user after the registration has finished and
+     * start the {@link MainActivity}.
+     *
+     * @param accessToken The access token from the new user
+     * @param keyPair The new generated keypair
+     */
     private void saveUserAndStartMain(final String accessToken, final KeyPair keyPair) {
         Call<Container<UserDTO>> call = userService.get(accessToken);
         call.enqueue(new Callback<Container<UserDTO>>() {
@@ -264,10 +292,19 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Show an icon at a EditText
+     *
+     * @param editText
+     * @param drawable
+     */
     private void showStatusIcon(EditText editText, int drawable) {
         editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable,0 );
     }
 
+    /**
+     * Load the parsed email address from the {@link dev.leonlatsch.olivia.login.LoginActivity}
+     */
     private void loadCachedData() {
         if (getIntent().getExtras() != null) {
             String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_KEY_EMAIL);

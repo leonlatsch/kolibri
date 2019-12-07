@@ -25,6 +25,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Activity to show the full profile picture of a user.
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -58,6 +60,11 @@ public class ProfilePicActivity extends AppCompatActivity {
         loadProfilePic(uid);
     }
 
+    /**
+     * Load and display a profile picture from the backend.
+     *
+     * @param uid The users uid
+     */
     private void loadProfilePic(String uid) {
         isLoading(true);
         final Context context = this;

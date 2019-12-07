@@ -32,6 +32,8 @@ import dev.leonlatsch.olivia.main.fragment.SettingsFragment;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
 /**
+ * The main activity which holds the main menu and the main fragments
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_help:
-                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show(); //TODO: make this a link to Github Wiki
                 break;
         }
 
@@ -126,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Display a user in the drawer view
+     *
+     * @param user
+     */
     private void mapUserToDrawer(User user) {
         if (user == null) {
             return;
@@ -142,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
+    /**
+     * Called when the logout button is pressed
+     *
+     * Delete the logged in user, all chats and contacts
+     */
     public void logout() {
         User user = userInterface.getUser();
         if (user != null) {
@@ -154,6 +166,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finish();
     }
 
+    /**
+     * Called when the logged in user has changed
+     *
+     * @param newEntity
+     */
     @Override
     public void entityChanged(User newEntity) {
         if (newEntity != null) {

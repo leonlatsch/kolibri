@@ -33,6 +33,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Activity to search for new users
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -88,6 +90,11 @@ public class UserSearchActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Called when a user is selected.
+     *
+     * @param user
+     */
     private void proceedUser(UserDTO user) {
         Call<Container<String>> call = userService.getPublicKey(userInterface.getAccessToken(), user.getUid());
         call.enqueue(new Callback<Container<String>>() {
@@ -109,8 +116,11 @@ public class UserSearchActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Search for users with the value from the search EditText.
+     */
     private void search() {
-        if (searchBar.getText().toString().length() >= 2) {
+        if (searchBar.getText().toString().length() >= 2) { // Only search if at least 2 chars where entered
             isLoading(true);
             Call<Container<List<UserDTO>>> call = userService.search(userInterface.getAccessToken(), searchBar.getText().toString());
             call.enqueue(new Callback<Container<List<UserDTO>>>() {
