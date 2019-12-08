@@ -18,6 +18,9 @@ import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 
 /**
+ * The first Activity to be started.
+ * It runs a bunch of jobs and based of that runs other activities
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -44,7 +47,7 @@ public class BootActivity extends AppCompatActivity {
                     }
                     finish();
                 }));
-            } else {
+            } else { // If there is no backend config show the BackendDialog
                 BackendDialog dialog = new BackendDialog(this);
                 dialog.setOnDismissListener(dialogInterface -> {
                     startActivity(new Intent(getApplicationContext(), BootActivity.class));

@@ -26,6 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * A {@link AlertDialog} to configure the backend
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -70,7 +72,6 @@ public class BackendDialog extends AlertDialog {
             return;
         }
 
-        // Try healthcheck
         tryHealthcheck(url);
     }
 
@@ -104,6 +105,12 @@ public class BackendDialog extends AlertDialog {
         });
     }
 
+    /**
+     * Build a url with the default protocol
+     *
+     * @param input
+     * @return
+     */
     private String buildUrl(String input) {
         if (!Pattern.matches(Regex.URL, input)) {
             input = HTTPS + input;
@@ -145,6 +152,12 @@ public class BackendDialog extends AlertDialog {
         }
     }
 
+    /**
+     * Saves the config after a healtheck succeeded
+     *
+     * @param url
+     * @param commonService
+     */
     private void saveConfig(String url, CommonService commonService) {
         SharedPreferences preferences = Config.getSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
@@ -152,7 +165,7 @@ public class BackendDialog extends AlertDialog {
         editor.putString(Config.KEY_BACKEND_HTTP_BASEURL, url);
         editor.putString(Config.KEY_BACKEND_BROKER_HOST, extractHostname(url));
 
-        commonService.getBrokerPort().enqueue(new Callback<Integer>() {
+        commonService.getBrokerPort().enqueue(new Callback<Integer>() { // Get the port for the broker
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()) {
@@ -173,6 +186,12 @@ public class BackendDialog extends AlertDialog {
         });
     }
 
+    /**
+     * Extract the hostname for the broker
+     *
+     * @param url
+     * @return
+     */
     private String extractHostname(String url) {
         if (Pattern.matches(Regex.URL, url)) {
             String brokerHost = null;

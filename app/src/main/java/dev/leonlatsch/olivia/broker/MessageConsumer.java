@@ -35,6 +35,9 @@ import retrofit2.Response;
 import static dev.leonlatsch.olivia.constants.MessageType.*;
 
 /**
+ * This class controls the receiving of messages.
+ * It also controls the technical aspects of rabbtimq
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -66,6 +69,11 @@ public class MessageConsumer {
         initialize(context);
     }
 
+    /**
+     * Initialize the consumer with services, interfaces and a connection factory from the shared preferences
+     *
+     * @param context
+     */
     private void initialize(Context context) {
         this.context = context;
         userInterface = UserInterface.getInstance();
@@ -106,11 +114,17 @@ public class MessageConsumer {
         });
     }
 
+    /**
+     * Reconnect on shutdown
+     */
     private ShutdownListener shutdownListener = cause -> {
         initialize(context);
         run();
     };
 
+    /**
+     * Run a new thread and start consuming the own queue
+     */
     private void run() {
         new Thread(() -> {
             try {
@@ -126,6 +140,10 @@ public class MessageConsumer {
         }, THREAD_NAME).start();
     }
 
+    /**
+     * Proceed a text message and notify components
+     * @param message
+     */
     private void processTextMessage(Message message) {
         byte[] decryptedData = CryptoManager.decryptAndDecode(message.getContent(), keyPairInterface.get(userInterface.getUser().getUid()).getPrivateKey());
         String content = new String(decryptedData, StandardCharsets.UTF_8);
@@ -177,12 +195,22 @@ public class MessageConsumer {
         }, THREAD_NAME).start();
     }
 
+    /**
+     * Notify if a chat has changed from external components
+     *
+     * @param chat
+     */
     public static void notifyChatListChangedFromExternal(Chat chat) {
         if (consumer != null) {
             consumer.notifyChatListChangeListener(chat);
         }
     }
 
+    /**
+     * Notify if a message has changed from external components
+     *
+     * @param message
+     */
     public static void notifyMessageRecyclerChangedFromExternal(Message message) {
         if (messageRecyclerChangeListener != null) {
             messageRecyclerChangeListener.receive(message);

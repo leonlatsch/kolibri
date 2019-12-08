@@ -1,6 +1,8 @@
 package dev.leonlatsch.olivia.boot.jobs.base;
 
 /**
+ * Result object for jobs
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
