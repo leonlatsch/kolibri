@@ -10,6 +10,8 @@ import dev.leonlatsch.olivia.settings.Config;
 import static dev.leonlatsch.olivia.settings.Config.*;
 
 /**
+ * Sync job to validate the backend config
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

@@ -22,6 +22,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * Async job to check and update the logged in user
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

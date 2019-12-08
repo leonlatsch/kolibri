@@ -20,6 +20,8 @@ import dev.leonlatsch.olivia.rest.service.UserService;
 import retrofit2.Response;
 
 /**
+ * Async job to update the saved contacts.
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -74,6 +76,7 @@ public class UpdateContactsAsyncJob extends AsyncJob {
 
                         if (changed) {
                             contactInterface.updateContact(contact);
+                            // Notify the chat list if it is already displayed
                             MessageConsumer.notifyChatListChangedFromExternal(chatInterface.getChatForContact(contact.getUid()));
                             contactsUpdated++;
                         }
