@@ -5,6 +5,8 @@ import com.activeandroid.query.Select;
 import dev.leonlatsch.olivia.database.model.KeyPair;
 
 /**
+ * Database interface to persist KeyPars
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

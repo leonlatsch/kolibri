@@ -10,6 +10,8 @@ import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.database.model.Message;
 
 /**
+ * Database interface to persist chats and messages
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

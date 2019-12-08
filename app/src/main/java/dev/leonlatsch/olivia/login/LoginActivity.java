@@ -39,6 +39,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * This Activity is used for logging in and directing to the Registration
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -85,6 +87,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Empty the backend config and start a new {@link BootActivity}
+     */
     private void disconnect() {
         DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
             if (which == DialogInterface.BUTTON_POSITIVE) {
@@ -103,6 +108,9 @@ public class LoginActivity extends AppCompatActivity {
                 .setNegativeButton(getString(R.string.no), onClickListener).show();
     }
 
+    /**
+     * Called when the login button is pressed
+     */
     private void login() {
         isLoading(true);
         if (!isInputValid()) {
@@ -135,13 +143,17 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Save the new logged in user and start the {@link MainActivity}
+     *
+     * @param accessToken
+     */
     private void saveUserAndStartMain(final String accessToken) {
         Call<Container<UserDTO>> call = userService.get(accessToken);
         call.enqueue(new Callback<Container<UserDTO>>() {
             @Override
             public void onResponse(Call<Container<UserDTO>> call, Response<Container<UserDTO>> response) {
                 if (response.isSuccessful()) {
-
                     KeyPair newKeyPair = keyPairInterface.createOrGet(CryptoManager.genKeyPair(), response.body().getContent().getUid());
                     userInterface.save(response.body().getContent(), accessToken);
                     updatePublicKey(newKeyPair.getPublicKey());
@@ -159,6 +171,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Update the public key in the backend
+     *
+     * @param publicKey
+     */
     private void updatePublicKey(final String publicKey) {
         Call<Container<String>> call = userService.updatePublicKey(userInterface.getAccessToken(), publicKey);
         call.enqueue(new Callback<Container<String>>() {
@@ -178,12 +195,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Route to the registration
+     */
     private void register() {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
         cacheToIntent(intent);
         startActivity(intent);
     }
 
+    /**
+     * Validate all input
+     *
+     * @return true/false
+     */
     private boolean isInputValid() {
         boolean isValid = true;
 
@@ -204,10 +229,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isEmailValid(String email) {
         return !email.isEmpty() || !Pattern.matches(Regex.EMAIL, email);
-    }
-
-    private void displayIcon(EditText editText, int drawable) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
 
     private void cacheToIntent(Intent intent) {

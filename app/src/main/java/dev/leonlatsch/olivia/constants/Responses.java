@@ -1,6 +1,8 @@
 package dev.leonlatsch.olivia.constants;
 
 /**
+ * Contains default rest responses
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

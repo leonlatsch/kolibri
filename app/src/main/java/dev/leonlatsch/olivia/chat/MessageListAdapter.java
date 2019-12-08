@@ -17,6 +17,8 @@ import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.Message;
 
 /**
+ * Adapter for displaying the ChatActivity's Message Recycler
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

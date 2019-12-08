@@ -7,6 +7,8 @@ import dev.leonlatsch.olivia.database.model.Message;
 import dev.leonlatsch.olivia.database.model.User;
 
 /**
+ * Class for mapping dto to model and the other way
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

@@ -42,16 +42,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * The Chat Activity which mainly displays messages and sends messages to the api
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
 public class ChatActivity extends AppCompatActivity implements MessageRecyclerChangeListener {
 
+    /**
+     * Indicates of a ChatActivity is active
+     */
     public static boolean isActive;
 
     private Chat chat;
     private Contact contact;
-    private boolean isTemp;
+    private boolean isTemp; // Indicates if this is called from the chat list or the user search
 
     private EditText messageEditText;
     private RecyclerView messageRecycler;
@@ -121,6 +126,9 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         }
     }
 
+    /**
+     * Called when the send button is pressed
+     */
     private void onSendPressed() {
         if (!messageEditText.getText().toString().isEmpty()) {
             Message message = constructMessage();
@@ -138,6 +146,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             chatInterface.updateChat(chat);
             MessageConsumer.notifyChatListChangedFromExternal(chat);
 
+            // Clean up view
             messageListAdapter.add(message);
             messageEditText.setText(Values.EMPTY);
             messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
@@ -163,6 +172,11 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         }
     }
 
+    /**
+     * Called when a new message arrives
+     *
+     * @param message
+     */
     @Override
     public void receive(Message message) {
         if (isActive && message.getCid().equals(chat.getCid()) && !isTemp) {
@@ -177,6 +191,11 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         }
     }
 
+    /**
+     * Construct a message before sending it
+     *
+     * @return
+     */
     private Message constructMessage() {
         String messageText = messageEditText.getText().toString();
 
@@ -191,6 +210,9 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         return message;
     }
 
+    /**
+     * Initialize the data
+     */
     private void initData() {
         String uid = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_UID);
         String username = (String) getIntent().getExtras().get(Values.INTENT_KEY_CHAT_USERNAME);

@@ -11,6 +11,8 @@ import dev.leonlatsch.olivia.database.model.User;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
 
 /**
+ * Database interface to persist contacts
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

@@ -1,6 +1,8 @@
 package dev.leonlatsch.olivia.constants;
 
 /**
+ * Used to determine the type of a {@link dev.leonlatsch.olivia.database.model.Message}
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */

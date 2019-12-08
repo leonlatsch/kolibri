@@ -8,8 +8,8 @@ import java.util.List;
 import dev.leonlatsch.olivia.database.EntityChangedListener;
 
 /**
- * Base Class for a Database Interface
- * The cached model needs to be
+ * Class to store a cached model in memory and database
+ * Mainly used for the logged in user
  *
  * @param <T> extends Model
  *

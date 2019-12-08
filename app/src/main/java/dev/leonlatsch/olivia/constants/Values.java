@@ -1,6 +1,8 @@
 package dev.leonlatsch.olivia.constants;
 
 /**
+ * Contains common string and intent keys
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
