@@ -25,6 +25,8 @@ import dev.leonlatsch.olivia.database.model.Contact;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
 /**
+ * This Adapter is used to display the chat list in the {@link dev.leonlatsch.olivia.main.fragment.ChatFragment}
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -50,6 +52,12 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         this.contactInterface = ContactInterface.getInstance();
     }
 
+    /**
+     * Check if a Chat is already present in the dataset
+     *
+     * @param chat
+     * @return
+     */
     public boolean isChatPresent(Chat chat) {
         for (Chat data : dataset) {
             if (data.getCid().equals(chat.getCid()) || data.getUid().equals(chat.getUid())) {
@@ -69,12 +77,17 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         notifyDataSetChanged();
     }
 
+    /**
+     * Add a chat and sort the list afterwords
+     *
+     * @param chat
+     */
     @Override
     public void add(Chat chat) {
         super.add(chat);
         Collections.sort(dataset, chatComparator);
     }
-    
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Chat chat = getItem(position);
@@ -113,6 +126,9 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         return convertView;
     }
 
+    /**
+     * Comparator to sort the chats after teh last received message
+     */
     private static Comparator<Chat> chatComparator = (obj1, obj2) -> {
         try {
             Date obj1Date = Formats.DATE_FORMAT.parse(obj1.getLastTimestamp());

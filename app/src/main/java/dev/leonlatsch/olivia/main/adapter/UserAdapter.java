@@ -15,6 +15,8 @@ import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
 /**
+ * This Adapter is used tot display the user search
+ *
  * @author Leon Latsch
  * @since 1.0.0
  */
