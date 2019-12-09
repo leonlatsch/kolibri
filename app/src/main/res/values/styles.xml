@@ -31,4 +31,8 @@
         <item name="android:tint">@android:color/black</item>
     </style>
 
+    <style name="activated" parent="AppTheme">
+        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+    </style>
+
 </resources>

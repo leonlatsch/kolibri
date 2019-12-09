@@ -3,9 +3,13 @@ package dev.leonlatsch.olivia.main.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,8 +60,11 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         listView = view.findViewById(R.id.fragment_chat_list_view);
         hintTextView = view.findViewById(R.id.fragment_chat_hint);
-        List<Chat> chatList = chatInterface.getALl();
 
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new MultiSelectHandler());
+
+        List<Chat> chatList = chatInterface.getALl();
         setChatListVisible(!chatList.isEmpty());
 
         chatListAdapter = new ChatListAdapter(parent, chatList);
@@ -115,6 +122,40 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
             }); // Invoke in main thread
         } else {
             new Handler(parent.getApplicationContext().getMainLooper()).post(() -> chatListAdapter.chatChanged(chat)); // Invoke on main thread
+        }
+    }
+
+    /**
+     * Private class to handle multi selection
+     *
+     * @author Leon Latsch
+     * @since 1.0.0
+     */
+    private class MultiSelectHandler implements AbsListView.MultiChoiceModeListener {
+
+        @Override
+        public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            parent.onCreateOptionsMenu(menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+
         }
     }
 }
