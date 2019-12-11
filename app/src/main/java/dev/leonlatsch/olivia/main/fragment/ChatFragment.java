@@ -138,6 +138,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         @Override
         public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+            chatListAdapter.toggleSelection(i);
         }
 
         @Override
@@ -158,7 +159,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         @Override
         public void onDestroyActionMode(ActionMode actionMode) {
-
+            chatListAdapter.removeSelections();
         }
     }
 }

@@ -1,6 +1,8 @@
 package dev.leonlatsch.olivia.main.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     private Context mContext;
     private ContactInterface contactInterface;
 
+    private SparseBooleanArray selectedItems;
+
     private static class ViewHolder {
         ImageView imageView;
         TextView usernameTextView;
@@ -50,6 +54,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         this.dataset = contactList;
         this.mContext = context;
         this.contactInterface = ContactInterface.getInstance();
+        selectedItems = new SparseBooleanArray();
     }
 
     /**
@@ -107,20 +112,29 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         }
 
         Contact contact = contactInterface.getContact(chat.getUid());
+
         if (contact.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
         } else {
             viewHolder.imageView.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext));
         }
+
         viewHolder.usernameTextView.setText(contact.getUsername());
         viewHolder.lastMessageTextView.setText(chat.getLastMessage());
         viewHolder.lastDateTextView.setText(chat.getLastTimestamp().substring(11, 16));
+
         if (chat.getUnreadMessages() > 0) {
             viewHolder.unreadMessagesTextView.setVisibility(View.VISIBLE);
             viewHolder.unreadMessagesTextView.setText(String.valueOf(chat.getUnreadMessages()));
         } else {
             viewHolder.unreadMessagesTextView.setText(Values.EMPTY);
             viewHolder.unreadMessagesTextView.setVisibility(View.GONE);
+        }
+
+        if (selectedItems.get(position)) {
+            convertView.setBackgroundColor(Color.LTGRAY);
+        } else {
+            convertView.setBackgroundColor(Color.WHITE);
         }
 
         return convertView;
@@ -138,4 +152,22 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             return 0;
         }
     };
+
+    public void toggleSelection(int position) {
+        selectView(position, !selectedItems.get(position));
+    }
+
+    public void removeSelections() {
+        selectedItems = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    private void selectView(int position, boolean value) {
+        if (value) {
+            selectedItems.put(position, true);
+        } else {
+            selectedItems.delete(position);
+        }
+        notifyDataSetChanged();
+    }
 }
