@@ -1,6 +1,7 @@
 package dev.leonlatsch.olivia.main.fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ActionMode;
@@ -32,6 +33,8 @@ import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.main.UserSearchActivity;
 import dev.leonlatsch.olivia.main.adapter.ChatListAdapter;
+import dev.leonlatsch.olivia.util.AndroidUtils;
+import dev.leonlatsch.olivia.util.ImageUtil;
 
 /**
  * Fragment to show a list of chats
@@ -139,7 +142,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-            parent.onCreateOptionsMenu(menu);
+            actionMode.getMenuInflater().inflate(R.menu.menu_chats_action_mode, menu);
             return true;
         }
 
