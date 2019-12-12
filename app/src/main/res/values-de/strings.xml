@@ -9,8 +9,8 @@
     <string name="cancel">Abbrechen</string>
     <string name="chats">Chats</string>
     <string name="delete_account">Account löschen</string>
-    <string name="email">E-Mail Addresse</string>
-    <string name="email_hint">E-Mail Addresse eingeben</string>
+    <string name="email">E-Mail Adresse</string>
+    <string name="email_hint">E-Mail Adresse eingeben</string>
     <string name="error">Fehler</string>
     <string name="error_common">Etwas ist schief gelaufen</string>
     <string name="error_no_internet">Überprüfe dein Internetverbindung</string>
@@ -40,7 +40,7 @@
     <string name="settings">Einstellungen</string>
     <string name="unsaved_data">Änderungen nicht gespeichert</string>
     <string name="user_search_chat_hint">Tippen um zu chatten</string>
-    <string name="user_search_hint">Suche nach Nutzern...</string>
+    <string name="user_search_hint">Suche nach Nutzern…</string>
     <string name="username">Nutzername</string>
     <string name="username_hint">Gib einen Nutzernamen ein</string>
     <string name="yes">Ja</string>
@@ -53,5 +53,5 @@
     <string name="are_you_sure_disconnect">Willst du die Verbindung zum Server wirklich trennen?</string>
     <string name="CONNECTED">VERBUNDEN</string>
     <string name="delete">Löschen</string>
-    <string name="are_you_sure_delete_chats">WIllst du die ausgewählten Chats und dessen Nachrichten wirklich löschen?</string>
+    <string name="are_you_sure_delete_chats">Willst du die ausgewählten Chats und dessen Nachrichten wirklich löschen?</string>
 </resources>

@@ -20,7 +20,7 @@
     <string name="login_fail">E-Mail or Password is wrong</string>
 
     <!-- User Search -->
-    <string name="user_search_hint">Search for users...</string>
+    <string name="user_search_hint">Search for users…</string>
     <string name="user_search_chat_hint">Tap to chat</string>
 
     <!-- Error -->
