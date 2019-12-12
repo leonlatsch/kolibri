@@ -37,6 +37,10 @@ public class ContactInterface extends BaseInterface {
         contact.delete();
     }
 
+    public void delete(String uid) {
+        new Delete().from(Contact.class).where(QUEUE_UID_WHERE, uid).execute();
+    }
+
     public void deleteAll() {
         new Delete().from(Contact.class).execute();
     }

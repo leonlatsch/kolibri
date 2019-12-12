@@ -65,5 +65,7 @@
     <string name="hostname_or_url">Hostname or Url</string>
     <string name="are_you_sure_disconnect">Are you sure you want to disconnect from the backend?</string>
     <string name="CONNECTED">CONNECTED</string>
+    <string name="delete">Delete</string>
+    <string name="are_you_sure_delete_chats">Do you really want to delete the selected chats and it\'s messages?</string>
 
 </resources>

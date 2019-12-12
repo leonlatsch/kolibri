@@ -52,4 +52,6 @@
     <string name="hostname_or_url">Hostnamen oder Url</string>
     <string name="are_you_sure_disconnect">Willst du die Verbindung zum Server wirklich trennen?</string>
     <string name="CONNECTED">VERBUNDEN</string>
+    <string name="delete">Löschen</string>
+    <string name="are_you_sure_delete_chats">WIllst du die ausgewählten Chats und dessen Nachrichten wirklich löschen?</string>
 </resources>

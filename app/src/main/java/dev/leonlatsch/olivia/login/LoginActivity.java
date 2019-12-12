@@ -104,8 +104,10 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.AlertDialogCustom);
-        builder.setMessage(getString(R.string.are_you_sure_disconnect)).setPositiveButton(getString(R.string.yes), onClickListener)
-                .setNegativeButton(getString(R.string.no), onClickListener).show();
+        builder.setMessage(getString(R.string.are_you_sure_disconnect))
+                .setPositiveButton(getString(R.string.yes), onClickListener)
+                .setNegativeButton(getString(R.string.no), onClickListener)
+                .show();
     }
 
     /**
