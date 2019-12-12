@@ -1,7 +1,8 @@
 package dev.leonlatsch.olivia.main.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ActionMode;
@@ -29,12 +30,11 @@ import dev.leonlatsch.olivia.broker.MessageConsumer;
 import dev.leonlatsch.olivia.chat.ChatActivity;
 import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
+import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
 import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.main.UserSearchActivity;
 import dev.leonlatsch.olivia.main.adapter.ChatListAdapter;
-import dev.leonlatsch.olivia.util.AndroidUtils;
-import dev.leonlatsch.olivia.util.ImageUtil;
 
 /**
  * Fragment to show a list of chats
@@ -49,8 +49,10 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
     private ListView listView;
     private TextView hintTextView;
     private ChatListAdapter chatListAdapter;
+    private List<Chat> chatList;
 
     private ChatInterface chatInterface;
+    private ContactInterface contactInterface;
 
     @Nullable
     @Override
@@ -59,6 +61,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
         parent = (MainActivity) getActivity();
 
         chatInterface = ChatInterface.getInstance();
+        contactInterface = ContactInterface.getInstance();
         MessageConsumer.setChatListChangeListener(this);
 
         listView = view.findViewById(R.id.fragment_chat_list_view);
@@ -67,7 +70,7 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new MultiSelectHandler());
 
-        List<Chat> chatList = chatInterface.getALl();
+        chatList = chatInterface.getALl();
         setChatListVisible(!chatList.isEmpty());
 
         chatListAdapter = new ChatListAdapter(parent, chatList);
@@ -154,6 +157,26 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         @Override
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            if (menuItem.getItemId() == R.id.menu_chats_delete) {
+                DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
+                        for (int i : chatListAdapter.getSelectedItems()) {
+                            contactInterface.delete(chatListAdapter.getItem(i).getUid());
+                            chatInterface.deleteChat(chatListAdapter.getItem(i).getCid());
+                        }
+                        chatListAdapter.deleteSelectedItems();
+
+                        actionMode.finish();
+                        setChatListVisible(!chatList.isEmpty());
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AlertDialogCustom);
+                builder.setMessage(getString(R.string.are_you_sure_delete_chats))
+                        .setPositiveButton(getString(R.string.yes), onClickListener)
+                        .setNegativeButton(getString(R.string.no), onClickListener)
+                        .show();
+            }
             return false;
         }
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -152,6 +153,25 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             return 0;
         }
     };
+
+    public void deleteSelectedItems() {
+        for (int i = 0; i < dataset.size(); i++) {
+            if (selectedItems.get(i)) {
+                dataset.remove(i);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public List<Integer> getSelectedItems() {
+        List<Integer> items = new ArrayList<>();
+        for (int i = 0; i < dataset.size(); i++) {
+            if (selectedItems.get(i)) {
+                items.add(i);
+            }
+        }
+        return items;
+    }
 
     public void toggleSelection(int position) {
         selectView(position, !selectedItems.get(position));
