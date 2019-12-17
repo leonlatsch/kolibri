@@ -1,4 +1,4 @@
-package dev.leonlatsch.olivia.login;
+package dev.leonlatsch.olivia.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,8 +23,6 @@ import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.KeyPair;
-import dev.leonlatsch.olivia.main.MainActivity;
-import dev.leonlatsch.olivia.register.RegisterActivity;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.AuthService;

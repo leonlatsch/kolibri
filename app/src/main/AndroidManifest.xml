@@ -43,14 +43,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.login.LoginActivity"
+            android:name="dev.leonlatsch.olivia.main.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.register.RegisterActivity"
+            android:name="dev.leonlatsch.olivia.main.RegisterActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

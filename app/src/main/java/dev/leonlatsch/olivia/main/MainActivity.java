@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,7 +26,6 @@ import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.User;
-import dev.leonlatsch.olivia.login.LoginActivity;
 import dev.leonlatsch.olivia.main.fragment.ChatFragment;
 import dev.leonlatsch.olivia.main.fragment.ProfileFragment;
 import dev.leonlatsch.olivia.main.fragment.SettingsFragment;
@@ -114,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 titleTextView.setText(getString(R.string.settings));
                 break;
 
-            case R.id.nav_help:
-                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show(); //TODO: make this a link to Github Wiki
+            case R.id.nav_info:
+                Toast.makeText(this, "Info", Toast.LENGTH_SHORT).show(); //TODO: make this a link to Github Wiki
                 break;
         }
 
