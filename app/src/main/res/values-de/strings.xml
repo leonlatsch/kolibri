@@ -55,4 +55,6 @@
     <string name="delete">Löschen</string>
     <string name="are_you_sure_delete_chats">Willst du die ausgewählten Chats und dessen Nachrichten wirklich löschen?</string>
     <string name="info">Info</string>
+    <string name="version_prefix">"Version "</string>
+    <string name="copyright">Copyright (c) 2019 Leon Latsch</string>
 </resources>

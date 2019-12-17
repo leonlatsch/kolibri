@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_info:
-                Toast.makeText(this, "Info", Toast.LENGTH_SHORT).show(); //TODO: make this a link to Github Wiki
+                startActivity(new Intent(getApplicationContext(), InfoActivity.class));
                 break;
         }
 

@@ -13,13 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="dev.leonlatsch.olivia.chat.ChatActivity">
+        <activity android:name=".main.InfoActivity"></activity>
+        <activity android:name=".chat.ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dev.leonlatsch.olivia.main.MainActivity" />
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.main.UserSearchActivity"
+            android:name=".main.UserSearchActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -28,13 +29,13 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name="dev.leonlatsch.olivia.main.ProfilePicActivity">
+        <activity android:name=".main.ProfilePicActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dev.leonlatsch.olivia.main.MainActivity" />
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.boot.BootActivity"
+            android:name=".boot.BootActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,21 +44,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.main.LoginActivity"
+            android:name=".main.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.main.RegisterActivity"
+            android:name=".main.RegisterActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name="dev.leonlatsch.olivia.main.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
