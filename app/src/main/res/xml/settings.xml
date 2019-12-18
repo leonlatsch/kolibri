@@ -1,4 +1,24 @@
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/chat">
+
+        <SwitchPreferenceCompat
+            android:key="olivia.app.send_with_enter"
+            android:summary="@string/settings_summary_send_with_enter"
+            android:title="@string/settings_title_send_with_enter" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/help">
+
+        <Preference
+            android:summary="@string/settings_summary_wiki"
+            android:title="@string/settings_title_wiki">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_wiki" />
+        </Preference>
+
+    </PreferenceCategory>
 </PreferenceScreen>

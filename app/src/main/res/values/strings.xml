@@ -70,5 +70,11 @@
     <string name="info">Info</string>
     <string name="version_prefix">"Version "</string>
     <string name="copyright">Copyright (c) 2019 Leon Latsch</string>
+    <string name="chat">Chat</string>
+    <string name="settings_title_send_with_enter">Send with enter</string>
+    <string name="settings_summary_send_with_enter">Send messages with enter</string>
+    <string name="url_wiki">https://github.com/leonlatsch/olivia/wiki</string>
+    <string name="settings_title_wiki">Wiki</string>
+    <string name="settings_summary_wiki">The Olivia GitHub Wiki</string>
 
 </resources>
