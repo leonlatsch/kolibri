@@ -1,8 +1,10 @@
 package dev.leonlatsch.olivia.chat;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,6 +37,7 @@ import dev.leonlatsch.olivia.rest.dto.MessageDTO;
 import dev.leonlatsch.olivia.rest.service.ChatService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.security.CryptoManager;
+import dev.leonlatsch.olivia.settings.Config;
 import dev.leonlatsch.olivia.util.Generator;
 import dev.leonlatsch.olivia.util.ImageUtil;
 import retrofit2.Call;
@@ -86,6 +89,7 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         chatService = RestServiceFactory.getChatService();
 
         initData();
+        SharedPreferences preferences = Config.getSharedPreferences(this);
         messageRecycler = findViewById(R.id.chat_recycler_view);
 
         List<Message> messageList;
@@ -103,10 +107,16 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         ImageView profilePicImageView = findViewById(R.id.chat_profile_pic_image_view);
         ImageButton sendButton = findViewById(R.id.chat_button_send);
         sendButton.setOnClickListener(v -> onSendPressed());
-        messageEditText.setOnEditorActionListener((v, actionId, event) -> {
-            onSendPressed();
-            return true;
-        });
+
+        if (preferences.getBoolean(Config.KEY_APP_SEND_WITH_ENTER, false)) {
+            messageEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+            messageEditText.setOnEditorActionListener((v, actionId, event) -> {
+                onSendPressed();
+                return true;
+            });
+        } else {
+            messageEditText.setImeOptions(EditorInfo.IME_ACTION_NONE);
+        }
 
         Contact contact = contactInterface.getContact(chat.getUid());
         if (contact != null) {

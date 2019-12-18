@@ -82,7 +82,6 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:inputType="textCapSentences"
-            android:imeOptions="actionSend"
             android:maxLines="6"
             android:maxLength="255"/>
 
