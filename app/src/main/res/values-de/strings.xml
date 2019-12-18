@@ -63,4 +63,6 @@
     <string name="url_wiki">https://github.com/leonlatsch/olivia/wiki</string>
     <string name="settings_title_wiki">Wiki</string>
     <string name="settings_summary_wiki">Das Olivia GitHub Wiki</string>
+    <string name="licences_caps">LIZENZEN</string>
+    <string name="url_third_party">https://github.com/leonlatsch/olivia/blob/master/THIRD_PARTY</string>
 </resources>
