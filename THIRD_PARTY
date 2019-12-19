@@ -63,10 +63,10 @@ The software contains the following licence:
 ----
 
 The following software may be included in this application: Android Image Cropper.
-See: https://square.github.io/retrofit/
+See: https://github.com/ArthurHub/Android-Image-Cropper
 The software contains the following licence:
 
-Originally forked from edmodo/cropper.
+    Originally forked from edmodo/cropper.
 
     Copyright 2016, Arthur Teplitzki, 2013, Edmodo, Inc.
 
