@@ -244,6 +244,8 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                         } else {
                             showStatusIcon(oldPasswordEditText, R.drawable.icons8_cancel_48);
                         }
+                    } else {
+                        showStatusIcon(oldPasswordEditText, R.drawable.icons8_cancel_48);
                     }
                 }
 
