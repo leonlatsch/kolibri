@@ -3,6 +3,8 @@ package dev.leonlatsch.olivia.boot;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
@@ -82,7 +84,7 @@ public class BackendDialog extends AlertDialog {
             @Override
             public void onResponse(Call<Container<Void>> call, Response<Container<Void>> response) {
                 if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
-                    saveConfig(url, commonService);
+                    saveConfig(url);
                 } else {
                     if (url.endsWith(DEFAULT_SUFFIX)) {
                         isLoading(false);
@@ -103,6 +105,17 @@ public class BackendDialog extends AlertDialog {
                 }
             }
         });
+    }
+
+    private boolean checkVersion(String backendVersion) {
+        try {
+            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
+            String[] arr = packageInfo.versionName.split("\\.");
+            String majorVersion = packageInfo.versionName.split("\\.")[0]; // Get the major version eg. 1 from 1.5.3
+            return backendVersion.startsWith(majorVersion);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     /**
@@ -156,9 +169,8 @@ public class BackendDialog extends AlertDialog {
      * Saves the config after a healtheck succeeded
      *
      * @param url
-     * @param commonService
      */
-    private void saveConfig(String url, CommonService commonService) {
+    private void saveConfig(String url) {
         SharedPreferences preferences = Config.getSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -171,10 +183,26 @@ public class BackendDialog extends AlertDialog {
                 if (response.isSuccessful()) {
                     int port = response.body();
                     editor.putInt(Config.KEY_BACKEND_BROKER_PORT, port);
-                    editor.apply();
-                    isLoading(false);
-                    success(true);
-                    new Handler().postDelayed(() -> dismiss(), 1000); // Wait 1 sec before dismissing
+                    commonService.getVersion().enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.isSuccessful() && checkVersion(response.body())) {
+                                editor.apply();
+                                isLoading(false);
+                                success(true);
+                                new Handler().postDelayed(() -> dismiss(), 1000); // Wait 1 sec before dismissing
+                            } else {
+                                isLoading(false);
+                                success(false);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            isLoading(false);
+                            success(false);
+                        }
+                    });
                 }
             }
 
