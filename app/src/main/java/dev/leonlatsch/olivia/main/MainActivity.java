@@ -11,9 +11,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,22 +95,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
 
             case R.id.nav_chat:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ChatFragment()).commit();
-                titleTextView.setText(getString(R.string.app_name));
-
+                displayFragment(new ChatFragment(), getString(R.string.app_name));
                 break;
 
             case R.id.nav_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new ProfileFragment()).commit();
-                titleTextView.setText(getString(R.string.profile));
+                displayFragment(new ProfileFragment(), getString(R.string.profile));
                 break;
 
             case R.id.nav_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new SettingsFragment()).commit();
-                titleTextView.setText(getString(R.string.settings));
+                displayFragment(new SettingsFragment(), getString(R.string.settings));
                 break;
 
             case R.id.nav_info:
@@ -125,8 +120,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof ChatFragment) {
+                super.onBackPressed();
+            } else {
+                displayFragment(new ChatFragment(), getString(R.string.app_name));
+                navigationView.setCheckedItem(R.id.nav_chat);
+            }
         }
+    }
+
+    private void displayFragment(Fragment fragment, String title) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fragment).commit();
+        titleTextView.setText(title);
     }
 
     /**
