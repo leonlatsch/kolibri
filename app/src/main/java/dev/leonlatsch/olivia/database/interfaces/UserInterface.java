@@ -4,12 +4,12 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
-import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.database.model.User;
+import dev.leonlatsch.olivia.rest.dto.UserDTO;
 
 /**
- *  Child of {@link CacheInterface}
- *  Syncs the database table 'user' and the Entity {@link User}
+ * Child of {@link CacheInterface}
+ * Syncs the database table 'user' and the Entity {@link User}
  *
  * @author Leon Latsch
  * @since 1.0.0
@@ -20,6 +20,14 @@ public class UserInterface extends CacheInterface<User> {
 
     private UserInterface() {
         setModel(getUser());
+    }
+
+    public static UserInterface getInstance() {
+        if (userInterface == null) {
+            userInterface = new UserInterface();
+        }
+
+        return userInterface;
     }
 
     public void loadUser() {
@@ -60,13 +68,5 @@ public class UserInterface extends CacheInterface<User> {
     public void save(User user) {
         super.save(user);
         loadUser();
-    }
-
-    public static UserInterface getInstance() {
-        if (userInterface == null) {
-            userInterface = new UserInterface();
-        }
-
-        return userInterface;
     }
 }

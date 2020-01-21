@@ -12,5 +12,6 @@ public class Regex {
     public static final String PASSWORD = "^(?=.*?[a-z])(?=.*?[0-9]).{6,}.*";
     public static final String URL = "^(https?|http)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
-    private Regex() {}
+    private Regex() {
+    }
 }

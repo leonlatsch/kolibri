@@ -10,13 +10,22 @@ import dev.leonlatsch.olivia.database.model.KeyPair;
  * @author Leon Latsch
  * @since 1.0.0
  */
-public class KeyPairInterface extends BaseInterface{
+public class KeyPairInterface extends BaseInterface {
 
     private static final String QUEUE_UID_WHERE = "uid = ?";
 
     private static KeyPairInterface keyPairInterface; // Singleton
 
-    private KeyPairInterface() {}
+    private KeyPairInterface() {
+    }
+
+    public static KeyPairInterface getInstance() {
+        if (keyPairInterface == null) {
+            keyPairInterface = new KeyPairInterface();
+        }
+
+        return keyPairInterface;
+    }
 
     public KeyPair createOrGet(KeyPair keyPair) {
         if (keyPair == null || keyPair.getUid() == null) {
@@ -44,13 +53,5 @@ public class KeyPairInterface extends BaseInterface{
 
     public KeyPair get(String uid) {
         return new Select().from(KeyPair.class).where(QUEUE_UID_WHERE, uid).executeSingle();
-    }
-
-    public static KeyPairInterface getInstance() {
-        if (keyPairInterface == null) {
-            keyPairInterface = new KeyPairInterface();
-        }
-
-        return keyPairInterface;
     }
 }

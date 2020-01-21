@@ -35,19 +35,22 @@ import dev.leonlatsch.olivia.util.ImageUtil;
  */
 public class ChatListAdapter extends ArrayAdapter<Chat> {
 
+    /**
+     * Comparator to sort the chats after teh last received message
+     */
+    private static Comparator<Chat> chatComparator = (obj1, obj2) -> {
+        try {
+            Date obj1Date = Formats.DATE_FORMAT.parse(obj1.getLastTimestamp());
+            Date obj2Date = Formats.DATE_FORMAT.parse(obj2.getLastTimestamp());
+            return obj2Date.compareTo(obj1Date);
+        } catch (ParseException e) {
+            return 0;
+        }
+    };
     private List<Chat> dataset;
     private Context mContext;
     private ContactInterface contactInterface;
-
     private SparseBooleanArray selectedItems;
-
-    private static class ViewHolder {
-        ImageView imageView;
-        TextView usernameTextView;
-        TextView lastMessageTextView;
-        TextView lastDateTextView;
-        TextView unreadMessagesTextView;
-    }
 
     public ChatListAdapter(@NonNull Context context, List<Chat> contactList) {
         super(context, 0, contactList);
@@ -141,19 +144,6 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         return convertView;
     }
 
-    /**
-     * Comparator to sort the chats after teh last received message
-     */
-    private static Comparator<Chat> chatComparator = (obj1, obj2) -> {
-        try {
-            Date obj1Date = Formats.DATE_FORMAT.parse(obj1.getLastTimestamp());
-            Date obj2Date = Formats.DATE_FORMAT.parse(obj2.getLastTimestamp());
-            return obj2Date.compareTo(obj1Date);
-        } catch (ParseException e) {
-            return 0;
-        }
-    };
-
     public void deleteSelectedItems() {
         for (int i = 0; i < dataset.size(); i++) {
             if (selectedItems.get(i)) {
@@ -189,5 +179,13 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             selectedItems.delete(position);
         }
         notifyDataSetChanged();
+    }
+
+    private static class ViewHolder {
+        ImageView imageView;
+        TextView usernameTextView;
+        TextView lastMessageTextView;
+        TextView lastDateTextView;
+        TextView unreadMessagesTextView;
     }
 }

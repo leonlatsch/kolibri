@@ -23,7 +23,8 @@ public class Contact extends Model {
     @Column(name = "public_key")
     private String publicKey;
 
-    public Contact() {}
+    public Contact() {
+    }
 
     public Contact(String uid, String username, String profilePicTn, String publicKey) {
         this.uid = uid;

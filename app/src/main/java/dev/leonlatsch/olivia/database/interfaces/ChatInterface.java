@@ -26,6 +26,14 @@ public class ChatInterface extends BaseInterface {
     private ChatInterface() {
     }
 
+    public static ChatInterface getInstance() {
+        if (chatInterface == null) {
+            chatInterface = new ChatInterface();
+        }
+
+        return chatInterface;
+    }
+
     public void saveMessage(Message message) {
         Message savedMessage = new Select().from(Message.class).where(QUEUE_MID_WHERE, message.getMid()).executeSingle();
         if (savedMessage == null) {
@@ -93,13 +101,5 @@ public class ChatInterface extends BaseInterface {
 
     public Message getMessage(String mid) {
         return new Select().from(Message.class).where(QUEUE_MID_WHERE, mid).executeSingle();
-    }
-
-    public static ChatInterface getInstance() {
-        if (chatInterface == null) {
-            chatInterface = new ChatInterface();
-        }
-
-        return chatInterface;
     }
 }

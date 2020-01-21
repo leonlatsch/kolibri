@@ -1,8 +1,5 @@
 package dev.leonlatsch.olivia.main;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +18,10 @@ import java.util.List;
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.chat.ChatActivity;
 import dev.leonlatsch.olivia.constants.Values;
-import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
-import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
+import dev.leonlatsch.olivia.main.adapter.UserAdapter;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
-import dev.leonlatsch.olivia.main.adapter.UserAdapter;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
 import dev.leonlatsch.olivia.util.AndroidUtils;
@@ -49,6 +46,13 @@ public class UserSearchActivity extends AppCompatActivity {
 
     private UserService userService;
     private UserInterface userInterface;
+    private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
+        Object raw = listView.getItemAtPosition(position);
+        if (raw instanceof UserDTO) {
+            UserDTO user = (UserDTO) raw;
+            proceedUser(user);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +86,6 @@ public class UserSearchActivity extends AppCompatActivity {
         searchBar.requestFocus();
     }
 
-    private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
-        Object raw = listView.getItemAtPosition(position);
-        if (raw instanceof UserDTO) {
-            UserDTO user = (UserDTO) raw;
-            proceedUser(user);
-        }
-    };
-
     /**
      * Called when a user is selected.
      *
@@ -112,7 +108,8 @@ public class UserSearchActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Container<String>> call, Throwable t) {}
+            public void onFailure(Call<Container<String>> call, Throwable t) {
+            }
         });
     }
 

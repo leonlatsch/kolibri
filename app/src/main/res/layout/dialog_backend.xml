@@ -2,53 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="20dp">
 
     <ImageView
-        android:src="@drawable/server"
         android:layout_width="80dp"
-        android:layout_height="80dp"/>
+        android:layout_height="80dp"
+        android:src="@drawable/server" />
 
     <TextView
-        android:text="@string/connect_a_backend"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/connect_a_backend" />
 
     <EditText
         android:id="@+id/dialog_backend_edit_text"
-        android:singleLine="true"
-        android:inputType="textUri"
         style="@style/CommonEditText"
-        android:maxWidth="280dp"
-        android:imeOptions="actionDone"
-        android:textAlignment="center"
-        android:hint="@string/hostname_or_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="250dp"
-        android:maxLength="80" />
+        android:hint="@string/hostname_or_url"
+        android:imeOptions="actionDone"
+        android:inputType="textUri"
+        android:maxWidth="280dp"
+        android:maxLength="80"
+        android:singleLine="true"
+        android:textAlignment="center" />
 
     <ProgressBar
         android:id="@+id/dialog_backend_progressbar"
-        android:indeterminateTint="@color/colorPrimary"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:visibility="gone"/>
+        android:indeterminateTint="@color/colorPrimary"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/dialog_backend_success_indicator"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/dialog_backend_button"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/CONNECT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp"
+        android:text="@string/CONNECT"
+        android:textColor="@color/colorPrimaryDark" />
 
 </LinearLayout>

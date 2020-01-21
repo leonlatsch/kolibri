@@ -35,7 +35,8 @@ public class Message extends Model {
     @Column(name = "sent")
     private boolean sent;
 
-    public Message() {}
+    public Message() {
+    }
 
     public Message(String mid, String cid, String from, String to, String type, String timestamp, String content) {
         this.mid = mid;

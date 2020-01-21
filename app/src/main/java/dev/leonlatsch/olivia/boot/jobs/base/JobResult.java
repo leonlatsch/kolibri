@@ -12,7 +12,8 @@ public class JobResult<T> {
 
     private T result;
 
-    public JobResult() {}
+    public JobResult() {
+    }
 
     public JobResult(boolean successful, T result) {
         this.successful = successful;

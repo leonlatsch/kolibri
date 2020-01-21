@@ -25,11 +25,6 @@ public class UserAdapter extends ArrayAdapter<UserDTO> {
     private List<UserDTO> dataset;
     private Context mContext;
 
-    private static class ViewHolder {
-        ImageView imageView;
-        TextView textView;
-    }
-
     public UserAdapter(Context context, List<UserDTO> users) {
         super(context, 0, users);
         this.dataset = users;
@@ -59,5 +54,10 @@ public class UserAdapter extends ArrayAdapter<UserDTO> {
         viewHolder.textView.setText(user.getUsername());
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        ImageView imageView;
+        TextView textView;
     }
 }

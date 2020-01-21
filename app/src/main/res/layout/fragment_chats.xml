@@ -15,12 +15,12 @@
 
     <TextView
         android:id="@+id/fragment_chat_hint"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:text="@string/new_chat_hint"
         android:textAlignment="center"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/newChatFab"

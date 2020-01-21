@@ -26,7 +26,8 @@ public class Chat extends Model {
     @Column(name = "last_timestamp")
     private String lastTimestamp;
 
-    public Chat() {}
+    public Chat() {
+    }
 
     public Chat(String cid, String uid, int unreadMessages, String lastMessage, String lastTimestamp) {
         this.cid = cid;

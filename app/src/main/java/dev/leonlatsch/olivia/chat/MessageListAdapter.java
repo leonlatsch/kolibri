@@ -106,6 +106,15 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void add(Message message) {
+        mMessageList.add(message);
+        notifyItemInserted(mMessageList.size() - 1);
+    }
+
+    public int getLastPosition() {
+        return mMessageList.size() - 1;
+    }
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
 
         TextView messageBody, messageTimestamp;
@@ -145,14 +154,5 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageBody.setText(message.getContent());
             messageTimestamp.setText(message.getTimestamp().substring(11, 16)); // Hard code for the moment
         }
-    }
-
-    public void add(Message message) {
-        mMessageList.add(message);
-        notifyItemInserted(mMessageList.size() - 1);
-    }
-
-    public int getLastPosition() {
-        return mMessageList.size() - 1;
     }
 }

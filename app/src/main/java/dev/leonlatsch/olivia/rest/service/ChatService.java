@@ -20,7 +20,7 @@ public interface ChatService {
      * Send a message to the backend which gets later pushed to the queue
      *
      * @param accessToken The access token of teh sending user
-     * @param message The {@link MessageDTO} to be sent
+     * @param message     The {@link MessageDTO} to be sent
      * @return A empty {@link Container}
      */
     @POST("chat/send")

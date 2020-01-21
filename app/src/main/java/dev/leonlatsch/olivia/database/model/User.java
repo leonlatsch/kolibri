@@ -29,7 +29,8 @@ public class User extends Model {
     @Column(name = "token")
     private String accessToken;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String uid, String username, String email, String password, String profilePicTn, String accessToken, String privateKey) {
         this.uid = uid;

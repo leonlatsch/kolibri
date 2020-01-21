@@ -12,7 +12,7 @@ public abstract class BaseJob {
 
     private Context context;
 
-    protected BaseJob(Context context){
+    protected BaseJob(Context context) {
         this.context = context;
     }
 

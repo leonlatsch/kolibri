@@ -34,7 +34,7 @@ public interface UserService {
      * Get a user with a uid
      *
      * @param accessToken
-     * @param uid The uid of the user
+     * @param uid         The uid of the user
      * @return A {@link Container} with the specified user
      */
     @GET("user/get/{uid}")
@@ -44,7 +44,7 @@ public interface UserService {
      * Search for users with a username
      *
      * @param accessToken
-     * @param username The query for the search
+     * @param username    The query for the search
      * @return A {@link Container} with a {@link List} of users, matching the sarched username
      */
     @GET("user/search/{username}")
@@ -54,7 +54,7 @@ public interface UserService {
      * Update your user
      *
      * @param accessToken
-     * @param user The user {@link UserDTO} filled with the fields to update
+     * @param user        The user {@link UserDTO} filled with the fields to update
      * @return A empty {@link Container}
      */
     @PUT("user/update")
@@ -78,7 +78,7 @@ public interface UserService {
      * @return A {@link Container} with a message indicating if the username ss free
      */
     @GET("user/check/username/{username}")
-    Call<Container<String>> checkUsername(@Header(Headers.ACCESS_TOKEN) String accessToken,@Path("username") String username);
+    Call<Container<String>> checkUsername(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
     /**
      * Check if a email address is already taken

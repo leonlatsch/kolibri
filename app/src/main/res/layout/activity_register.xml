@@ -19,6 +19,7 @@
 
     <EditText
         android:id="@+id/registerEmailEditText"
+        style="@style/LightEditText"
         android:layout_width="309dp"
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
@@ -29,14 +30,13 @@
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        style="@style/LightEditText"
+        android:maxLength="150"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/oliviaLettering"
-        app:layout_constraintVertical_bias="0.216"
-        android:singleLine="true"
-        android:maxLength="150"/>
+        app:layout_constraintVertical_bias="0.216" />
 
     <ImageView
         android:id="@+id/oliviaLettering"
@@ -72,6 +72,7 @@
 
     <EditText
         android:id="@+id/registerUsernameEditText"
+        style="@style/LightEditText"
         android:layout_width="309dp"
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
@@ -81,17 +82,17 @@
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
-        style="@style/LightEditText"
+        android:maxLength="30"
+        android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@+id/registerEmailEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/oliviaLettering"
-        app:layout_constraintVertical_bias="0.975"
-        android:singleLine="true"
-        android:maxLength="30" />
+        app:layout_constraintVertical_bias="0.975" />
 
     <EditText
         android:id="@+id/registerPasswordEditText"
+        style="@style/LightEditText"
         android:layout_width="309dp"
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
@@ -100,14 +101,14 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        style="@style/LightEditText"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText"
-        android:singleLine="true" />
+        app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText" />
 
     <EditText
         android:id="@+id/registerPasswordConfirmEditText"
+        style="@style/LightEditText"
         android:layout_width="309dp"
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
@@ -116,7 +117,6 @@
         android:ems="10"
         android:hint="@string/password_confirm"
         android:inputType="textPassword"
-        style="@style/LightEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerPasswordEditText" />

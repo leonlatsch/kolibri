@@ -18,7 +18,7 @@ import dev.leonlatsch.olivia.util.Base64;
 /**
  * @author Leon Latsch
  * @since 1.0.0
- *
+ * <p>
  * A Util class to manage end-to-end encryption of messages
  */
 public class CryptoManager {
@@ -85,7 +85,7 @@ public class CryptoManager {
     /**
      * Encrypt a byte[] with a decoded public key
      *
-     * @param data The plain byte[]
+     * @param data      The plain byte[]
      * @param publicKey The public key to use for encryption
      * @return The encrypted data
      * @throws GeneralSecurityException
@@ -103,7 +103,7 @@ public class CryptoManager {
     /**
      * Decrypt a byte[] with a decoded private key
      *
-     * @param data The encrypted byte[]
+     * @param data       The encrypted byte[]
      * @param privateKey The decoded private key
      * @return The decrypted plain byte[]
      * @throws GeneralSecurityException
@@ -121,7 +121,7 @@ public class CryptoManager {
     /**
      * Encrypt and encode a byte[] to a base64 String
      *
-     * @param data The plain byte[]
+     * @param data             The plain byte[]
      * @param encodedPublicKey The encoded public key
      * @return The encrypted data as a base64 encoded String
      */
@@ -138,7 +138,7 @@ public class CryptoManager {
     /**
      * Decrypt and decode a encoded base64 String
      *
-     * @param encodedData The encoded base64 String
+     * @param encodedData       The encoded base64 String
      * @param encodedPrivateKey The encoded private key
      * @return The decrypted data as plain byte[]
      */

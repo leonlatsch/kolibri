@@ -1,10 +1,10 @@
 package dev.leonlatsch.olivia.database;
 
 import dev.leonlatsch.olivia.database.model.Contact;
-import dev.leonlatsch.olivia.rest.dto.MessageDTO;
-import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.database.model.Message;
 import dev.leonlatsch.olivia.database.model.User;
+import dev.leonlatsch.olivia.rest.dto.MessageDTO;
+import dev.leonlatsch.olivia.rest.dto.UserDTO;
 
 /**
  * Class for mapping dto to model and the other way
@@ -16,7 +16,16 @@ public class DatabaseMapper {
 
     private static DatabaseMapper databaseMapper;
 
-    private DatabaseMapper() {}
+    private DatabaseMapper() {
+    }
+
+    public static DatabaseMapper getInstance() {
+        if (databaseMapper == null) {
+            databaseMapper = new DatabaseMapper();
+        }
+
+        return databaseMapper;
+    }
 
     public User toModel(UserDTO dto) {
         if (dto == null) {
@@ -102,14 +111,5 @@ public class DatabaseMapper {
         user.setUsername(contact.getUsername());
         user.setProfilePicTn(contact.getProfilePicTn());
         return user;
-    }
-
-
-    public static DatabaseMapper getInstance() {
-        if (databaseMapper == null) {
-            databaseMapper = new DatabaseMapper();
-        }
-
-        return databaseMapper;
     }
 }

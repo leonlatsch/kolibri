@@ -20,8 +20,6 @@ import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.KeyPair;
-import dev.leonlatsch.olivia.main.LoginActivity;
-import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.AuthService;
@@ -79,10 +77,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         usernameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -92,10 +92,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -105,10 +107,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         TextWatcher passwordTextWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -268,7 +272,7 @@ public class RegisterActivity extends AppCompatActivity {
      * start the {@link MainActivity}.
      *
      * @param accessToken The access token from the new user
-     * @param keyPair The new generated keypair
+     * @param keyPair     The new generated keypair
      */
     private void saveUserAndStartMain(final String accessToken, final KeyPair keyPair) {
         Call<Container<UserDTO>> call = userService.get(accessToken);
@@ -300,7 +304,7 @@ public class RegisterActivity extends AppCompatActivity {
      * @param drawable
      */
     private void showStatusIcon(EditText editText, int drawable) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable,0 );
+        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
 
     /**

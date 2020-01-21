@@ -23,7 +23,16 @@ public class ContactInterface extends BaseInterface {
     private static ContactInterface contactInterface; // Singleton
 
 
-    private ContactInterface() {}
+    private ContactInterface() {
+    }
+
+    public static ContactInterface getInstance() {
+        if (contactInterface == null) {
+            contactInterface = new ContactInterface();
+        }
+
+        return contactInterface;
+    }
 
     public Contact getContact(String uid) {
         return new Select().from(Contact.class).where(QUEUE_UID_WHERE, uid).executeSingle();
@@ -77,13 +86,5 @@ public class ContactInterface extends BaseInterface {
                     contact.getUid(), contact.getUsername(), contact.getPublicKey())
                     .where(QUEUE_UID_WHERE, contact.getUid()).execute();
         }
-    }
-
-    public static ContactInterface getInstance() {
-        if (contactInterface == null) {
-            contactInterface = new ContactInterface();
-        }
-
-        return contactInterface;
     }
 }

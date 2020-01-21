@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/login_background"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/nav_profile_pic_card"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:elevation="12dp"
-        android:id="@+id/nav_profile_pic_card"
         app:cardCornerRadius="50dp">
+
         <ImageView
             android:id="@+id/nav_profile_pic"
-            android:src="@drawable/default_profile_pic_tn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_profile_pic_tn" />
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -28,8 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="1dp"
-        android:textSize="14dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="14dp" />
 
 
     <TextView

@@ -32,7 +32,10 @@ import dev.leonlatsch.olivia.security.CryptoManager;
 import dev.leonlatsch.olivia.settings.Config;
 import retrofit2.Response;
 
-import static dev.leonlatsch.olivia.constants.MessageType.*;
+import static dev.leonlatsch.olivia.constants.MessageType.AUDIO;
+import static dev.leonlatsch.olivia.constants.MessageType.IMAGE;
+import static dev.leonlatsch.olivia.constants.MessageType.TEXT;
+import static dev.leonlatsch.olivia.constants.MessageType.VIDEO;
 
 /**
  * This class controls the receiving of messages.
@@ -48,25 +51,81 @@ public class MessageConsumer {
     private static final String THREAD_NAME = "BROKER-NET-THREAD";
 
     private static MessageConsumer consumer; // Singleton
-
+    private static MessageRecyclerChangeListener messageRecyclerChangeListener;
+    private static ChatListChangeListener chatListChangeListener;
+    private static boolean isRunning = false;
     private ConnectionFactory connectionFactory;
     private DeliverCallback callback;
     private Connection connection;
     private Context context;
-
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
     private KeyPairInterface keyPairInterface;
     private UserService userService;
     private DatabaseMapper databaseMapper;
-
-    private static MessageRecyclerChangeListener messageRecyclerChangeListener;
-    private static ChatListChangeListener chatListChangeListener;
-    private static boolean isRunning = false;
+    /**
+     * Reconnect on shutdown
+     */
+    private ShutdownListener shutdownListener = cause -> {
+        initialize(context);
+        run();
+    };
 
     private MessageConsumer(Context context) {
         initialize(context);
+    }
+
+    /**
+     * Notify if a chat has changed from external components
+     *
+     * @param chat
+     */
+    public static void notifyChatListChangedFromExternal(Chat chat) {
+        if (consumer != null) {
+            consumer.notifyChatListChangeListener(chat);
+        }
+    }
+
+    /**
+     * Notify if a message has changed from external components
+     *
+     * @param message
+     */
+    public static void notifyMessageRecyclerChangedFromExternal(Message message) {
+        if (messageRecyclerChangeListener != null) {
+            messageRecyclerChangeListener.receive(message);
+        }
+    }
+
+    public static void setMessageRecyclerChangeListener(MessageRecyclerChangeListener listener) {
+        messageRecyclerChangeListener = listener;
+    }
+
+    public static void setChatListChangeListener(ChatListChangeListener listener) {
+        chatListChangeListener = listener;
+    }
+
+    public static boolean isRunning() {
+        return isRunning;
+    }
+
+    public static void start(Context context) {
+        if (!isRunning()) {
+            if (consumer == null) {
+                consumer = new MessageConsumer(context);
+            }
+
+            consumer.run();
+        }
+    }
+
+    public static void stop() {
+        if (isRunning()) {
+            consumer.disconnect();
+            consumer = null;
+            isRunning = false;
+        }
     }
 
     /**
@@ -92,35 +151,27 @@ public class MessageConsumer {
         connectionFactory.setPassword(userInterface.getAccessToken());
 
         callback = ((consumerTag, message) -> {
-           MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
-           if (messageDTO != null) {
-               switch (messageDTO.getType()) {
-                   case TEXT:
-                       processTextMessage(databaseMapper.toModel(messageDTO));
-                       break;
-                   case IMAGE:
-                       //TODO: Process Image
-                       break;
-                   case AUDIO:
-                       //TODO: Process Audio
-                       break;
-                   case VIDEO:
-                       //TODO Process Video
-                       break;
-                   default:
-                       break;
-               }
-           }
+            MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
+            if (messageDTO != null) {
+                switch (messageDTO.getType()) {
+                    case TEXT:
+                        processTextMessage(databaseMapper.toModel(messageDTO));
+                        break;
+                    case IMAGE:
+                        //TODO: Process Image
+                        break;
+                    case AUDIO:
+                        //TODO: Process Audio
+                        break;
+                    case VIDEO:
+                        //TODO Process Video
+                        break;
+                    default:
+                        break;
+                }
+            }
         });
     }
-
-    /**
-     * Reconnect on shutdown
-     */
-    private ShutdownListener shutdownListener = cause -> {
-        initialize(context);
-        run();
-    };
 
     /**
      * Run a new thread and start consuming the own queue
@@ -142,6 +193,7 @@ public class MessageConsumer {
 
     /**
      * Proceed a text message and notify components
+     *
      * @param message
      */
     private void processTextMessage(Message message) {
@@ -191,38 +243,9 @@ public class MessageConsumer {
         new Thread(() -> {
             try {
                 connection.close();
-            } catch (IOException | AlreadyClosedException e) {}
+            } catch (IOException | AlreadyClosedException e) {
+            }
         }, THREAD_NAME).start();
-    }
-
-    /**
-     * Notify if a chat has changed from external components
-     *
-     * @param chat
-     */
-    public static void notifyChatListChangedFromExternal(Chat chat) {
-        if (consumer != null) {
-            consumer.notifyChatListChangeListener(chat);
-        }
-    }
-
-    /**
-     * Notify if a message has changed from external components
-     *
-     * @param message
-     */
-    public static void notifyMessageRecyclerChangedFromExternal(Message message) {
-        if (messageRecyclerChangeListener != null) {
-            messageRecyclerChangeListener.receive(message);
-        }
-    }
-
-    public static void setMessageRecyclerChangeListener(MessageRecyclerChangeListener listener) {
-        messageRecyclerChangeListener = listener;
-    }
-
-    public static void setChatListChangeListener(ChatListChangeListener listener) {
-        chatListChangeListener = listener;
     }
 
     private void notifyMessageRecyclerChangeListener(Message message) {
@@ -234,28 +257,6 @@ public class MessageConsumer {
     private void notifyChatListChangeListener(Chat chat) {
         if (chatListChangeListener != null) {
             chatListChangeListener.chatChanged(chat);
-        }
-    }
-
-    public static boolean isRunning() {
-        return isRunning;
-    }
-
-    public static void start(Context context) {
-        if (!isRunning()) {
-            if (consumer == null) {
-                consumer = new MessageConsumer(context);
-            }
-
-            consumer.run();
-        }
-    }
-
-    public static void stop() {
-        if (isRunning()) {
-            consumer.disconnect();
-            consumer = null;
-            isRunning = false;
         }
     }
 }

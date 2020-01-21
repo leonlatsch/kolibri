@@ -23,10 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:hint="@string/user_search_hint"
-            android:inputType="text"
             android:imeOptions="actionSearch"
-            android:singleLine="true"
-            android:maxLength="50"/>
+            android:inputType="text"
+            android:maxLength="50"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/userSearchBtn"
@@ -41,7 +41,7 @@
         android:id="@+id/user_search_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    
+
     <include layout="@layout/progress_overlay" />
 
 </LinearLayout>

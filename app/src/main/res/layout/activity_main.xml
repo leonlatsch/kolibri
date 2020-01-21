@@ -19,8 +19,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
             android:elevation="4dp"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
                 android:id="@+id/main_toolbar_title"
@@ -48,6 +48,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_main_draw">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/activated"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/activated">
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/item_chat_list_card_view"
@@ -11,14 +11,15 @@
         android:layout_height="60dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         app:cardCornerRadius="30dp">
+
         <ImageView
             android:id="@+id/item_chat_list_image_view"
-            android:src="@drawable/default_profile_pic_tn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:src="@drawable/default_profile_pic_tn" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -29,20 +30,20 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="PLACEHOLDER"
             android:id="@+id/item_chat_list_username"
-            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"/>
+            android:text="PLACEHOLDER"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <TextView
-            android:text="PLACEHOLDER"
             android:id="@+id/item_chat_list_last_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textSize="12sp"/>
+            android:text="PLACEHOLDER"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -50,25 +51,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
-            android:text="11:30"
             android:id="@+id/item_chat_list_last_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="datetime"
-            android:textSize="11sp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp"
+            android:inputType="datetime"
+            android:text="11:30"
+            android:textSize="11sp" />
 
         <TextView
             android:id="@+id/item_chat_list_unread_messages"
-            android:textColor="#FFFF"
-            android:visibility="gone"
-            android:textAlignment="center"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@drawable/circle"/>
+            android:background="@drawable/circle"
+            android:textAlignment="center"
+            android:textColor="#FFFF"
+            android:visibility="gone" />
 
     </LinearLayout>
 

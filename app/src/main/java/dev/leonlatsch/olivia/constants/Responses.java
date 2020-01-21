@@ -21,5 +21,6 @@ public class Responses {
     public static int CODE_ERROR = 400;
     public static int CODE_UNAUTHORIZED = 401;
 
-    private Responses() {}
+    private Responses() {
+    }
 }

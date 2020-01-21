@@ -13,7 +13,8 @@ public class UserDTO {
     private String profilePic;
     private String profilePicTn;
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public UserDTO(String uid, String username, String email, String password, String profilePic, String profilePicTn) {
         this.uid = uid;

@@ -15,5 +15,6 @@ public class Formats {
      */
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private Formats() {}
+    private Formats() {
+    }
 }

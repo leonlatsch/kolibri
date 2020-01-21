@@ -11,7 +11,8 @@ public class Container<T> {
     private String timestamp;
     private T content;
 
-    public Container() {}
+    public Container() {
+    }
 
     public Container(int code, String message, String timestamp, T content) {
         this.code = code;

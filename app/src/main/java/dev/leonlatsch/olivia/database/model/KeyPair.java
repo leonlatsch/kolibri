@@ -20,7 +20,8 @@ public class KeyPair extends Model {
     @Column(name = "private_key")
     private String privateKey;
 
-    public KeyPair() {}
+    public KeyPair() {
+    }
 
     public KeyPair(String uid, String publicKey, String privateKey) {
         this.uid = uid;

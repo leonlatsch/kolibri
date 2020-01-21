@@ -21,8 +21,8 @@
         android:id="@+id/disconnectButton"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:alpha="0.5"
         android:layout_margin="5dp"
+        android:alpha="0.5"
         android:src="@drawable/logout"
         android:tint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,6 +34,7 @@
 
     <EditText
         android:id="@+id/loginEmailEditText"
+        style="@style/LightEditText"
         android:layout_width="309dp"
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
@@ -44,7 +45,6 @@
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        style="@style/LightEditText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +53,7 @@
 
     <EditText
         android:id="@+id/loginPasswordEditText"
+        style="@style/LightEditText"
         android:layout_width="309dp"
         android:layout_height="70dp"
         android:layout_marginStart="8dp"
@@ -61,14 +62,13 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="@string/password"
+        android:imeOptions="actionDone"
         android:inputType="textPassword"
-        style="@style/LightEditText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginEmailEditText"
-        app:layout_constraintVertical_bias="0.003"
-        android:imeOptions="actionDone"/>
+        app:layout_constraintVertical_bias="0.003" />
 
     <ImageView
         android:id="@+id/oliviaLettering"

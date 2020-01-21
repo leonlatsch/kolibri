@@ -30,16 +30,6 @@ public class MessageQueue {
     private DatabaseMapper databaseMapper;
 
     private Thread thread;
-
-    private MessageQueue() {
-        chatService = RestServiceFactory.getChatService();
-        chatInterface = ChatInterface.getInstance();
-        userInterface = UserInterface.getInstance();
-        databaseMapper = DatabaseMapper.getInstance();
-
-        thread = new Thread(runnable, THREAD_NAME);
-    }
-
     private Runnable runnable = () -> {
         while (running) {
             try {
@@ -55,12 +45,18 @@ public class MessageQueue {
                         MessageConsumer.notifyMessageRecyclerChangedFromExternal(message);
                     }
                 }
-            } catch (InterruptedException | IOException e) {}
+            } catch (InterruptedException | IOException e) {
+            }
         }
     };
 
-    private Thread getThread() {
-        return thread;
+    private MessageQueue() {
+        chatService = RestServiceFactory.getChatService();
+        chatInterface = ChatInterface.getInstance();
+        userInterface = UserInterface.getInstance();
+        databaseMapper = DatabaseMapper.getInstance();
+
+        thread = new Thread(runnable, THREAD_NAME);
     }
 
     public static void stop() {
@@ -68,11 +64,15 @@ public class MessageQueue {
     }
 
     public static void start() {
-        if(!running) {
+        if (!running) {
             messageQueue = new MessageQueue();
 
             running = true;
             messageQueue.getThread().start();
         }
+    }
+
+    private Thread getThread() {
+        return thread;
     }
 }

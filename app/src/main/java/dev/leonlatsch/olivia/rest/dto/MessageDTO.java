@@ -14,7 +14,8 @@ public class MessageDTO {
     private String content;
     private String cid;
 
-    public MessageDTO() {}
+    public MessageDTO() {
+    }
 
     public MessageDTO(String mid, String from, String to, String type, String timestamp, String content, String cid) {
         this.mid = mid;

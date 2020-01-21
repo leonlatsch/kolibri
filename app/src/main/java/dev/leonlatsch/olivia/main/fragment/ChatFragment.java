@@ -53,6 +53,20 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
     private ChatInterface chatInterface;
     private ContactInterface contactInterface;
+    private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
+        Object raw = listView.getItemAtPosition(position);
+        if (raw instanceof Chat) {
+            Chat chat = (Chat) raw;
+            Intent intent = new Intent(this.parent.getApplicationContext(), ChatActivity.class);
+            intent.putExtra(Values.INTENT_KEY_CHAT_UID, chat.getUid());
+            startActivity(intent);
+            if (chat.getUnreadMessages() > 0) {
+                chat.setUnreadMessages(0);
+                chatInterface.updateChat(chat);
+                chatListAdapter.chatChanged(chat);
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -82,21 +96,6 @@ public class ChatFragment extends Fragment implements ChatListChangeListener {
 
         return view;
     }
-
-    private AdapterView.OnItemClickListener itemClickListener = (parent, view, position, id) -> {
-        Object raw = listView.getItemAtPosition(position);
-        if (raw instanceof Chat) {
-            Chat chat = (Chat) raw;
-            Intent intent = new Intent(this.parent.getApplicationContext(), ChatActivity.class);
-            intent.putExtra(Values.INTENT_KEY_CHAT_UID, chat.getUid());
-            startActivity(intent);
-            if (chat.getUnreadMessages() > 0) {
-                chat.setUnreadMessages(0);
-                chatInterface.updateChat(chat);
-                chatListAdapter.chatChanged(chat);
-            }
-        }
-    };
 
     private void newChat() {
         Intent intent = new Intent(parent.getApplicationContext(), UserSearchActivity.class);

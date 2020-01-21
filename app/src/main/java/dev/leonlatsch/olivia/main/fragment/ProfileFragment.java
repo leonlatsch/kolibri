@@ -28,17 +28,17 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.util.regex.Pattern;
 
 import dev.leonlatsch.olivia.R;
-import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Regex;
+import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.database.DatabaseMapper;
 import dev.leonlatsch.olivia.database.EntityChangedListener;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
-import dev.leonlatsch.olivia.rest.dto.Container;
-import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.database.model.User;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.main.ProfilePicActivity;
+import dev.leonlatsch.olivia.rest.dto.Container;
+import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.AuthService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.rest.service.UserService;
@@ -103,10 +103,12 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -263,7 +265,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
      */
     private void deleteAccount() {
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which){
+            switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
                     isLoading(true);
                     Call<Container<String>> call = userService.delete(userInterface.getAccessToken());
@@ -392,6 +394,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     /**
      * Display a {@link User} at the fragments view.
+     *
      * @param user
      */
     private void mapUserToView(User user) {
@@ -406,6 +409,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
 
     /**
      * Extract the views values and create a {@link User} from it.
+     *
      * @return
      */
     private User mapViewToUser() {
@@ -456,6 +460,6 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
     }
 
     private void showStatusIcon(EditText editText, int drawable) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable,0 );
+        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
 }

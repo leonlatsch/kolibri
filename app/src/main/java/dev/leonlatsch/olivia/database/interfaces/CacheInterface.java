@@ -12,7 +12,6 @@ import dev.leonlatsch.olivia.database.EntityChangedListener;
  * Mainly used for the logged in user
  *
  * @param <T> extends Model
- *
  * @author Leon Latsch
  * @since 1.0.0
  */
@@ -29,7 +28,7 @@ public abstract class CacheInterface<T extends Model> extends BaseInterface {
     private List<EntityChangedListener> listeners = new ArrayList<>();
 
     /**
-     *  Adds a {@link EntityChangedListener} that gets notified when the model hat changed
+     * Adds a {@link EntityChangedListener} that gets notified when the model hat changed
      *
      * @param listener the listener to add
      */
@@ -38,7 +37,8 @@ public abstract class CacheInterface<T extends Model> extends BaseInterface {
     }
 
     /**
-     *  Notify all listeners with the same model
+     * Notify all listeners with the same model
+     *
      * @param model
      */
     void notifyListeners(T model) {

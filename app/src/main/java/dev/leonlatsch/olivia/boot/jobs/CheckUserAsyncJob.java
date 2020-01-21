@@ -6,8 +6,8 @@ import android.os.Handler;
 
 import dev.leonlatsch.olivia.boot.BootActivity;
 import dev.leonlatsch.olivia.boot.jobs.base.AsyncJob;
-import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
 import dev.leonlatsch.olivia.boot.jobs.base.AsyncJobCallback;
+import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
 import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;

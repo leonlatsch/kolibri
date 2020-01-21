@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.ProfilePicActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".main.ProfilePicActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/profile_pic_toolbar"
@@ -13,8 +13,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryDark"
         android:elevation="4dp"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <TextView
             android:id="@+id/profile_pic_toolbar_text"
@@ -26,12 +26,12 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ImageView
-        android:layout_gravity="center"
-        android:foregroundGravity="center"
         android:id="@+id/profile_pic_image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:foregroundGravity="center" />
 
-    <include layout="@layout/progress_overlay"/>
+    <include layout="@layout/progress_overlay" />
 
 </LinearLayout>

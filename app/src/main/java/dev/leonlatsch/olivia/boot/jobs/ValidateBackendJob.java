@@ -7,7 +7,9 @@ import dev.leonlatsch.olivia.boot.jobs.base.Job;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
 import dev.leonlatsch.olivia.settings.Config;
 
-import static dev.leonlatsch.olivia.settings.Config.*;
+import static dev.leonlatsch.olivia.settings.Config.KEY_BACKEND_BROKER_HOST;
+import static dev.leonlatsch.olivia.settings.Config.KEY_BACKEND_BROKER_PORT;
+import static dev.leonlatsch.olivia.settings.Config.KEY_BACKEND_HTTP_BASEURL;
 
 /**
  * Sync job to validate the backend config
