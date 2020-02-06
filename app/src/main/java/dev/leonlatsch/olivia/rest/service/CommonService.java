@@ -17,7 +17,7 @@ public interface CommonService {
      *
      * @return A empty {@link Container}
      */
-    @GET("healthcheck")
+    @GET("api/v1/healthcheck")
     Call<Container<Void>> healthcheck();
 
     /**
@@ -25,14 +25,6 @@ public interface CommonService {
      *
      * @return A {@link Container} with the version number
      */
-    @GET("version")
+    @GET("api/v1/version")
     Call<String> getVersion();
-
-    /**
-     * Get the port for the running broker
-     *
-     * @return A {@link Container} with the broker port as an int
-     */
-    @GET("broker-port")
-    Call<Integer> getBrokerPort();
 }

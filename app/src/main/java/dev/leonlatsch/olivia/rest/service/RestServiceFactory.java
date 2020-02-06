@@ -25,6 +25,7 @@ public class RestServiceFactory {
     private static UserService userService;
     private static AuthService authService;
     private static ChatService chatService;
+    private static ConfigService configService;
     private static CommonService commonService;
 
     /**
@@ -67,6 +68,10 @@ public class RestServiceFactory {
         if (commonService != null) {
             commonService = retrofit.create(CommonService.class);
         }
+
+        if (configService == null) {
+            configService = retrofit.create(ConfigService.class);
+        }
     }
 
     // Constrict the Retrofit object
@@ -106,5 +111,13 @@ public class RestServiceFactory {
         }
 
         return commonService;
+    }
+
+    public static ConfigService getConfigService() {
+        if (configService == null) {
+            configService = retrofit.create(ConfigService.class);
+        }
+
+        return configService;
     }
 }

@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -27,7 +28,7 @@ public interface UserService {
      * @param accessToken
      * @return A {@link Container} with your user
      */
-    @GET("user/get")
+    @GET("api/v1/user/get")
     Call<Container<UserDTO>> get(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
     /**
@@ -37,7 +38,7 @@ public interface UserService {
      * @param uid         The uid of the user
      * @return A {@link Container} with the specified user
      */
-    @GET("user/get/{uid}")
+    @GET("api/v1/user/get/{uid}")
     Call<Container<UserDTO>> get(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") String uid);
 
     /**
@@ -47,7 +48,7 @@ public interface UserService {
      * @param username    The query for the search
      * @return A {@link Container} with a {@link List} of users, matching the sarched username
      */
-    @GET("user/search/{username}")
+    @GET("api/v1/user/search/{username}")
     Call<Container<List<UserDTO>>> search(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
     /**
@@ -57,7 +58,7 @@ public interface UserService {
      * @param user        The user {@link UserDTO} filled with the fields to update
      * @return A empty {@link Container}
      */
-    @PUT("user/update")
+    @PATCH("api/v1/user/update")
     Call<Container<String>> update(@Header(Headers.ACCESS_TOKEN) String accessToken, @Body UserDTO user);
 
     /**
@@ -66,7 +67,7 @@ public interface UserService {
      * @param accessToken
      * @return A empty {@link Container}
      */
-    @DELETE("user/delete")
+    @DELETE("api/v1/user/delete")
     Call<Container<String>> delete(@Header(Headers.ACCESS_TOKEN) String accessToken);
 
     /**
@@ -77,7 +78,7 @@ public interface UserService {
      * @param username
      * @return A {@link Container} with a message indicating if the username ss free
      */
-    @GET("user/check/username/{username}")
+    @GET("api/v1/user/check/username/{username}")
     Call<Container<String>> checkUsername(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("username") String username);
 
     /**
@@ -88,7 +89,7 @@ public interface UserService {
      * @param email
      * @return A {@link Container} with a message indicating if the email address is free
      */
-    @GET("user/check/email/{email}")
+    @GET("api/v1/user/check/email/{email}")
     Call<Container<String>> checkEmail(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("email") String email);
 
     /**
@@ -98,7 +99,7 @@ public interface UserService {
      * @param uid
      * @return A {@link Container} with a base64 String with the full profile picture
      */
-    @GET("user/get/profile-pic/{uid}")
+    @GET("api/v1/user/get/profile-pic/{uid}")
     Call<Container<String>> loadProfilePic(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") String uid);
 
     /**
@@ -108,7 +109,7 @@ public interface UserService {
      * @param uid
      * @return A {@link Container} with a base64 encoded public key
      */
-    @GET("user/public-key/get/{uid}")
+    @GET("api/v1/user/public-key/get/{uid}")
     Call<Container<String>> getPublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Path("uid") String uid);
 
     /**
@@ -118,6 +119,6 @@ public interface UserService {
      * @param publicKey
      * @return A empty {@link Container}
      */
-    @PUT("user/public-key/update")
+    @PATCH("api/v1/user/public-key/update")
     Call<Container<String>> updatePublicKey(@Header(Headers.ACCESS_TOKEN) String accessToken, @Header(Headers.PUBLIC_KEY) String publicKey);
 }

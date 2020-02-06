@@ -20,6 +20,7 @@ import dev.leonlatsch.olivia.constants.Responses;
 import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.service.CommonService;
+import dev.leonlatsch.olivia.rest.service.ConfigService;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 import dev.leonlatsch.olivia.settings.Config;
 import retrofit2.Call;
@@ -34,7 +35,6 @@ import retrofit2.Response;
  */
 public class BackendDialog extends AlertDialog {
 
-    private static final String DEFAULT_SUFFIX = "backend/";
     private static final String SLASH = "/";
     private static final String HTTPS = "https://";
     private static final String HTTP = "http://";
@@ -45,6 +45,7 @@ public class BackendDialog extends AlertDialog {
     private ImageView successImageView;
 
     private CommonService commonService;
+    private ConfigService configService;
 
     public BackendDialog(Context context) {
         super(context);
@@ -79,29 +80,22 @@ public class BackendDialog extends AlertDialog {
     private void tryHealthcheck(final String url) {
         RestServiceFactory.initialize(url);
         commonService = RestServiceFactory.getCommonService();
+        configService = RestServiceFactory.getConfigService();
         commonService.healthcheck().enqueue(new Callback<Container<Void>>() {
             @Override
             public void onResponse(Call<Container<Void>> call, Response<Container<Void>> response) {
                 if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
                     saveConfig(url);
                 } else {
-                    if (url.endsWith(DEFAULT_SUFFIX)) {
-                        isLoading(false);
-                        success(false);
-                    } else {
-                        tryHealthcheck(url + DEFAULT_SUFFIX);
-                    }
+                    isLoading(false);
+                    success(false);
                 }
             }
 
             @Override
             public void onFailure(Call<Container<Void>> call, Throwable t) {
-                if (url.endsWith(DEFAULT_SUFFIX)) {
-                    isLoading(false);
-                    success(false);
-                } else {
-                    tryHealthcheck(url + DEFAULT_SUFFIX);
-                }
+                isLoading(false);
+                success(false);
             }
         });
     }
@@ -176,7 +170,7 @@ public class BackendDialog extends AlertDialog {
         editor.putString(Config.KEY_BACKEND_HTTP_BASEURL, url);
         editor.putString(Config.KEY_BACKEND_BROKER_HOST, extractHostname(url));
 
-        commonService.getBrokerPort().enqueue(new Callback<Integer>() { // Get the port for the broker
+        configService.getBrokerPort().enqueue(new Callback<Integer>() { // Get the port for the broker
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()) {
@@ -229,9 +223,6 @@ public class BackendDialog extends AlertDialog {
                 brokerHost = url.replace(HTTP, Values.EMPTY);
             }
 
-            if (brokerHost.endsWith(DEFAULT_SUFFIX)) { // Remove default suffix
-                brokerHost = brokerHost.replace(DEFAULT_SUFFIX, Values.EMPTY);
-            }
             if (brokerHost.endsWith(SLASH)) { // Remove trailing slashes
                 brokerHost = brokerHost.replace(SLASH, Values.EMPTY);
             }

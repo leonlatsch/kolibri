@@ -23,6 +23,6 @@ public interface ChatService {
      * @param message     The {@link MessageDTO} to be sent
      * @return A empty {@link Container}
      */
-    @POST("chat/send")
+    @POST("api/v1/chat/send")
     Call<Container<String>> send(@Header(Headers.ACCESS_TOKEN) String accessToken, @Body MessageDTO message);
 }
