@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 /**
  * This service is used for sending messages to the backend.
@@ -23,6 +24,6 @@ public interface ChatService {
      * @param message     The {@link MessageDTO} to be sent
      * @return A empty {@link Container}
      */
-    @POST("api/v1/chat/send")
+    @PUT("api/v1/chat/send")
     Call<Container<String>> send(@Header(Headers.ACCESS_TOKEN) String accessToken, @Body MessageDTO message);
 }
