@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 /**
  * This service is used for registration and logging in to the backend.
@@ -22,7 +23,7 @@ public interface AuthService {
      * @param dto
      * @return A {@link Container} with the access token
      */
-    @POST("auth/login")
+    @POST("api/v1/auth/login")
     Call<Container<String>> login(@Body UserDTO dto);
 
     /**
@@ -32,6 +33,6 @@ public interface AuthService {
      * @param publicKey
      * @return A {@link Container} with the access token
      */
-    @POST("auth/register")
+    @PUT("api/v1/auth/register")
     Call<Container<String>> register(@Body UserDTO dto, @Header(Headers.PUBLIC_KEY) String publicKey);
 }
