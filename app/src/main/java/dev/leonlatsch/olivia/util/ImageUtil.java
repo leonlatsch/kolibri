@@ -42,7 +42,7 @@ public class ImageUtil {
             return null;
         }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos); //TODO: Seperate this into its own function
         byte[] bytes = bos.toByteArray();
         return Base64.toBase64(bytes);
     }
