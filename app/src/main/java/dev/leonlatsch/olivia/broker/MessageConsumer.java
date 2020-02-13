@@ -46,7 +46,6 @@ public class MessageConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(MessageConsumer.class);
 
-    private static final String USER_PREFIX = "user.";
     private static final String USER_QUEUE_PREFIX = "queue.user.";
     private static final String THREAD_NAME = "BROKER-NET-THREAD";
 
@@ -147,7 +146,7 @@ public class MessageConsumer {
         connectionFactory = new ConnectionFactory();
         connectionFactory.setHost(preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null));
         connectionFactory.setPort(preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0));
-        connectionFactory.setUsername(USER_PREFIX + userInterface.getUser().getUid());
+        connectionFactory.setUsername(userInterface.getUser().getUid());
         connectionFactory.setPassword(userInterface.getAccessToken());
 
         callback = ((consumerTag, message) -> {
