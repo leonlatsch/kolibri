@@ -234,7 +234,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                                 if (password.equals(passwordConfirm)) {
                                     showStatusIcon(confirmPasswordEditText, R.drawable.icons8_checked_48);
                                     passwordCache = password;
-                                    dataChanged();
+                                    saveBtn();
                                     passwordChanged = true;
                                     dialog.dismiss();
                                 } else {
@@ -439,7 +439,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                 Uri resultUri = result.getUri();
                 profilePicImageView.setImageBitmap(BitmapFactory.decodeFile(resultUri.getPath()));
                 profilePicChanged = true;
-                dataChanged();
+                saveBtn();
             }
         }
     }
