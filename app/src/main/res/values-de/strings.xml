@@ -60,9 +60,14 @@
     <string name="chat">Chat</string>
     <string name="settings_title_send_with_enter">Mit Enter senden</string>
     <string name="settings_summary_send_with_enter">Nachrichten mit enter versenden</string>
-    <string name="url_wiki">https://github.com/leonlatsch/olivia/wiki</string>
+    <string name="url_wiki">https://olivia.leonlatsch.dev</string>
     <string name="settings_title_wiki">Wiki</string>
-    <string name="settings_summary_wiki">Das Olivia GitHub Wiki</string>
+    <string name="settings_summary_wiki">Besuche das Olivia Wiki</string>
     <string name="licences_caps">LIZENZEN</string>
     <string name="url_third_party">https://raw.githubusercontent.com/leonlatsch/olivia/master/THIRD_PARTY</string>
+    <string name="settings_title_server">Server</string>
+    <string name="settings_connected_to">Verbunden mit</string>
+    <string name="settings_source_code">Quellcode</string>
+    <string name="settings_source_code_summary">Durchsuche den Olviia Quellcode</string>
+    <string name="url_github">https://github.com/leonlatsch/olivia</string>
 </resources>
