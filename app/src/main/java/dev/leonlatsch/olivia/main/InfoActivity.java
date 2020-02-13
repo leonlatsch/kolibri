@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import dev.leonlatsch.olivia.BuildConfig;
 import dev.leonlatsch.olivia.R;
 
 public class InfoActivity extends AppCompatActivity {
@@ -21,12 +22,7 @@ public class InfoActivity extends AppCompatActivity {
         TextView version = findViewById(R.id.info_version);
         TextView licences = findViewById(R.id.licences_link);
 
-        try {
-            PackageInfo packageInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            version.setText(String.format("%s%s", getString(R.string.version_prefix), packageInfo.versionName));
-        } catch (PackageManager.NameNotFoundException e) {
-            finish();
-        }
+        version.setText(String.format("%s%s", getString(R.string.version_prefix), BuildConfig.VERSION_NAME));
 
         licences.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
