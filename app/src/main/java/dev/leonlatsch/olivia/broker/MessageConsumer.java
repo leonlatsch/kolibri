@@ -11,6 +11,9 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.ShutdownListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
@@ -32,11 +35,6 @@ import dev.leonlatsch.olivia.security.CryptoManager;
 import dev.leonlatsch.olivia.settings.Config;
 import retrofit2.Response;
 
-import static dev.leonlatsch.olivia.constants.MessageType.AUDIO;
-import static dev.leonlatsch.olivia.constants.MessageType.IMAGE;
-import static dev.leonlatsch.olivia.constants.MessageType.TEXT;
-import static dev.leonlatsch.olivia.constants.MessageType.VIDEO;
-
 /**
  * This class controls the receiving of messages.
  * It also controls the technical aspects of rabbtimq
@@ -45,6 +43,8 @@ import static dev.leonlatsch.olivia.constants.MessageType.VIDEO;
  * @since 1.0.0
  */
 public class MessageConsumer {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageConsumer.class);
 
     private static final String USER_PREFIX = "user.";
     private static final String USER_QUEUE_PREFIX = "queue.user.";
@@ -167,6 +167,7 @@ public class MessageConsumer {
                         //TODO Process Video
                         break;
                     default:
+                        log.warn("Received message with type: " + messageDTO.getType());
                         break;
                 }
             }

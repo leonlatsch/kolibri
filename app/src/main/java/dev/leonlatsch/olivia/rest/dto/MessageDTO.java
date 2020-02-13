@@ -1,5 +1,7 @@
 package dev.leonlatsch.olivia.rest.dto;
 
+import dev.leonlatsch.olivia.database.model.MessageType;
+
 /**
  * @author Leon Latsch
  * @since 1.0.0
@@ -9,7 +11,7 @@ public class MessageDTO {
     private String mid;
     private String from;
     private String to;
-    private String type;
+    private MessageType type;
     private String timestamp;
     private String content;
     private String cid;
@@ -17,7 +19,7 @@ public class MessageDTO {
     public MessageDTO() {
     }
 
-    public MessageDTO(String mid, String from, String to, String type, String timestamp, String content, String cid) {
+    public MessageDTO(String mid, String from, String to, MessageType type, String timestamp, String content, String cid) {
         this.mid = mid;
         this.from = from;
         this.to = to;
@@ -51,11 +53,11 @@ public class MessageDTO {
         this.to = to;
     }
 
-    public String getType() {
+    public MessageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(MessageType type) {
         this.type = type;
     }
 

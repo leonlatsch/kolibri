@@ -24,7 +24,7 @@ public class Message extends Model {
     private String to;
 
     @Column(name = "type")
-    private String type;
+    private MessageType type;
 
     @Column(name = "timestamp")
     private String timestamp;
@@ -38,7 +38,7 @@ public class Message extends Model {
     public Message() {
     }
 
-    public Message(String mid, String cid, String from, String to, String type, String timestamp, String content) {
+    public Message(String mid, String cid, String from, String to, MessageType type, String timestamp, String content) {
         this.mid = mid;
         this.cid = cid;
         this.from = from;
@@ -81,11 +81,11 @@ public class Message extends Model {
         this.to = to;
     }
 
-    public String getType() {
+    public MessageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(MessageType type) {
         this.type = type;
     }
 

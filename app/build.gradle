@@ -46,8 +46,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // API Client Framework RETROFIT
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.6.2'
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0' // Plain text converter
 
     // Active Android Database ORM
