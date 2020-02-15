@@ -9,7 +9,6 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import com.rabbitmq.client.ShutdownListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,28 +55,12 @@ public class MessageConsumer {
     private ConnectionFactory connectionFactory;
     private DeliverCallback callback;
     private Connection connection;
-    private Context context;
     private UserInterface userInterface;
     private ContactInterface contactInterface;
     private ChatInterface chatInterface;
     private KeyPairInterface keyPairInterface;
     private UserService userService;
     private DatabaseMapper databaseMapper;
-
-    /**
-     * Reconnect on shutdown
-     */
-    private ShutdownListener shutdownListener = cause -> {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                log.warn("" + e);
-            }
-            initialize(context);
-            run();
-        }).start();
-    };
 
     private MessageConsumer(Context context) {
         initialize(context);
@@ -141,7 +124,6 @@ public class MessageConsumer {
      * @param context
      */
     private void initialize(Context context) {
-        this.context = context;
         userInterface = UserInterface.getInstance();
         contactInterface = ContactInterface.getInstance();
         chatInterface = ChatInterface.getInstance();
@@ -156,6 +138,9 @@ public class MessageConsumer {
         connectionFactory.setPort(preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0));
         connectionFactory.setUsername(userInterface.getUser().getUid());
         connectionFactory.setPassword(userInterface.getAccessToken());
+        connectionFactory.setAutomaticRecoveryEnabled(true);
+        connectionFactory.setNetworkRecoveryInterval(1000);
+        connectionFactory.setConnectionTimeout(5000);
 
         callback = ((consumerTag, message) -> {
             MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
@@ -188,13 +173,17 @@ public class MessageConsumer {
         new Thread(() -> {
             try {
                 connection = connectionFactory.newConnection();
-                connection.addShutdownListener(shutdownListener);
                 Channel channel = connection.createChannel();
                 channel.basicConsume(USER_QUEUE_PREFIX + userInterface.getUser().getUid(), true, callback, consumerTag -> {
                 });
                 isRunning = true;
             } catch (IOException | TimeoutException e) {
-                isRunning = false;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    log.warn("" + ex);
+                }
+                run();
             }
         }, THREAD_NAME).start();
     }
