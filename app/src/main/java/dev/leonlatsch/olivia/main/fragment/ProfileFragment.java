@@ -336,6 +336,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                     }
                 } else {
                     parent.showDialog(getString(R.string.error), getString(R.string.error_common));
+                    dataChanged();
                 }
                 isLoading(false);
             }
@@ -343,6 +344,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
             @Override
             public void onFailure(Call<Container<String>> call, Throwable t) {
                 parent.showDialog(getString(R.string.error), getString(R.string.error_no_internet));
+                dataChanged();
                 isLoading(false);
             }
         });

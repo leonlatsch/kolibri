@@ -63,12 +63,20 @@ public class MessageConsumer {
     private KeyPairInterface keyPairInterface;
     private UserService userService;
     private DatabaseMapper databaseMapper;
+
     /**
      * Reconnect on shutdown
      */
     private ShutdownListener shutdownListener = cause -> {
-        initialize(context);
-        run();
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                log.warn("" + e);
+            }
+            initialize(context);
+            run();
+        }).start();
     };
 
     private MessageConsumer(Context context) {
