@@ -68,6 +68,6 @@
     <string name="settings_title_server">Server</string>
     <string name="settings_connected_to">Verbunden mit</string>
     <string name="settings_source_code">Quellcode</string>
-    <string name="settings_source_code_summary">Durchsuche den Olviia Quellcode</string>
+    <string name="settings_source_code_summary">Durchsuche den Olivia Quellcode</string>
     <string name="url_github">https://github.com/leonlatsch/olivia</string>
 </resources>
