@@ -48,7 +48,7 @@
                 style="@style/LightEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginStart="25dp"
                 android:text="Username"
                 android:textSize="18sp" />
 
@@ -72,7 +72,8 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/chatbox_bg"
             android:clipToPadding="true"
-            android:minHeight="48dp"
+            android:minHeight="50dp"
+            android:maxHeight="100dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -81,14 +82,15 @@
             <EditText
                 android:id="@+id/chat_edit_text"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="@string/enter_message"
-                android:inputType="textCapSentences"
+                android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="255"
                 android:maxLines="6" />
 
