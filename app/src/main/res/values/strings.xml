@@ -17,7 +17,7 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="register_now">Register Now</string>
-    <string name="login_fail">E-Mail or Password is wrong</string>
+    <string name="login_fail">Username or Password is wrong</string>
 
     <!-- User Search -->
     <string name="user_search_hint">Search…</string>

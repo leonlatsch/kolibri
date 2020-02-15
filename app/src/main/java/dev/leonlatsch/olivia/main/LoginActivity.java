@@ -44,7 +44,7 @@ import retrofit2.Response;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText emailEditText;
+    private EditText usernameEditText;
     private EditText passwordEditText;
     private Button registerBtn;
     private Button loginBtn;
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         userInterface = UserInterface.getInstance();
         keyPairInterface = KeyPairInterface.getInstance();
 
-        emailEditText = findViewById(R.id.loginEmailEditText);
+        usernameEditText = findViewById(R.id.loginUsernameEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
         registerBtn = findViewById(R.id.loginRegisterNowBtn);
         loginBtn = findViewById(R.id.loginBtn);
@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         displayError(Values.EMPTY);
         final UserDTO userAuthDTO = new UserDTO();
-        userAuthDTO.setEmail(emailEditText.getText().toString());
+        userAuthDTO.setUsername(usernameEditText.getText().toString());
         userAuthDTO.setPassword(Hash.createHexHash(passwordEditText.getText().toString()));
 
         Call<Container<String>> call = authService.login(userAuthDTO);
@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isInputValid() {
         boolean isValid = true;
 
-        if (!isEmailValid(emailEditText.getText().toString())) {
+        if (!isEmailValid(usernameEditText.getText().toString())) {
             isValid = false;
         }
 
@@ -232,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void cacheToIntent(Intent intent) {
-        String email = emailEditText.getText().toString();
+        String email = usernameEditText.getText().toString();
 
         if (!email.isEmpty()) {
             intent.putExtra(Values.INTENT_KEY_EMAIL, email);
@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f);
         }
-        emailEditText.setEnabled(!loading);
+        usernameEditText.setEnabled(!loading);
         passwordEditText.setEnabled(!loading);
         loginBtn.setEnabled(!loading);
         registerBtn.setEnabled(!loading);

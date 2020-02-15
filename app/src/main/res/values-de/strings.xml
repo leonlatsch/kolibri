@@ -17,7 +17,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="help">Hilfe</string>
     <string name="login">Einloggen</string>
-    <string name="login_fail">E-Mail oder Password ist falsch</string>
+    <string name="login_fail">Nutzername oder Password ist falsch</string>
     <string name="logout">Ausloggen</string>
     <string name="nav_drawer_close">Open navigation close</string>
     <string name="nav_drawer_open">Open navigation drawer</string>

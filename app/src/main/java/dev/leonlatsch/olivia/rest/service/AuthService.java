@@ -18,7 +18,7 @@ import retrofit2.http.PUT;
 public interface AuthService {
 
     /**
-     * Login to the olivia backend with a {@link UserDTO} containing email and password hash
+     * Login to the olivia backend with a {@link UserDTO} containing username and password hash
      *
      * @param dto
      * @return A {@link Container} with the access token
