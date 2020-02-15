@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -41,6 +42,7 @@ public class UserSearchActivity extends AppCompatActivity {
     private EditText searchBar;
     private ListView listView;
     private UserAdapter userAdapter;
+    private TextView searchHint;
 
     private View progressOverlay;
 
@@ -70,6 +72,7 @@ public class UserSearchActivity extends AppCompatActivity {
         searchBtn = findViewById(R.id.userSearchBtn);
         searchBar = findViewById(R.id.userSearchEditText);
         listView = findViewById(R.id.user_search_list_view);
+        searchHint = findViewById(R.id.user_search_hint);
         progressOverlay = findViewById(R.id.progressOverlay);
 
         userAdapter = new UserAdapter(this, new ArrayList<>());
@@ -79,11 +82,22 @@ public class UserSearchActivity extends AppCompatActivity {
             search();
             return true;
         });
+        setUserListVisibility();
 
         listView.setAdapter(userAdapter);
         listView.setOnItemClickListener(itemClickListener);
 
         searchBar.requestFocus();
+    }
+
+    private void setUserListVisibility() {
+        if (!userAdapter.isEmpty()) {
+            listView.setVisibility(View.VISIBLE);
+            searchHint.setVisibility(View.GONE);
+        } else {
+            listView.setVisibility(View.GONE);
+            searchHint.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -125,10 +139,12 @@ public class UserSearchActivity extends AppCompatActivity {
                 public void onResponse(Call<Container<List<UserDTO>>> call, Response<Container<List<UserDTO>>> response) {
                     if (response.isSuccessful()) {
                         Container<List<UserDTO>> container = response.body();
+                        userAdapter.clear();
                         if (container.getContent() != null && !container.getContent().isEmpty()) {
-                            userAdapter.clear();
                             userAdapter.addAll(container.getContent());
                         }
+                        setUserListVisibility();
+                        searchHint.setText(R.string.user_search_no_results);
                     }
                     isLoading(false);
                 }

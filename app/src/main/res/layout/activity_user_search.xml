@@ -42,6 +42,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/user_search_hint"
+        android:text="@string/user_search_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"/>
+
     <include layout="@layout/progress_overlay" />
 
 </LinearLayout>

@@ -40,7 +40,7 @@
     <string name="settings">Einstellungen</string>
     <string name="unsaved_data">Änderungen nicht gespeichert</string>
     <string name="user_search_chat_hint">Tippen um zu chatten</string>
-    <string name="user_search_hint">Suche nach Nutzern…</string>
+    <string name="user_search_hint">Suche…</string>
     <string name="username">Nutzername</string>
     <string name="username_hint">Gib einen Nutzernamen ein</string>
     <string name="yes">Ja</string>
@@ -70,4 +70,6 @@
     <string name="settings_source_code">Quellcode</string>
     <string name="settings_source_code_summary">Durchsuche den Olivia Quellcode</string>
     <string name="url_github">https://github.com/leonlatsch/olivia</string>
+    <string name="user_search_placeholder">Suche nach Nutzern</string>
+    <string name="user_search_no_results">Kein Suchergebnisse</string>
 </resources>
