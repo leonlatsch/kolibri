@@ -44,7 +44,7 @@
         android:backgroundTint="@color/colorAccent"
         android:ems="10"
         android:hint="@string/username"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
