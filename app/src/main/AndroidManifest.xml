@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.leonlatsch.olivia">
+    package="dev.leonlatsch.kolibri">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,29 +14,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.InfoActivity"></activity>
-        <activity android:name=".main.chat.ChatActivity">
+        <activity android:name="dev.leonlatsch.kolibri.main.InfoActivity"></activity>
+        <activity android:name="dev.leonlatsch.kolibri.main.chat.ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="dev.leonlatsch.olivia.main.MainActivity" />
+                android:value="dev.leonlatsch.kolibri.main.MainActivity" />
         </activity>
         <activity
-            android:name=".main.UserSearchActivity"
+            android:name="dev.leonlatsch.kolibri.main.UserSearchActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="dev.leonlatsch.olivia.main.MainActivity" />
+                android:value="dev.leonlatsch.kolibri.main.MainActivity" />
         </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".main.ProfilePicActivity">
+        <activity android:name="dev.leonlatsch.kolibri.main.ProfilePicActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="dev.leonlatsch.olivia.main.MainActivity" />
+                android:value="dev.leonlatsch.kolibri.main.MainActivity" />
         </activity>
         <activity
-            android:name=".boot.BootActivity"
+            android:name="dev.leonlatsch.kolibri.boot.BootActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,21 +45,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.login.LoginActivity"
+            android:name="dev.leonlatsch.kolibri.main.login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.login.RegisterActivity"
+            android:name="dev.leonlatsch.kolibri.main.login.RegisterActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.MainActivity"
+            android:name="dev.leonlatsch.kolibri.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -69,16 +69,16 @@
 
         <provider
             android:name="com.activeandroid.content.ContentProvider"
-            android:authorities="dev.leonlatsch.olivia"
+            android:authorities="dev.leonlatsch.kolibri"
             android:enabled="true"
             android:exported="false" />
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="olivia.db" />
+            android:value="kolibri.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="2" />
+            android:value="1" />
     </application>
 
 </manifest>
