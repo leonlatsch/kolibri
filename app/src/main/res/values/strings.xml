@@ -77,7 +77,7 @@
     <string name="settings_title_wiki">Wiki</string>
     <string name="settings_summary_wiki">Go to the Kolibri Wiki</string>
     <string name="licences_caps">LICENCES</string>
-    <string name="url_third_party">https://raw.githubusercontent.com/leonlatsch/olivia/master/THIRD_PARTY</string>
+    <string name="url_third_party">https://raw.githubusercontent.com/leonlatsch/kolibri/master/THIRD_PARTY</string>
     <string name="settings_title_server">Server</string>
     <string name="settings_connected_to">Connected to</string>
     <string name="settings_source_code">Source Code</string>
