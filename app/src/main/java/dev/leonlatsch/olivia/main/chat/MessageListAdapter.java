@@ -1,4 +1,4 @@
-package dev.leonlatsch.olivia.chat;
+package dev.leonlatsch.olivia.main.chat;
 
 import android.content.Context;
 import android.view.LayoutInflater;

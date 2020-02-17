@@ -14,7 +14,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="dev.leonlatsch.olivia.chat.ChatActivity">
+        tools:context=".main.chat.ChatActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/chat_toolbar"

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-import dev.leonlatsch.olivia.chat.ChatActivity;
 import dev.leonlatsch.olivia.database.DatabaseMapper;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -25,6 +24,7 @@ import dev.leonlatsch.olivia.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.database.model.Message;
+import dev.leonlatsch.olivia.main.chat.ChatActivity;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.dto.MessageDTO;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;

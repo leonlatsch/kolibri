@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.leonlatsch.olivia.R;
-import dev.leonlatsch.olivia.chat.ChatActivity;
 import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.database.interfaces.UserInterface;
 import dev.leonlatsch.olivia.main.adapter.UserAdapter;
+import dev.leonlatsch.olivia.main.chat.ChatActivity;
 import dev.leonlatsch.olivia.rest.dto.Container;
 import dev.leonlatsch.olivia.rest.dto.UserDTO;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;

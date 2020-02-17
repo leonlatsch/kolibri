@@ -27,7 +27,6 @@ import java.util.List;
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.broker.ChatListChangeListener;
 import dev.leonlatsch.olivia.broker.MessageConsumer;
-import dev.leonlatsch.olivia.chat.ChatActivity;
 import dev.leonlatsch.olivia.constants.Values;
 import dev.leonlatsch.olivia.database.interfaces.ChatInterface;
 import dev.leonlatsch.olivia.database.interfaces.ContactInterface;
@@ -35,6 +34,7 @@ import dev.leonlatsch.olivia.database.model.Chat;
 import dev.leonlatsch.olivia.main.MainActivity;
 import dev.leonlatsch.olivia.main.UserSearchActivity;
 import dev.leonlatsch.olivia.main.adapter.ChatListAdapter;
+import dev.leonlatsch.olivia.main.chat.ChatActivity;
 
 /**
  * Fragment to show a list of chats

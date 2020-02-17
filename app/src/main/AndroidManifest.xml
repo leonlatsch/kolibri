@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".main.InfoActivity"></activity>
-        <activity android:name=".chat.ChatActivity">
+        <activity android:name=".main.chat.ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dev.leonlatsch.olivia.main.MainActivity" />
@@ -45,14 +45,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.LoginActivity"
+            android:name=".main.login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.RegisterActivity"
+            android:name=".main.login.RegisterActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

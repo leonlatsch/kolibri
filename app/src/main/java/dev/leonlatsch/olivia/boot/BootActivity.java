@@ -13,8 +13,8 @@ import dev.leonlatsch.olivia.boot.jobs.CheckUserAsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.UpdateContactsAsyncJob;
 import dev.leonlatsch.olivia.boot.jobs.ValidateBackendJob;
 import dev.leonlatsch.olivia.boot.jobs.base.JobResult;
-import dev.leonlatsch.olivia.main.LoginActivity;
 import dev.leonlatsch.olivia.main.MainActivity;
+import dev.leonlatsch.olivia.main.login.LoginActivity;
 import dev.leonlatsch.olivia.rest.service.RestServiceFactory;
 
 /**

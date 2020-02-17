@@ -29,6 +29,7 @@ import dev.leonlatsch.olivia.database.model.User;
 import dev.leonlatsch.olivia.main.fragment.ChatFragment;
 import dev.leonlatsch.olivia.main.fragment.ProfileFragment;
 import dev.leonlatsch.olivia.main.fragment.SettingsFragment;
+import dev.leonlatsch.olivia.main.login.LoginActivity;
 import dev.leonlatsch.olivia.util.ImageUtil;
 
 /**

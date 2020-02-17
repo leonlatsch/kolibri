@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
 
-import dev.leonlatsch.olivia.BuildConfig;
 import dev.leonlatsch.olivia.R;
 import dev.leonlatsch.olivia.settings.Config;
 
