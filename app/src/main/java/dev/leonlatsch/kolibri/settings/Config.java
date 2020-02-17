@@ -15,7 +15,7 @@ public class Config {
     public static final String KEY_BACKEND_BROKER_PORT = "kolibri.backend.broker.port"; // The port for the broker connection
     public static final String KEY_BACKEND_BROKER_HOST = "kolibri.backend.broker.host"; // The host for the broker connection
     public static final String KEY_APP_SEND_WITH_ENTER = "kolibri.app.send_with_enter"; // Send a message with enter
-    private static final String FILE_NAME = "dev.leonlatsch.olivia_preferences"; // Filename will be kolibri-preferences.xml
+    private static final String FILE_NAME = "dev.leonlatsch.kolibri_preferences"; // Filename will be kolibri-preferences.xml
     private static final int MODE = Context.MODE_PRIVATE; // Always open in private mode
 
     private Config() {

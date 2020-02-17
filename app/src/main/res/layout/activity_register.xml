@@ -35,11 +35,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oliviaLettering"
+        app:layout_constraintTop_toBottomOf="@+id/kolibriLettering"
         app:layout_constraintVertical_bias="0.216" />
 
-    <ImageView
-        android:id="@+id/oliviaLettering"
+    <TextView
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="100sp"
+        android:fontFamily="@font/ice_valley"
+        android:id="@+id/kolibriLettering"
         android:layout_width="245dp"
         android:layout_height="107dp"
         android:layout_marginStart="8dp"
@@ -49,8 +53,7 @@
         app:layout_constraintBottom_toTopOf="@+id/loginUsernameEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/olivia_lettering_basic" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/registerNowBtn"
@@ -87,7 +90,7 @@
         app:layout_constraintBottom_toTopOf="@+id/registerEmailEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/oliviaLettering"
+        app:layout_constraintTop_toBottomOf="@+id/kolibriLettering"
         app:layout_constraintVertical_bias="0.975" />
 
     <EditText

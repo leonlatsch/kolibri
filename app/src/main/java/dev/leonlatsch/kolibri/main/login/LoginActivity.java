@@ -233,10 +233,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void cacheToIntent(Intent intent) {
-        String email = usernameEditText.getText().toString();
+        String username = usernameEditText.getText().toString();
 
-        if (!email.isEmpty()) {
-            intent.putExtra(Values.INTENT_KEY_EMAIL, email);
+        if (!username.isEmpty()) {
+            intent.putExtra(Values.INTENT_KEY_USERNAME, username);
         }
     }
 

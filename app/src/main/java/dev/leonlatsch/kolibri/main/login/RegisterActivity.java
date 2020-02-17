@@ -124,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(passwordTextWatcher);
         passwordConfirmEditText.addTextChangedListener(passwordTextWatcher);
 
-        loadCachedData();
+        loadPassedData();
         usernameEditText.requestFocus();
     }
 
@@ -311,12 +311,12 @@ public class RegisterActivity extends AppCompatActivity {
     /**
      * Load the parsed email address from the {@link LoginActivity}
      */
-    private void loadCachedData() {
+    private void loadPassedData() {
         if (getIntent().getExtras() != null) {
-            String cachedEmail = (String) getIntent().getExtras().get(Values.INTENT_KEY_EMAIL);
+            String passedUsername = (String) getIntent().getExtras().get(Values.INTENT_KEY_USERNAME);
 
-            if (cachedEmail != null) {
-                emailEditText.setText(cachedEmail);
+            if (passedUsername != null) {
+                usernameEditText.setText(passedUsername);
             }
         }
     }

@@ -18,8 +18,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/oliviaLettering"
+    <TextView
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="100sp"
+        android:fontFamily="@font/ice_valley"
+        android:gravity="center"
+        android:id="@+id/kolibriLettering"
         android:layout_width="276dp"
         android:layout_height="119dp"
         android:layout_marginStart="8dp"
@@ -31,8 +36,7 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.479"
-        app:srcCompat="@drawable/olivia_lettering_basic" />
+        app:layout_constraintVertical_bias="0.479" />
 
     <include layout="@layout/progress_overlay" />
 

@@ -81,7 +81,7 @@
     <string name="settings_title_server">Server</string>
     <string name="settings_connected_to">Connected to</string>
     <string name="settings_source_code">Source Code</string>
-    <string name="settings_source_code_summary">Search the Olivia source code</string>
+    <string name="settings_source_code_summary">Search the Kolibri source code</string>
     <string name="url_github">https://github.com/leonlatsch/kolibri</string>
     <string name="user_search_placeholder">Search for users</string>
     <string name="user_search_no_results">No Search Results</string>

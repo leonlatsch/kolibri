@@ -12,7 +12,7 @@ public class Values {
     public static final String EMPTY = "";
 
     // Keys
-    public static final String INTENT_KEY_EMAIL = "intent_email";
+    public static final String INTENT_KEY_USERNAME = "intent_username";
     public static final String INTENT_KEY_PROFILE_PIC_UID = "intent_profile_pic_uid";
     public static final String INTENT_KEY_PROFILE_PIC_USERNAME = "intent_profile_pic_username";
 

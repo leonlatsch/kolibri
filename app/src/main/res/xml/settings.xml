@@ -2,7 +2,7 @@
 
     <PreferenceCategory android:title="@string/settings_title_server">
         <Preference
-            android:key="olivia.backend.http.baseurl"
+            android:key="kolibri.backend.http.baseurl"
             android:title="@string/settings_connected_to"
             android:icon="@drawable/ic_cloud"/>
     </PreferenceCategory>
@@ -10,7 +10,7 @@
     <PreferenceCategory android:title="@string/chat">
 
         <SwitchPreferenceCompat
-            android:key="olivia.app.send_with_enter"
+            android:key="kolibri.app.send_with_enter"
             android:summary="@string/settings_summary_send_with_enter"
             android:title="@string/settings_title_send_with_enter"
             android:icon="@drawable/ic_keyboard_return"/>
