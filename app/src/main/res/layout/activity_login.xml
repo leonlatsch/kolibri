@@ -72,9 +72,9 @@
 
     <TextView
         android:text="@string/app_name"
-        android:textSize="100sp"
+        android:textSize="80sp"
         android:gravity="center"
-        android:fontFamily="@font/ice_valley"
+        android:fontFamily="@font/quicksand"
         android:textColor="@android:color/white"
         android:id="@+id/kolibriLettering"
         android:layout_width="245dp"
