@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Olivia</string>
+    <string name="app_name">Kolibri</string>
     <string name="account_saved">Account gespeichert</string>
     <string name="action_settings">Einstellungen</string>
     <string name="apply">Anwenden</string>
@@ -60,16 +60,16 @@
     <string name="chat">Chat</string>
     <string name="settings_title_send_with_enter">Mit Enter senden</string>
     <string name="settings_summary_send_with_enter">Nachrichten mit enter versenden</string>
-    <string name="url_wiki">https://olivia.leonlatsch.dev</string>
+    <string name="url_wiki">https://kolibri.leonlatsch.dev</string>
     <string name="settings_title_wiki">Wiki</string>
-    <string name="settings_summary_wiki">Besuche das Olivia Wiki</string>
+    <string name="settings_summary_wiki">Besuche das Kolibri Wiki</string>
     <string name="licences_caps">LIZENZEN</string>
-    <string name="url_third_party">https://raw.githubusercontent.com/leonlatsch/olivia/master/THIRD_PARTY</string>
+    <string name="url_third_party">https://raw.githubusercontent.com/leonlatsch/kolibri/master/THIRD_PARTY</string>
     <string name="settings_title_server">Server</string>
     <string name="settings_connected_to">Verbunden mit</string>
     <string name="settings_source_code">Quellcode</string>
-    <string name="settings_source_code_summary">Durchsuche den Olivia Quellcode</string>
-    <string name="url_github">https://github.com/leonlatsch/olivia</string>
+    <string name="settings_source_code_summary">Durchsuche den Kolibri Quellcode</string>
+    <string name="url_github">https://github.com/leonlatsch/kolibri</string>
     <string name="user_search_placeholder">Suche nach Nutzern</string>
     <string name="user_search_no_results">Kein Suchergebnisse</string>
 </resources>

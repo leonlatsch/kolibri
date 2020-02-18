@@ -70,8 +70,13 @@
         app:layout_constraintTop_toBottomOf="@+id/loginUsernameEditText"
         app:layout_constraintVertical_bias="0.003" />
 
-    <ImageView
-        android:id="@+id/oliviaLettering"
+    <TextView
+        android:text="@string/app_name"
+        android:textSize="100sp"
+        android:gravity="center"
+        android:fontFamily="@font/ice_valley"
+        android:textColor="@android:color/white"
+        android:id="@+id/kolibriLettering"
         android:layout_width="245dp"
         android:layout_height="107dp"
         android:layout_marginStart="8dp"
@@ -81,8 +86,7 @@
         app:layout_constraintBottom_toTopOf="@+id/loginUsernameEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/olivia_lettering_basic" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/loginBtn"
