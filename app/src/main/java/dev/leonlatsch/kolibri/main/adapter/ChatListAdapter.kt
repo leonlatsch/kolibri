@@ -9,19 +9,18 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.NonNull
+import androidx.cardview.widget.CardView
 
 import java.text.ParseException
 import java.util.ArrayList
 import java.util.Collections
-import java.util.Comparator
-import java.util.Date
 
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.constants.Formats
 import dev.leonlatsch.kolibri.constants.Values
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
 import dev.leonlatsch.kolibri.database.model.Chat
-import dev.leonlatsch.kolibri.database.model.Contact
 import dev.leonlatsch.kolibri.util.ImageUtil
 
 /**
@@ -30,13 +29,24 @@ import dev.leonlatsch.kolibri.util.ImageUtil
  * @author Leon Latsch
  * @since 1.0.0
  */
-class ChatListAdapter(@param:NonNull private val mContext: Context, private val dataset: List<Chat>) : ArrayAdapter<Chat>(mContext, 0, dataset) {
-    private val contactInterface: ContactInterface
+class ChatListAdapter(@NonNull private val mContext: Context, private val dataset: MutableList<Chat>) : ArrayAdapter<Chat>(mContext, 0, dataset) {
     private var selectedItems: SparseBooleanArray? = null
+
+    /**
+     * Comparator to sort the chats after teh last received message
+     */
+    private val chatComparator = Comparator<Chat> { chat1: Chat, chat2: Chat ->
+        try {
+            val obj1Date = Formats.DATE_FORMAT.parse(chat1.lastTimestamp!!)
+            val obj2Date = Formats.DATE_FORMAT.parse(chat2.lastTimestamp!!)
+            obj2Date!!.compareTo(obj1Date)
+        } catch (e: ParseException) {
+            0
+        }
+    }
 
     init {
         Collections.sort(dataset, chatComparator)
-        this.contactInterface = ContactInterface.getInstance()
         selectedItems = SparseBooleanArray()
     }
 
@@ -48,7 +58,7 @@ class ChatListAdapter(@param:NonNull private val mContext: Context, private val 
      */
     fun isChatPresent(chat: Chat): Boolean {
         for (data in dataset) {
-            if (data.getCid().equals(chat.getCid()) || data.getUid().equals(chat.getUid())) {
+            if (data.cid.equals(chat.cid) || data.uid.equals(chat.uid)) {
                 return true
             }
         }
@@ -56,9 +66,9 @@ class ChatListAdapter(@param:NonNull private val mContext: Context, private val 
     }
 
     fun chatChanged(chat: Chat) {
-        for (i in 0 until dataset.size()) {
-            if (dataset[i].getCid().equals(chat.getCid())) {
-                dataset.set(i, chat)
+        for (i in 0 until dataset.size) {
+            if (dataset[i].cid.equals(chat.cid)) {
+                dataset[i] = chat
             }
         }
         Collections.sort(dataset, chatComparator)
@@ -76,66 +86,65 @@ class ChatListAdapter(@param:NonNull private val mContext: Context, private val 
         Collections.sort(dataset, chatComparator)
     }
 
-    @Override
-    fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var view = convertView
         val chat = getItem(position)
         val viewHolder: ViewHolder
 
-        if (convertView == null) {
+        if (view == null) {
             viewHolder = ViewHolder()
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_chat, parent, false)
-            viewHolder.imageView = convertView!!.findViewById(R.id.item_chat_list_card_view).findViewById(R.id.item_chat_list_image_view)
-            viewHolder.usernameTextView = convertView!!.findViewById(R.id.item_chat_list_username)
-            viewHolder.lastMessageTextView = convertView!!.findViewById(R.id.item_chat_list_last_message)
-            viewHolder.lastDateTextView = convertView!!.findViewById(R.id.item_chat_list_last_date)
-            viewHolder.unreadMessagesTextView = convertView!!.findViewById(R.id.item_chat_list_unread_messages)
-            convertView!!.setTag(viewHolder)
+            view = LayoutInflater.from(context).inflate(R.layout.item_chat, parent, false)
+            viewHolder.imageView = view!!.findViewById<CardView>(R.id.item_chat_list_card_view).findViewById(R.id.item_chat_list_image_view)
+            viewHolder.usernameTextView = view.findViewById(R.id.item_chat_list_username)
+            viewHolder.lastMessageTextView = view.findViewById(R.id.item_chat_list_last_message)
+            viewHolder.lastDateTextView = view.findViewById(R.id.item_chat_list_last_date)
+            viewHolder.unreadMessagesTextView = view.findViewById(R.id.item_chat_list_unread_messages)
+            view.tag = viewHolder
         } else {
-            viewHolder = convertView!!.getTag()
+            viewHolder = view.tag as ViewHolder
         }
 
-        val contact = contactInterface.getContact(chat.getUid())
+        val contact = ContactInterface.getContact(chat?.uid!!)
 
-        if (contact.getProfilePicTn() != null) {
-            viewHolder.imageView!!.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()))
+        if (contact.profilePicTn != null) {
+            viewHolder.imageView!!.setImageBitmap(ImageUtil.createBitmap(contact.profilePicTn))
         } else {
             viewHolder.imageView!!.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext))
         }
 
-        viewHolder.usernameTextView!!.setText(contact.getUsername())
-        viewHolder.lastMessageTextView!!.setText(chat.getLastMessage())
-        viewHolder.lastDateTextView!!.setText(chat.getLastTimestamp().substring(11, 16))
+        viewHolder.usernameTextView!!.text = contact.username
+        viewHolder.lastMessageTextView!!.text = chat.lastMessage
+        viewHolder.lastDateTextView!!.text = chat.lastTimestamp?.substring(11, 16)
 
-        if (chat.getUnreadMessages() > 0) {
-            viewHolder.unreadMessagesTextView!!.setVisibility(View.VISIBLE)
-            viewHolder.unreadMessagesTextView!!.setText(String.valueOf(chat.getUnreadMessages()))
+        if (chat.unreadMessages > 0) {
+            viewHolder.unreadMessagesTextView!!.visibility = View.VISIBLE
+            viewHolder.unreadMessagesTextView!!.text = chat.unreadMessages.toString()
         } else {
-            viewHolder.unreadMessagesTextView!!.setText(Values.EMPTY)
-            viewHolder.unreadMessagesTextView!!.setVisibility(View.GONE)
+            viewHolder.unreadMessagesTextView!!.text = Values.EMPTY
+            viewHolder.unreadMessagesTextView!!.visibility = View.GONE
         }
 
         if (selectedItems!!.get(position)) {
-            convertView!!.setBackgroundColor(Color.LTGRAY)
+            view.setBackgroundColor(Color.LTGRAY)
         } else {
-            convertView!!.setBackgroundColor(Color.WHITE)
+            view.setBackgroundColor(Color.WHITE)
         }
 
-        return convertView
+        return view
     }
 
     fun deleteSelectedItems() {
-        for (i in 0 until dataset.size()) {
+        for (i in 0 until dataset.size) {
             if (selectedItems!!.get(i)) {
-                dataset.remove(i)
+                dataset.removeAt(i)
             }
         }
         notifyDataSetChanged()
     }
 
-    fun getSelectedItems(): List<Integer> {
-        val items = ArrayList()
-        for (i in 0 until dataset.size()) {
+    fun getSelectedItems(): List<Int> {
+        val items = mutableListOf<Int>()
+        for (i in 0 until dataset.size) {
             if (selectedItems!!.get(i)) {
                 items.add(i)
             }
@@ -167,21 +176,5 @@ class ChatListAdapter(@param:NonNull private val mContext: Context, private val 
         internal var lastMessageTextView: TextView? = null
         internal var lastDateTextView: TextView? = null
         internal var unreadMessagesTextView: TextView? = null
-    }
-
-    companion object {
-
-        /**
-         * Comparator to sort the chats after teh last received message
-         */
-        private val chatComparator = { obj1, obj2 ->
-            try {
-                val obj1Date = Formats.DATE_FORMAT.parse(obj1.getLastTimestamp())
-                val obj2Date = Formats.DATE_FORMAT.parse(obj2.getLastTimestamp())
-                return obj2Date.compareTo(obj1Date)
-            } catch (e: ParseException) {
-                return 0
-            }
-        }
     }
 }

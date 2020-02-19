@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.rest.dto.UserDTO
@@ -18,32 +19,31 @@ import dev.leonlatsch.kolibri.util.ImageUtil
  * @author Leon Latsch
  * @since 1.0.0
  */
-class UserAdapter(private val mContext: Context, private val dataset: List<UserDTO>) : ArrayAdapter<UserDTO>(mContext, 0, dataset) {
+class UserAdapter(private val mContext: Context, private val dataset: MutableList<UserDTO>) : ArrayAdapter<UserDTO>(mContext, 0, dataset) {
 
-    @Override
-    fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var view = convertView
         val user = getItem(position)
         val viewHolder: ViewHolder
 
-        if (convertView == null) {
+        if (view == null) {
             viewHolder = ViewHolder()
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_user, parent, false)
-            viewHolder.imageView = convertView!!.findViewById(R.id.item_user_search_card_view).findViewById(R.id.item_user_search_image_view)
-            viewHolder.textView = convertView!!.findViewById(R.id.item_user_search_username)
-            convertView!!.setTag(viewHolder)
+            view = LayoutInflater.from(getContext()).inflate(R.layout.item_user, parent, false)
+            viewHolder.imageView = view!!.findViewById<CardView>(R.id.item_user_search_card_view).findViewById(R.id.item_user_search_image_view)
+            viewHolder.textView = view.findViewById(R.id.item_user_search_username)
+            view.tag = viewHolder
         } else {
-            viewHolder = convertView!!.getTag()
+            viewHolder = view.tag as ViewHolder
         }
 
-        if (user.getProfilePicTn() != null) {
-            viewHolder.imageView!!.setImageBitmap(ImageUtil.createBitmap(user.getProfilePicTn()))
+        if (user?.profilePicTn != null) {
+            viewHolder.imageView!!.setImageBitmap(ImageUtil.createBitmap(user.profilePicTn))
         } else {
             viewHolder.imageView!!.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext))
         }
-        viewHolder.textView!!.setText(user.getUsername())
+        viewHolder.textView!!.text = user?.username
 
-        return convertView
+        return view
     }
 
     private class ViewHolder {

@@ -104,7 +104,7 @@ class UserSearchActivity : AppCompatActivity() {
                     intent.putExtra(Values.INTENT_KEY_CHAT_UID, user.uid)
                     intent.putExtra(Values.INTENT_KEY_CHAT_USERNAME, user.username)
                     intent.putExtra(Values.INTENT_KEY_CHAT_PROFILE_PIC, user.profilePicTn)
-                    intent.putExtra(Values.INTENT_KEY_CHAT_PUBLIC_KEY, response.body().content)
+                    intent.putExtra(Values.INTENT_KEY_CHAT_PUBLIC_KEY, response.body()?.content)
                     startActivity(intent)
                     finish()
                 }
@@ -127,8 +127,8 @@ class UserSearchActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val container = response.body()
                         userAdapter!!.clear()
-                        if (container?.content != null && container?.content!!.isNotEmpty()) {
-                            userAdapter!!.addAll(container!!.content)
+                        if (container?.content != null && container.content!!.isNotEmpty()) {
+                            userAdapter!!.addAll(container.content as MutableCollection<out UserDTO>)
                         }
                         setUserListVisibility()
                         searchHint!!.setText(R.string.user_search_no_results)
