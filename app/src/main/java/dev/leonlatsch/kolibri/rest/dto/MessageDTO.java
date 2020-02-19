@@ -14,19 +14,17 @@ public class MessageDTO {
     private MessageType type;
     private String timestamp;
     private String content;
-    private String cid;
 
     public MessageDTO() {
     }
 
-    public MessageDTO(String mid, String from, String to, MessageType type, String timestamp, String content, String cid) {
+    public MessageDTO(String mid, String from, String to, MessageType type, String timestamp, String content) {
         this.mid = mid;
         this.from = from;
         this.to = to;
         this.type = type;
         this.timestamp = timestamp;
         this.content = content;
-        this.cid = cid;
     }
 
     public String getMid() {
@@ -75,13 +73,5 @@ public class MessageDTO {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
     }
 }

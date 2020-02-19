@@ -60,7 +60,6 @@ public class DatabaseMapper {
 
         Message message = new Message();
         message.setMid(dto.getMid());
-        message.setCid(dto.getCid());
         message.setFrom(dto.getFrom());
         message.setTo(dto.getTo());
         message.setType(dto.getType());
@@ -76,7 +75,6 @@ public class DatabaseMapper {
 
         MessageDTO dto = new MessageDTO();
         dto.setMid(message.getMid());
-        dto.setCid(message.getCid());
         dto.setFrom(message.getFrom());
         dto.setTo(message.getTo());
         dto.setType(message.getType());
