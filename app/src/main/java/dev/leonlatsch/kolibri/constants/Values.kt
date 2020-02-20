@@ -8,9 +8,6 @@ package dev.leonlatsch.kolibri.constants
  */
 object Values {
 
-    // Common
-    const val EMPTY = ""
-
     // Keys
     const val INTENT_KEY_USERNAME = "intent_username"
     const val INTENT_KEY_PROFILE_PIC_UID = "intent_profile_pic_uid"

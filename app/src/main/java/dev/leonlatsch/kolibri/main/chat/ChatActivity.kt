@@ -39,6 +39,7 @@ import dev.leonlatsch.kolibri.security.CryptoManager
 import dev.leonlatsch.kolibri.settings.Config
 import dev.leonlatsch.kolibri.util.Generator
 import dev.leonlatsch.kolibri.util.ImageUtil
+import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -152,7 +153,7 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
 
             // Clean up view
             messageListAdapter!!.add(message)
-            messageEditText!!.setText(Values.EMPTY)
+            messageEditText!!.setText(String.empty())
             messageRecycler!!.scrollToPosition(messageListAdapter!!.getLastPosition())
             messageEditText!!.requestFocus()
 

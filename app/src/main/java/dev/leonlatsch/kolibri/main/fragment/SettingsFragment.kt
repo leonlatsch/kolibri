@@ -1,10 +1,14 @@
 package dev.leonlatsch.kolibri.main.fragment
 
+import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.Preference
 
 import androidx.preference.PreferenceFragmentCompat
 
 import dev.leonlatsch.kolibri.R
+import dev.leonlatsch.kolibri.main.MainActivity
 import dev.leonlatsch.kolibri.settings.Config
 
 /**
@@ -15,10 +19,9 @@ import dev.leonlatsch.kolibri.settings.Config
  */
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    @Override
-    fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        findPreference(Config.KEY_BACKEND_HTTP_BASEURL).setSummary(Config.getSharedPreferences(getActivity()).getString(Config.KEY_BACKEND_HTTP_BASEURL, ""))
+        findPreference<Preference>(Config.KEY_BACKEND_HTTP_BASEURL)?.summary = Config.getSharedPreferences(activity as MainActivity).getString(Config.KEY_BACKEND_HTTP_BASEURL, "")
     }
 }

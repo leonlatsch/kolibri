@@ -1,6 +1,7 @@
 package dev.leonlatsch.kolibri.main.fragment
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -15,8 +16,9 @@ import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 import dev.leonlatsch.kolibri.R
@@ -40,70 +42,63 @@ import dev.leonlatsch.kolibri.main.chat.ChatActivity
 class ChatFragment : Fragment(), ChatListChangeListener {
 
     private var parent: MainActivity? = null
-    private var view: View? = null
     private var listView: ListView? = null
     private var hintTextView: TextView? = null
     private var chatListAdapter: ChatListAdapter? = null
     private var chatList: List<Chat>? = null
 
-    private var chatInterface: ChatInterface? = null
-    private var contactInterface: ContactInterface? = null
-    private val itemClickListener = { parent, view, position, id ->
-        val raw = listView!!.getItemAtPosition(position)
-        if (raw is Chat) {
-            val chat = raw as Chat
-            val intent = Intent(this.parent!!.getApplicationContext(), ChatActivity::class.java)
-            intent.putExtra(Values.INTENT_KEY_CHAT_UID, chat.getUid())
+    private val itemClickListener = AdapterView.OnItemClickListener{ _, _, position, _ ->
+        val chat = listView!!.getItemAtPosition(position)
+        if (chat is Chat) {
+            val intent = Intent(this.parent!!.applicationContext, ChatActivity::class.java)
+            intent.putExtra(Values.INTENT_KEY_CHAT_UID, chat.uid)
             startActivity(intent)
-            if (chat.getUnreadMessages() > 0) {
-                chat.setUnreadMessages(0)
-                chatInterface!!.updateChat(chat)
+            if (chat.unreadMessages > 0) {
+                chat.unreadMessages = 0
+                ChatInterface.updateChat(chat)
                 chatListAdapter!!.chatChanged(chat)
             }
         }
     }
 
     @Nullable
-    @Override
-    fun onCreateView(@NonNull inflater: LayoutInflater, @Nullable container: ViewGroup, @Nullable savedInstanceState: Bundle): View {
-        view = inflater.inflate(R.layout.fragment_chats, container, false)
-        parent = getActivity() as MainActivity
+    override fun onCreateView(@NonNull inflater: LayoutInflater, @Nullable container: ViewGroup?, @Nullable savedInstanceState: Bundle?): View {
+        val view = inflater.inflate(R.layout.fragment_chats, container, false)
+        parent = activity as MainActivity
 
-        chatInterface = ChatInterface.getInstance()
-        contactInterface = ContactInterface.getInstance()
         MessageConsumer.setChatListChangeListener(this)
 
         listView = view!!.findViewById(R.id.fragment_chat_list_view)
-        hintTextView = view!!.findViewById(R.id.fragment_chat_hint)
+        hintTextView = view.findViewById(R.id.fragment_chat_hint)
 
-        listView!!.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL)
+        listView!!.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
         listView!!.setMultiChoiceModeListener(MultiSelectHandler())
 
-        chatList = chatInterface!!.getALl()
-        setChatListVisible(!chatList!!.isEmpty())
+        chatList = ChatInterface.all
+        setChatListVisible(chatList!!.isNotEmpty())
 
-        chatListAdapter = ChatListAdapter(parent, chatList)
-        listView!!.setAdapter(chatListAdapter)
-        listView!!.setOnItemClickListener(itemClickListener)
+        chatListAdapter = ChatListAdapter(parent!!, chatList as MutableList<Chat>)
+        listView!!.adapter = chatListAdapter
+        listView!!.onItemClickListener = itemClickListener
 
-        val newChatFab = view!!.findViewById(R.id.newChatFab)
-        newChatFab.setOnClickListener({ v -> newChat() })
+        val newChatFab = view.findViewById<FloatingActionButton>(R.id.newChatFab)
+        newChatFab.setOnClickListener { newChat() }
 
         return view
     }
 
     private fun newChat() {
-        val intent = Intent(parent!!.getApplicationContext(), UserSearchActivity::class.java)
+        val intent = Intent(parent!!.applicationContext, UserSearchActivity::class.java)
         startActivity(intent)
     }
 
     private fun setChatListVisible(visible: Boolean) {
         if (visible) {
-            hintTextView!!.setVisibility(View.GONE)
-            listView!!.setVisibility(View.VISIBLE)
+            hintTextView!!.visibility = View.GONE
+            listView!!.visibility = View.VISIBLE
         } else {
-            hintTextView!!.setVisibility(View.VISIBLE)
-            listView!!.setVisibility(View.GONE)
+            hintTextView!!.visibility = View.VISIBLE
+            listView!!.visibility = View.GONE
         }
     }
 
@@ -113,15 +108,14 @@ class ChatFragment : Fragment(), ChatListChangeListener {
      *
      * @param chat
      */
-    @Override
-    fun chatChanged(chat: Chat) {
+    override fun chatChanged(chat: Chat) {
         if (!chatListAdapter!!.isChatPresent(chat)) {
-            Handler(parent!!.getApplicationContext().getMainLooper()).post({
+            Handler(parent!!.applicationContext.mainLooper).post {
                 chatListAdapter!!.add(chat)
                 setChatListVisible(true)
-            }) // Invoke in main thread
+            } // Invoke in main thread
         } else {
-            Handler(parent!!.getApplicationContext().getMainLooper()).post({ chatListAdapter!!.chatChanged(chat) }) // Invoke on main thread
+            Handler(parent!!.applicationContext.mainLooper).post { chatListAdapter!!.chatChanged(chat) } // Invoke on main thread
         }
     }
 
@@ -133,35 +127,31 @@ class ChatFragment : Fragment(), ChatListChangeListener {
      */
     private inner class MultiSelectHandler : AbsListView.MultiChoiceModeListener {
 
-        @Override
-        fun onItemCheckedStateChanged(actionMode: ActionMode, i: Int, l: Long, b: Boolean) {
+        override fun onItemCheckedStateChanged(actionMode: ActionMode, i: Int, l: Long, b: Boolean) {
             chatListAdapter!!.toggleSelection(i)
         }
 
-        @Override
-        fun onCreateActionMode(actionMode: ActionMode, menu: Menu): Boolean {
-            actionMode.getMenuInflater().inflate(R.menu.menu_chats_action_mode, menu)
+        override fun onCreateActionMode(actionMode: ActionMode, menu: Menu): Boolean {
+            actionMode.menuInflater.inflate(R.menu.menu_chats_action_mode, menu)
             return true
         }
 
-        @Override
-        fun onPrepareActionMode(actionMode: ActionMode, menu: Menu): Boolean {
+        override fun onPrepareActionMode(actionMode: ActionMode, menu: Menu): Boolean {
             return true
         }
 
-        @Override
-        fun onActionItemClicked(actionMode: ActionMode, menuItem: MenuItem): Boolean {
-            if (menuItem.getItemId() === R.id.menu_chats_delete) {
-                val onClickListener = { dialog, which ->
-                    if (which === DialogInterface.BUTTON_POSITIVE) {
+        override fun onActionItemClicked(actionMode: ActionMode, menuItem: MenuItem): Boolean {
+            if (menuItem.itemId == R.id.menu_chats_delete) {
+                val onClickListener = DialogInterface.OnClickListener{ _, which ->
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
                         for (i in chatListAdapter!!.getSelectedItems()) {
-                            contactInterface!!.delete(chatListAdapter!!.getItem(i).getUid())
-                            chatInterface!!.deleteChat(chatListAdapter!!.getItem(i).getCid())
+                            ContactInterface.delete(chatListAdapter!!.getItem(i)?.uid!!)
+                            ChatInterface.deleteChat(chatListAdapter!!.getItem(i)?.uid!!)
                         }
                         chatListAdapter!!.deleteSelectedItems()
 
                         actionMode.finish()
-                        setChatListVisible(!chatList!!.isEmpty())
+                        setChatListVisible(chatList!!.isNotEmpty())
                     }
                 }
 
@@ -174,8 +164,7 @@ class ChatFragment : Fragment(), ChatListChangeListener {
             return false
         }
 
-        @Override
-        fun onDestroyActionMode(actionMode: ActionMode) {
+        override fun onDestroyActionMode(actionMode: ActionMode) {
             chatListAdapter!!.removeSelections()
         }
     }

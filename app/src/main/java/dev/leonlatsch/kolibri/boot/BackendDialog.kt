@@ -23,6 +23,7 @@ import dev.leonlatsch.kolibri.rest.service.CommonService
 import dev.leonlatsch.kolibri.rest.service.ConfigService
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
 import dev.leonlatsch.kolibri.settings.Config
+import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -215,13 +216,13 @@ class BackendDialog(context: Context) : AlertDialog(context) {
             var brokerHost: String? = null
 
             if (url.startsWith(HTTPS)) { // Remove http protocol
-                brokerHost = url.replace(HTTPS, Values.EMPTY)
+                brokerHost = url.replace(HTTPS, String.empty())
             } else if (url.startsWith(HTTP)) {
-                brokerHost = url.replace(HTTP, Values.EMPTY)
+                brokerHost = url.replace(HTTP, String.empty())
             }
 
             if (brokerHost!!.endsWith(SLASH)) { // Remove trailing slashes
-                brokerHost = brokerHost.replace(SLASH, Values.EMPTY)
+                brokerHost = brokerHost.replace(SLASH, String.empty())
             }
 
             return brokerHost

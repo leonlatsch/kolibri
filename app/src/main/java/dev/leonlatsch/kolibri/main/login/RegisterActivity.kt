@@ -29,6 +29,7 @@ import dev.leonlatsch.kolibri.rest.service.UserService
 import dev.leonlatsch.kolibri.security.CryptoManager
 import dev.leonlatsch.kolibri.security.Hash
 import dev.leonlatsch.kolibri.util.AndroidUtils
+import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,15 +51,12 @@ class RegisterActivity : AppCompatActivity() {
 
     private var userService: UserService? = null
     private var authService: AuthService? = null
-    private var userInterface: UserInterface? = null
-    private var keyPairInterface: KeyPairInterface? = null
 
     private var usernameValid: Boolean = false
     private var emailValid: Boolean = false
     private var passwordValid: Boolean = false
 
-    @Override
-    protected fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
@@ -71,52 +69,41 @@ class RegisterActivity : AppCompatActivity() {
 
         userService = RestServiceFactory.getUserService()
         authService = RestServiceFactory.getAuthService()
-        userInterface = UserInterface.getInstance()
-        keyPairInterface = KeyPairInterface.getInstance()
 
-        registerBtn!!.setOnClickListener({ v -> register() })
+        registerBtn!!.setOnClickListener { register() }
 
-        usernameEditText!!.addTextChangedListener(object : TextWatcher() {
-            @Override
-            fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        usernameEditText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
-            @Override
-            fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
 
-            @Override
-            fun afterTextChanged(s: Editable) {
+            override fun afterTextChanged(s: Editable) {
                 validateUsername()
             }
         })
 
-        emailEditText!!.addTextChangedListener(object : TextWatcher() {
-            @Override
-            fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        emailEditText!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
-            @Override
-            fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
 
-            @Override
-            fun afterTextChanged(s: Editable) {
+            override fun afterTextChanged(s: Editable) {
                 validateEmail()
             }
         })
 
-        val passwordTextWatcher = object : TextWatcher() {
-            @Override
-            fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        val passwordTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
-            @Override
-            fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
 
-            @Override
-            fun afterTextChanged(s: Editable) {
+            override fun afterTextChanged(s: Editable) {
                 validatePassword()
             }
         }
@@ -134,8 +121,8 @@ class RegisterActivity : AppCompatActivity() {
      * Show a icon at the password edit text.
      */
     private fun validatePassword() {
-        val password = passwordEditText!!.getText().toString()
-        val passwordConfirm = passwordConfirmEditText!!.getText().toString()
+        val password = passwordEditText!!.text.toString()
+        val passwordConfirm = passwordConfirmEditText!!.text.toString()
 
         if (password.isEmpty() || !Pattern.matches(Regex.PASSWORD, password)) {
             showStatusIcon(passwordEditText!!, R.drawable.icons8_cancel_48)
@@ -145,12 +132,12 @@ class RegisterActivity : AppCompatActivity() {
             showStatusIcon(passwordEditText!!, R.drawable.icons8_checked_48)
         }
 
-        if (password.equals(passwordConfirm)) {
+        passwordValid = if (password == passwordConfirm) {
             showStatusIcon(passwordConfirmEditText!!, R.drawable.icons8_checked_48)
-            passwordValid = true
+            true
         } else {
             showStatusIcon(passwordConfirmEditText!!, R.drawable.icons8_cancel_48)
-            passwordValid = false
+            false
         }
     }
 
@@ -159,7 +146,7 @@ class RegisterActivity : AppCompatActivity() {
      * Show an icon at the email EditText.
      */
     private fun validateEmail() {
-        val email = emailEditText!!.getText().toString()
+        val email = emailEditText!!.text.toString()
 
         if (email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)) {
             showStatusIcon(emailEditText!!, R.drawable.icons8_cancel_48)
@@ -167,24 +154,22 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        val call = userService!!.checkEmail(Values.EMPTY, email)
-        call.enqueue(object : Callback<Container<String>>() {
-            @Override
-            fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
-                if (response.isSuccessful()) {
-                    val message = response.body().getMessage()
-                    if (Responses.MSG_FREE.equals(message)) {
+        val call = userService!!.checkEmail(String.empty(), email)
+        call.enqueue(object : Callback<Container<String>> {
+            override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+                if (response.isSuccessful) {
+                    val message = response.body()?.message
+                    emailValid = if (Responses.MSG_FREE == message) {
                         showStatusIcon(emailEditText!!, R.drawable.icons8_checked_48)
-                        emailValid = true
+                        true
                     } else {
                         showStatusIcon(emailEditText!!, R.drawable.icons8_cancel_48)
-                        emailValid = false
+                        false
                     }
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<String>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<String>>, t: Throwable) {
                 showDialog(getString(R.string.error), getString(R.string.error))
             }
         })
@@ -195,20 +180,19 @@ class RegisterActivity : AppCompatActivity() {
      * Show an icon at the username EditText.
      */
     private fun validateUsername() {
-        val username = usernameEditText!!.getText().toString()
-        if (username.isEmpty() || username.length() < 3) {
+        val username = usernameEditText!!.text.toString()
+        if (username.isEmpty() || username.length < 3) {
             showStatusIcon(usernameEditText!!, R.drawable.icons8_cancel_48)
             usernameValid = false
             return
         }
 
-        val call = userService!!.checkUsername(Values.EMPTY, username)
-        call.enqueue(object : Callback<Container<String>>() {
-            @Override
-            fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
-                if (response.isSuccessful()) {
-                    val message = response.body().getMessage()
-                    if (Responses.MSG_FREE.equals(message)) {
+        val call = userService!!.checkUsername(String.empty(), username)
+        call.enqueue(object : Callback<Container<String>> {
+            override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+                if (response.isSuccessful) {
+                    val message = response.body()?.message
+                    if (Responses.MSG_FREE == message) {
                         showStatusIcon(usernameEditText!!, R.drawable.icons8_checked_48)
                         usernameValid = true
                     } else {
@@ -218,8 +202,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<String>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<String>>, t: Throwable) {
                 showDialog(getString(R.string.error), getString(R.string.error))
             }
         })
@@ -242,26 +225,24 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         val userDTO = UserDTO()
-        userDTO.setEmail(emailEditText!!.getText().toString())
-        userDTO.setUsername(usernameEditText!!.getText().toString())
-        userDTO.setPassword(Hash.createHexHash(passwordEditText!!.getText().toString()))
+        userDTO.email = emailEditText!!.text.toString()
+        userDTO.username = usernameEditText!!.text.toString()
+        userDTO.password = Hash.createHexHash(passwordEditText!!.text.toString())
 
         val keyPair = CryptoManager.genKeyPair()
 
-        val call = authService!!.register(userDTO, keyPair.getPublicKey())
-        call.enqueue(object : Callback<Container<String>>() {
-            @Override
-            fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+        val call = authService!!.register(userDTO, keyPair?.publicKey!!)
+        call.enqueue(object : Callback<Container<String>> {
+            override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
                 isLoading(false)
-                if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
-                    saveUserAndStartMain(response.body().getContent(), keyPair)
+                if (response.isSuccessful && Responses.MSG_OK == response.body()?.message) {
+                    saveUserAndStartMain(response.body()?.content!!, keyPair)
                 } else {
                     showDialog(getString(R.string.error), getString(R.string.error))
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<String>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<String>>, t: Throwable) {
                 isLoading(false)
                 showDialog("Error", getString(R.string.error_no_internet))
             }
@@ -277,22 +258,20 @@ class RegisterActivity : AppCompatActivity() {
      */
     private fun saveUserAndStartMain(accessToken: String, keyPair: KeyPair) {
         val call = userService!!.get(accessToken)
-        call.enqueue(object : Callback<Container<UserDTO>>() {
-            @Override
-            fun onResponse(call: Call<Container<UserDTO>>, response: Response<Container<UserDTO>>) {
-                if (response.isSuccessful()) {
-                    keyPair.setUid(response.body().getContent().getUid())
-                    keyPairInterface!!.createOrGet(keyPair)
-                    userInterface!!.save(response.body().getContent(), accessToken)
+        call.enqueue(object : Callback<Container<UserDTO>> {
+            override fun onResponse(call: Call<Container<UserDTO>>, response: Response<Container<UserDTO>>) {
+                if (response.isSuccessful) {
+                    keyPair.uid = response.body()?.content!!.uid
+                    KeyPairInterface.createOrGet(keyPair)
+                    UserInterface.save(response.body()?.content!!, accessToken)
                     isLoading(false)
-                    val intent = Intent(getApplicationContext(), MainActivity::class.java)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<UserDTO>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<UserDTO>>, t: Throwable) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet))
             }
         })
@@ -312,20 +291,18 @@ class RegisterActivity : AppCompatActivity() {
      * Load the parsed email address from the [LoginActivity]
      */
     private fun loadPassedData() {
-        if (getIntent().getExtras() != null) {
-            val passedUsername = getIntent().getExtras().get(Values.INTENT_KEY_USERNAME) as String
+        if (intent.extras != null) {
+            val passedUsername = intent.extras?.get(Values.INTENT_KEY_USERNAME) as String
 
-            if (passedUsername != null) {
-                usernameEditText!!.setText(passedUsername)
-            }
+            usernameEditText!!.setText(passedUsername)
         }
     }
 
     private fun isLoading(loading: Boolean) {
         if (loading) {
-            AndroidUtils.animateView(progressOverlay, View.VISIBLE, 0.4f)
+            AndroidUtils.animateView(progressOverlay!!, View.VISIBLE, 0.4f)
         } else {
-            AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f)
+            AndroidUtils.animateView(progressOverlay!!, View.GONE, 0.4f)
         }
     }
 

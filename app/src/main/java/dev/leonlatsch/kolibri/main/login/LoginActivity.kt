@@ -33,6 +33,7 @@ import dev.leonlatsch.kolibri.security.CryptoManager
 import dev.leonlatsch.kolibri.security.Hash
 import dev.leonlatsch.kolibri.settings.Config
 import dev.leonlatsch.kolibri.util.AndroidUtils
+import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,8 +56,6 @@ class LoginActivity : AppCompatActivity() {
 
     private var userService: UserService? = null
     private var authService: AuthService? = null
-    private var userInterface: UserInterface? = null
-    private var keyPairInterface: KeyPairInterface? = null
 
     /**
      * Validate all input
@@ -78,15 +77,12 @@ class LoginActivity : AppCompatActivity() {
             return isValid
         }
 
-    @Override
-    protected fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         userService = RestServiceFactory.getUserService()
         authService = RestServiceFactory.getAuthService()
-        userInterface = UserInterface.getInstance()
-        keyPairInterface = KeyPairInterface.getInstance()
 
         usernameEditText = findViewById(R.id.loginUsernameEditText)
         passwordEditText = findViewById(R.id.loginPasswordEditText)
@@ -96,28 +92,28 @@ class LoginActivity : AppCompatActivity() {
         errorText = findViewById(R.id.loginErrorTextView)
         disconnectButton = findViewById(R.id.disconnectButton)
 
-        registerBtn!!.setOnClickListener({ v -> register() })
-        disconnectButton!!.setOnClickListener({ v -> disconnect() })
+        registerBtn!!.setOnClickListener { v -> register() }
+        disconnectButton!!.setOnClickListener { v -> disconnect() }
 
-        loginBtn!!.setOnClickListener({ v -> login() })
-        passwordEditText!!.setOnEditorActionListener({ v, actionId, event ->
+        loginBtn!!.setOnClickListener { v -> login() }
+        passwordEditText!!.setOnEditorActionListener { _, _, _ ->
             login()
             true
-        })
+        }
     }
 
     /**
      * Empty the backend config and start a new [BootActivity]
      */
     private fun disconnect() {
-        val onClickListener = { dialog, which ->
-            if (which === DialogInterface.BUTTON_POSITIVE) {
+        val onClickListener = DialogInterface.OnClickListener{ _, which ->
+            if (which == DialogInterface.BUTTON_POSITIVE) {
                 val editor = Config.getSharedPreferences(this).edit()
                 editor.remove(Config.KEY_BACKEND_HTTP_BASEURL)
                 editor.remove(Config.KEY_BACKEND_BROKER_HOST)
                 editor.remove(Config.KEY_BACKEND_BROKER_PORT)
                 editor.apply()
-                startActivity(Intent(getApplicationContext(), BootActivity::class.java))
+                startActivity(Intent(applicationContext, BootActivity::class.java))
                 finish()
             }
         }
@@ -139,25 +135,23 @@ class LoginActivity : AppCompatActivity() {
             displayError(getString(R.string.login_fail))
             return
         }
-        displayError(Values.EMPTY)
+        displayError(String.empty())
         val userAuthDTO = UserDTO()
-        userAuthDTO.setUsername(usernameEditText!!.getText().toString())
-        userAuthDTO.setPassword(Hash.createHexHash(passwordEditText!!.getText().toString()))
+        userAuthDTO.username = usernameEditText!!.text.toString()
+        userAuthDTO.password = Hash.createHexHash(passwordEditText!!.text.toString())
 
         val call = authService!!.login(userAuthDTO)
-        call.enqueue(object : Callback<Container<String>>() {
-            @Override
-            fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
-                if (Responses.CODE_UNAUTHORIZED !== response.code()) {
-                    saveUserAndStartMain(response.body().getContent())
+        call.enqueue(object : Callback<Container<String>> {
+            override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+                if (Responses.CODE_OK == response.code()) {
+                    saveUserAndStartMain(response.body()?.content!!)
                 } else {
                     displayError(getString(R.string.login_fail))
                     isLoading(false)
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<String>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<String>>, t: Throwable) {
                 isLoading(false)
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet))
             }
@@ -171,22 +165,20 @@ class LoginActivity : AppCompatActivity() {
      */
     private fun saveUserAndStartMain(accessToken: String) {
         val call = userService!!.get(accessToken)
-        call.enqueue(object : Callback<Container<UserDTO>>() {
-            @Override
-            fun onResponse(call: Call<Container<UserDTO>>, response: Response<Container<UserDTO>>) {
-                if (response.isSuccessful()) {
-                    val newKeyPair = keyPairInterface!!.createOrGet(CryptoManager.genKeyPair(), response.body().getContent().getUid())
-                    userInterface!!.save(response.body().getContent(), accessToken)
-                    updatePublicKey(newKeyPair.getPublicKey())
+        call.enqueue(object : Callback<Container<UserDTO>> {
+            override fun onResponse(call: Call<Container<UserDTO>>, response: Response<Container<UserDTO>>) {
+                if (response.isSuccessful) {
+                    val newKeyPair = KeyPairInterface.createOrGet(CryptoManager.genKeyPair(), response.body()?.content!!.uid!!)
+                    UserInterface.save(response.body()?.content!!, accessToken)
+                    updatePublicKey(newKeyPair?.publicKey!!)
                     isLoading(false)
-                    val intent = Intent(getApplicationContext(), MainActivity::class.java)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<UserDTO>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<UserDTO>>, t: Throwable) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet))
             }
         })
@@ -198,19 +190,17 @@ class LoginActivity : AppCompatActivity() {
      * @param publicKey
      */
     private fun updatePublicKey(publicKey: String) {
-        val call = userService!!.updatePublicKey(userInterface!!.getAccessToken(), publicKey)
-        call.enqueue(object : Callback<Container<String>>() {
-            @Override
-            fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
-                if (response.isSuccessful()) {
-                    if (!Responses.MSG_OK.equals(response.body().getMessage())) {
+        val call = userService!!.updatePublicKey(UserInterface.accessToken!!, publicKey)
+        call.enqueue(object : Callback<Container<String>> {
+            override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+                if (response.isSuccessful) {
+                    if (Responses.MSG_OK != response.body()?.message) {
                         showDialog(getString(R.string.error), getString(R.string.error))
                     }
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<String>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<String>>, t: Throwable) {
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet))
             }
         })
@@ -220,37 +210,37 @@ class LoginActivity : AppCompatActivity() {
      * Route to the registration
      */
     private fun register() {
-        val intent = Intent(getApplicationContext(), RegisterActivity::class.java)
+        val intent = Intent(applicationContext, RegisterActivity::class.java)
         cacheToIntent(intent)
         startActivity(intent)
     }
 
     private fun displayError(message: String) {
-        errorText!!.setText(message)
+        errorText!!.text = message
     }
 
     private fun isEmailValid(email: String): Boolean {
-        return !email.isEmpty() || !Pattern.matches(Regex.EMAIL, email)
+        return email.isNotEmpty() || !Pattern.matches(Regex.EMAIL, email)
     }
 
     private fun cacheToIntent(intent: Intent) {
-        val username = usernameEditText!!.getText().toString()
+        val username = usernameEditText!!.text.toString()
 
-        if (!username.isEmpty()) {
+        if (username.isNotEmpty()) {
             intent.putExtra(Values.INTENT_KEY_USERNAME, username)
         }
     }
 
     private fun isLoading(loading: Boolean) {
         if (loading) {
-            AndroidUtils.animateView(progressOverlay, View.VISIBLE, 0.4f)
+            AndroidUtils.animateView(progressOverlay!!, View.VISIBLE, 0.4f)
         } else {
-            AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f)
+            AndroidUtils.animateView(progressOverlay!!, View.GONE, 0.4f)
         }
-        usernameEditText!!.setEnabled(!loading)
-        passwordEditText!!.setEnabled(!loading)
-        loginBtn!!.setEnabled(!loading)
-        registerBtn!!.setEnabled(!loading)
+        usernameEditText!!.isEnabled = !loading
+        passwordEditText!!.isEnabled = !loading
+        loginBtn!!.isEnabled = !loading
+        registerBtn!!.isEnabled = !loading
     }
 
     private fun showDialog(title: String, message: String) {

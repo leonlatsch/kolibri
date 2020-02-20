@@ -22,6 +22,7 @@ import dev.leonlatsch.kolibri.constants.Values
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
 import dev.leonlatsch.kolibri.database.model.Chat
 import dev.leonlatsch.kolibri.util.ImageUtil
+import dev.leonlatsch.kolibri.util.empty
 
 /**
  * This Adapter is used to display the chat list in the [dev.leonlatsch.kolibri.main.fragment.ChatFragment]
@@ -120,7 +121,7 @@ class ChatListAdapter(@NonNull private val mContext: Context, private val datase
             viewHolder.unreadMessagesTextView!!.visibility = View.VISIBLE
             viewHolder.unreadMessagesTextView!!.text = chat.unreadMessages.toString()
         } else {
-            viewHolder.unreadMessagesTextView!!.text = Values.EMPTY
+            viewHolder.unreadMessagesTextView!!.text = String.empty()
             viewHolder.unreadMessagesTextView!!.visibility = View.GONE
         }
 

@@ -1,5 +1,7 @@
 package dev.leonlatsch.kolibri.rest.dto
 
+import dev.leonlatsch.kolibri.util.empty
+
 /**
  * @author Leon Latsch
  * @since 1.0.0
@@ -7,8 +9,8 @@ package dev.leonlatsch.kolibri.rest.dto
 class Container<T> {
 
     var code: Int = 0
-    var message: String? = null
-    var timestamp: String? = null
+    var message: String = String.empty()
+    var timestamp: String = String.empty()
     var content: T? = null
 
     constructor()

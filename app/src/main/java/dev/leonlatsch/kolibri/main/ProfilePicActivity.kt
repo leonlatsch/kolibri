@@ -31,30 +31,26 @@ import retrofit2.Response
  */
 class ProfilePicActivity : AppCompatActivity() {
 
-    private var userInterface: UserInterface? = null
-
     private var userService: UserService? = null
     private var imageView: ImageView? = null
     private var progressOverlay: View? = null
 
-    @Override
-    protected fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_pic)
-        val toolbar = findViewById(R.id.profile_pic_toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.profile_pic_toolbar)
         setSupportActionBar(toolbar)
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true)
-        getSupportActionBar().setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        userInterface = UserInterface.getInstance()
         userService = RestServiceFactory.getUserService()
 
-        val title = toolbar.findViewById(R.id.profile_pic_toolbar_text)
+        val title = toolbar.findViewById<TextView>(R.id.profile_pic_toolbar_text)
         imageView = findViewById(R.id.profile_pic_image_view)
         progressOverlay = findViewById(R.id.progressOverlay)
 
-        title.setText(getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_USERNAME) as String)
-        val uid = getIntent().getExtras().get(Values.INTENT_KEY_PROFILE_PIC_UID) as String
+        title.text = intent.extras?.get(Values.INTENT_KEY_PROFILE_PIC_USERNAME) as String
+        val uid = intent.extras?.get(Values.INTENT_KEY_PROFILE_PIC_UID) as String
 
         loadProfilePic(uid)
     }
@@ -67,12 +63,11 @@ class ProfilePicActivity : AppCompatActivity() {
     private fun loadProfilePic(uid: String) {
         isLoading(true)
         val context = this
-        val call = userService!!.loadProfilePic(userInterface!!.getAccessToken(), uid)
-        call.enqueue(object : Callback<Container<String>>() {
-            @Override
-            fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
-                if (response.isSuccessful()) {
-                    val profilePic = response.body().getContent()
+        val call = userService!!.loadProfilePic(UserInterface.accessToken!!, uid)
+        call.enqueue(object : Callback<Container<String>> {
+            override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+                if (response.isSuccessful) {
+                    val profilePic = response.body()?.content
                     if (profilePic != null) {
                         imageView!!.setImageBitmap(ImageUtil.createBitmap(profilePic))
                     } else {
@@ -82,8 +77,7 @@ class ProfilePicActivity : AppCompatActivity() {
                 isLoading(false)
             }
 
-            @Override
-            fun onFailure(call: Call<Container<String>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<String>>, t: Throwable) {
                 isLoading(false)
                 showDialog(getString(R.string.error), getString(R.string.error_no_internet))
                 finish()
@@ -91,23 +85,22 @@ class ProfilePicActivity : AppCompatActivity() {
         })
     }
 
-    @Override
-    fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 finish()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun isLoading(loading: Boolean) {
         if (loading) {
-            AndroidUtils.animateView(progressOverlay, View.VISIBLE, 0.4f)
+            AndroidUtils.animateView(progressOverlay!!, View.VISIBLE, 0.4f)
         } else {
-            AndroidUtils.animateView(progressOverlay, View.GONE, 0.4f)
+            AndroidUtils.animateView(progressOverlay!!, View.GONE, 0.4f)
         }
     }
 

@@ -24,14 +24,14 @@ object AndroidUtils {
     fun animateView(view: View, toVisibility: Int, toAlpha: Float) {
         val show = toVisibility == View.VISIBLE
         if (show) {
-            view.setAlpha(0f)
+            view.alpha = 0f
         }
-        view.setVisibility(View.VISIBLE)
+        view.visibility = View.VISIBLE
         view.animate()
                 .alpha(if (show) toAlpha else 0f)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        view.setVisibility(toVisibility)
+                        view.visibility = toVisibility
                     }
                 })
     }
