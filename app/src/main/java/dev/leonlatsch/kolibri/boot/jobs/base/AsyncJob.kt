@@ -17,7 +17,7 @@ abstract class AsyncJob(context: Context) : BaseJob(context) {
 
     abstract fun execute(asyncJobCallback: AsyncJobCallback?)
 
-    protected fun run(runnable: Runnable) {
+    protected fun runAsync(runnable: Runnable) {
         thread = Thread(runnable, threadName)
         thread!!.start()
     }

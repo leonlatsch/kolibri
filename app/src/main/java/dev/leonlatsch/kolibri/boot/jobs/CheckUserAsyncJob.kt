@@ -31,7 +31,7 @@ class CheckUserAsyncJob(context: Context) : AsyncJob(context) {
     private val userService: UserService = RestServiceFactory.getUserService()
 
     override fun execute(asyncJobCallback: AsyncJobCallback?) {
-        run {
+        runAsync(Runnable {
             UserInterface.loadUser()
 
             val savedUser = UserInterface.user
@@ -64,6 +64,6 @@ class CheckUserAsyncJob(context: Context) : AsyncJob(context) {
             } else {
                 asyncJobCallback?.onResult(JobResult(false, null))
             }
-        }
+        })
     }
 }

@@ -66,7 +66,7 @@ object DatabaseMapper {
         dto.to = message.to
         dto.type = message.type
         dto.timestamp = message.timestamp
-        dto.content = message.timestamp
+        dto.content = message.content
         return dto
     }
 

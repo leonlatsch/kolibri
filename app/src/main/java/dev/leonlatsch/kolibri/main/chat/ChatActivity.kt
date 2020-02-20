@@ -99,12 +99,9 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
             messageEditText!!.imeOptions = EditorInfo.IME_ACTION_NONE
         }
 
-        val contact = ContactInterface.getContact(chat!!.uid!!)
-        if (contact != null) {
-            usernameTextView.text = contact.username
-            if (this.contact!!.profilePicTn != null) {
-                profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.profilePicTn))
-            }
+        usernameTextView.text = contact?.username
+        if (this.contact!!.profilePicTn != null) {
+            profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact?.profilePicTn))
         }
     }
 

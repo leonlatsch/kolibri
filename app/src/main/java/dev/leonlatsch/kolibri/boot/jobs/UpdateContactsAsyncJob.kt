@@ -22,7 +22,7 @@ class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
     private val userService: UserService = RestServiceFactory.getUserService()
 
     override fun execute(asyncJobCallback: AsyncJobCallback?) { //TODO: create backend function to get a list of contacts in one request
-        run {
+        runAsync(Runnable {
             val contacts = ContactInterface.all
 
             var success = true
@@ -68,6 +68,6 @@ class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
             }
 
             asyncJobCallback?.onResult(JobResult(success, contactsUpdated))
-        }
+        })
     }
 }

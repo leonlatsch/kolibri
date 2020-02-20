@@ -68,7 +68,7 @@ object ChatInterface {
         return Select().from(Chat::class.java).where(QUEUE_UID_WHERE, message.from).executeSingle()
     }
 
-    fun getChatForContact(uid: String): Chat {
+    fun getChatForContact(uid: String): Chat? {
         return Select().from(Chat::class.java).where(QUEUE_UID_WHERE, uid).executeSingle()
     }
 

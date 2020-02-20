@@ -17,6 +17,7 @@ import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
 import dev.leonlatsch.kolibri.rest.service.UserService
 import dev.leonlatsch.kolibri.security.CryptoManager
 import dev.leonlatsch.kolibri.settings.Config
+import dev.leonlatsch.kolibri.util.Generator
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -119,7 +120,7 @@ object MessageConsumer {
                     if (userResponse.isSuccessful) {
                         ContactInterface.save(userResponse.body()?.content!!, publicKeyResponse.body()?.content!!)
                         val unreadMessages = if (ChatActivity.isActive) 0 else 1
-                        chat = Chat(message.cid, message.from, unreadMessages, message.content, message.timestamp)
+                        chat = Chat(Generator.genUUid(), message.from, unreadMessages, message.content, message.timestamp)
                         ChatInterface.saveChat(chat)
                         notifyChatListChanged(chat)
                     }
@@ -158,9 +159,9 @@ object MessageConsumer {
         }
     }
 
-    fun notifyChatListChanged(chat: Chat) {
+    fun notifyChatListChanged(chat: Chat?) {
         if (chatListChangeListener != null) {
-            chatListChangeListener!!.chatChanged(chat)
+            chatListChangeListener!!.chatChanged(chat!!)
         }
     }
 

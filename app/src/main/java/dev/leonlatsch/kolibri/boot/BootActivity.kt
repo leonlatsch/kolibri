@@ -41,17 +41,16 @@ class BootActivity : AppCompatActivity() {
                 val job = CheckUserAsyncJob(this)
                 job.execute(object : AsyncJobCallback {
                     override fun onResult(jobResult: JobResult<Any?>) {
-                        Handler(applicationContext.mainLooper).post {
-                            if (jobResult.isSuccessful) {
-                                startActivity(Intent(applicationContext, MainActivity::class.java))
-                                UpdateContactsAsyncJob(context).execute(null)
-                            } else {
+                        if (jobResult.isSuccessful) {
+                            startActivity(Intent(applicationContext, MainActivity::class.java))
+                            UpdateContactsAsyncJob(context).execute(null)
+                        } else {
+                            Handler(applicationContext.mainLooper).post {
                                 startActivity(Intent(applicationContext, LoginActivity::class.java))
                             }
-                            finish()
                         }
                     }
-                    })
+                })
             } else { // If there is no backend config show the BackendDialog
                 val dialog = BackendDialog(this)
                 dialog.setOnDismissListener {
