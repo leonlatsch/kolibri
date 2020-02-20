@@ -1,5 +1,6 @@
 package dev.leonlatsch.kolibri.boot
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +10,8 @@ import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.boot.jobs.CheckUserAsyncJob
 import dev.leonlatsch.kolibri.boot.jobs.UpdateContactsAsyncJob
 import dev.leonlatsch.kolibri.boot.jobs.ValidateBackendJob
+import dev.leonlatsch.kolibri.boot.jobs.base.AsyncJobCallback
+import dev.leonlatsch.kolibri.boot.jobs.base.JobResult
 import dev.leonlatsch.kolibri.main.MainActivity
 import dev.leonlatsch.kolibri.main.login.LoginActivity
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
@@ -22,8 +25,9 @@ import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
  */
 class BootActivity : AppCompatActivity() {
 
-    @Override
-    protected fun onCreate(savedInstanceState: Bundle) {
+    private val context: Context = this
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_boot)
 
@@ -32,26 +36,28 @@ class BootActivity : AppCompatActivity() {
         Handler().postDelayed({
             // Delay execution for 100 ms to show splash screen
             val result = ValidateBackendJob(this).execute()
-            if (result.isSuccessful()) {
+            if (result.isSuccessful) {
                 RestServiceFactory.initialize(this)
                 val job = CheckUserAsyncJob(this)
-                job.execute({ userResult ->
-                    Handler(getApplicationContext().getMainLooper()).post({
-                        if (userResult.isSuccessful()) {
-                            startActivity(Intent(getApplicationContext(), MainActivity::class.java))
-                            UpdateContactsAsyncJob(this).execute(null)
-                        } else {
-                            startActivity(Intent(getApplicationContext(), LoginActivity::class.java))
+                job.execute(object : AsyncJobCallback {
+                    override fun onResult(jobResult: JobResult<Any?>) {
+                        Handler(applicationContext.mainLooper).post {
+                            if (jobResult.isSuccessful) {
+                                startActivity(Intent(applicationContext, MainActivity::class.java))
+                                UpdateContactsAsyncJob(context).execute(null)
+                            } else {
+                                startActivity(Intent(applicationContext, LoginActivity::class.java))
+                            }
+                            finish()
                         }
-                        finish()
+                    }
                     })
-                })
             } else { // If there is no backend config show the BackendDialog
                 val dialog = BackendDialog(this)
-                dialog.setOnDismissListener({ dialogInterface ->
-                    startActivity(Intent(getApplicationContext(), BootActivity::class.java))
+                dialog.setOnDismissListener {
+                    startActivity(Intent(applicationContext, BootActivity::class.java))
                     finish()
-                })
+                }
                 dialog.show()
             }
         }, 100)

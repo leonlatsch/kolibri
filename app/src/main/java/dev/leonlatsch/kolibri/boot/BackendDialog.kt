@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import dev.leonlatsch.kolibri.BuildConfig
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.constants.Regex
 import dev.leonlatsch.kolibri.constants.Responses
@@ -40,17 +41,17 @@ class BackendDialog(context: Context) : AlertDialog(context) {
     private var configService: ConfigService? = null
 
     init {
-        val view = getLayoutInflater().inflate(R.layout.dialog_backend, null)
+        val view = layoutInflater.inflate(R.layout.dialog_backend, null)
         connectButton = view.findViewById(R.id.dialog_backend_button)
         hostnameEditText = view.findViewById(R.id.dialog_backend_edit_text)
         progressBar = view.findViewById(R.id.dialog_backend_progressbar)
         successImageView = view.findViewById(R.id.dialog_backend_success_indicator)
 
-        connectButton.setOnClickListener({ view1 -> connect() })
-        hostnameEditText.setOnEditorActionListener({ textView, i, keyEvent ->
+        connectButton.setOnClickListener { connect() }
+        hostnameEditText.setOnEditorActionListener { _, _, _ ->
             connect()
             true
-        })
+        }
 
         setCancelable(false)
         setView(view)
@@ -58,7 +59,7 @@ class BackendDialog(context: Context) : AlertDialog(context) {
 
     private fun connect() {
         isLoading(true)
-        val url = buildUrl(hostnameEditText.getText().toString())
+        val url = buildUrl(hostnameEditText.text.toString())
         if (url == null) {
             isLoading(false)
             success(false)
@@ -72,10 +73,9 @@ class BackendDialog(context: Context) : AlertDialog(context) {
         RestServiceFactory.initialize(url)
         commonService = RestServiceFactory.getCommonService()
         configService = RestServiceFactory.getConfigService()
-        commonService!!.healthcheck().enqueue(object : Callback<Container<Void>>() {
-            @Override
-            fun onResponse(call: Call<Container<Void>>, response: Response<Container<Void>>) {
-                if (response.isSuccessful() && Responses.MSG_OK.equals(response.body().getMessage())) {
+        commonService!!.healthcheck().enqueue(object : Callback<Container<Void>> {
+            override fun onResponse(call: Call<Container<Void>>, response: Response<Container<Void>>) {
+                if (response.isSuccessful && Responses.MSG_OK == response.body()?.message) {
                     saveConfig(url)
                 } else {
                     isLoading(false)
@@ -83,8 +83,7 @@ class BackendDialog(context: Context) : AlertDialog(context) {
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Container<Void>>, t: Throwable) {
+            override fun onFailure(call: Call<Container<Void>>, t: Throwable) {
                 isLoading(false)
                 success(false)
             }
@@ -93,9 +92,7 @@ class BackendDialog(context: Context) : AlertDialog(context) {
 
     private fun checkVersion(backendVersion: String): Boolean {
         try {
-            val packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0)
-            val arr = packageInfo.versionName.split("\\.")
-            val majorVersion = packageInfo.versionName.split("\\.")[0] // Get the major version eg. 1 from 1.5.3
+            val majorVersion = BuildConfig.VERSION_NAME.split("\\.")[0] // Get the major version eg. 1 from 1.5.3
             return backendVersion.startsWith(majorVersion)
         } catch (e: PackageManager.NameNotFoundException) {
             return false
@@ -126,28 +123,28 @@ class BackendDialog(context: Context) : AlertDialog(context) {
     }
 
     private fun success(success: Boolean) {
-        successImageView.setVisibility(View.VISIBLE)
+        successImageView.visibility = View.VISIBLE
         if (success) {
-            successImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_checked_48, getContext().getTheme()))
+            successImageView.setImageDrawable(context.resources.getDrawable(R.drawable.icons8_checked_48, context.theme))
             connectButton.setText(R.string.CONNECTED)
             connectButton.setOnClickListener(null)
         } else {
-            successImageView.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_cancel_48, getContext().getTheme()))
+            successImageView.setImageDrawable(context.resources.getDrawable(R.drawable.icons8_cancel_48, context.theme))
             connectButton.setText(R.string.CONNECT)
-            connectButton.setOnClickListener({ view -> connect() })
+            connectButton.setOnClickListener { connect() }
         }
     }
 
     private fun isLoading(isLoading: Boolean) {
         if (isLoading) {
-            hostnameEditText.setEnabled(false)
-            connectButton.setClickable(false)
-            progressBar.setVisibility(View.VISIBLE)
-            successImageView.setVisibility(View.GONE)
+            hostnameEditText.isEnabled = false
+            connectButton.isClickable = false
+            progressBar.visibility = View.VISIBLE
+            successImageView.visibility = View.GONE
         } else {
-            hostnameEditText.setEnabled(true)
-            connectButton.setClickable(true)
-            progressBar.setVisibility(View.GONE)
+            hostnameEditText.isEnabled = true
+            connectButton.isClickable = true
+            progressBar.visibility = View.GONE
         }
     }
 
@@ -157,22 +154,20 @@ class BackendDialog(context: Context) : AlertDialog(context) {
      * @param url
      */
     private fun saveConfig(url: String) {
-        val preferences = Config.getSharedPreferences(getContext())
+        val preferences = Config.getSharedPreferences(context)
         val editor = preferences.edit()
 
         editor.putString(Config.KEY_BACKEND_HTTP_BASEURL, url)
         editor.putString(Config.KEY_BACKEND_BROKER_HOST, extractHostname(url))
 
-        configService!!.getBrokerPort().enqueue(object : Callback<Integer>() { // Get the port for the broker
-            @Override
-            fun onResponse(call: Call<Integer>, response: Response<Integer>) {
-                if (response.isSuccessful()) {
+        configService!!.brokerPort().enqueue(object : Callback<Int> { // Get the port for the broker
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                if (response.isSuccessful) {
                     val port = response.body()
-                    editor.putInt(Config.KEY_BACKEND_BROKER_PORT, port)
-                    commonService!!.getVersion().enqueue(object : Callback<String>() {
-                        @Override
-                        fun onResponse(call: Call<String>, response: Response<String>) {
-                            if (response.isSuccessful() && checkVersion(response.body())) {
+                    editor.putInt(Config.KEY_BACKEND_BROKER_PORT, port!!)
+                    commonService!!.version().enqueue(object : Callback<String> {
+                        override fun onResponse(call: Call<String>, response: Response<String>) {
+                            if (response.isSuccessful && checkVersion(response.body()!!)) {
                                 editor.apply()
                                 isLoading(false)
                                 success(true)
@@ -183,8 +178,7 @@ class BackendDialog(context: Context) : AlertDialog(context) {
                             }
                         }
 
-                        @Override
-                        fun onFailure(call: Call<String>, t: Throwable) {
+                        override fun onFailure(call: Call<String>, t: Throwable) {
                             isLoading(false)
                             success(false)
                         }
@@ -192,8 +186,7 @@ class BackendDialog(context: Context) : AlertDialog(context) {
                 }
             }
 
-            @Override
-            fun onFailure(call: Call<Integer>, t: Throwable) {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
                 isLoading(false)
                 success(false) // Very unlikely
             }

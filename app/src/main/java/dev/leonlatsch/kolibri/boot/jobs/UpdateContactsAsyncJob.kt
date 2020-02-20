@@ -21,7 +21,7 @@ import java.io.IOException
 class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
     private val userService: UserService = RestServiceFactory.getUserService()
 
-    override fun execute(asyncJobCallback: AsyncJobCallback) { //TODO: create backend function to get a list of contacts in one request
+    override fun execute(asyncJobCallback: AsyncJobCallback?) { //TODO: create backend function to get a list of contacts in one request
         run {
             val contacts = ContactInterface.all
 
@@ -67,7 +67,7 @@ class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
 
             }
 
-            asyncJobCallback.onResult(JobResult(success, contactsUpdated))
+            asyncJobCallback?.onResult(JobResult(success, contactsUpdated))
         }
     }
 }

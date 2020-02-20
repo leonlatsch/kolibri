@@ -18,5 +18,5 @@ interface ConfigService {
      * @return A [Container] with the broker port as an int
      */
     @GET("api/v1/config/broker-port")
-    fun brokerPort(): Call<Integer>
+    fun brokerPort(): Call<Int>
 }

@@ -15,7 +15,7 @@ abstract class AsyncJob(context: Context) : BaseJob(context) {
     private val threadName: String
         get() = this.javaClass.name + "-THREAD"
 
-    abstract fun execute(asyncJobCallback: AsyncJobCallback)
+    abstract fun execute(asyncJobCallback: AsyncJobCallback?)
 
     protected fun run(runnable: Runnable) {
         thread = Thread(runnable, threadName)
