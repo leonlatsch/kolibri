@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mapUserToDrawer(UserInterface.user)
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
                     ChatFragment()).commit()
             navigationView!!.setCheckedItem(R.id.nav_chat)
         }
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_settings -> displayFragment(SettingsFragment(), getString(R.string.settings))
 
-            R.id.nav_info -> startActivity(Intent(getApplicationContext(), InfoActivity::class.java))
+            R.id.nav_info -> startActivity(Intent(applicationContext, InfoActivity::class.java))
         }
 
         drawerLayout!!.closeDrawer(GravityCompat.START)
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
             drawerLayout!!.closeDrawer(GravityCompat.START)
         } else {
-            if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) is ChatFragment) {
+            if (supportFragmentManager.findFragmentById(R.id.fragment_container) is ChatFragment) {
                 super.onBackPressed()
             } else {
                 displayFragment(ChatFragment(), getString(R.string.app_name))

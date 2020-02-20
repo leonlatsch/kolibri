@@ -22,7 +22,7 @@ object ContactInterface {
     val all: List<Contact>
         get() = Select().from(Contact::class.java).execute()
 
-    fun getContact(uid: String): Contact {
+    fun getContact(uid: String): Contact? {
         return Select().from(Contact::class.java).where(QUEUE_UID_WHERE, uid).executeSingle()
     }
 
@@ -50,11 +50,8 @@ object ContactInterface {
     }
 
     fun save(contact: Contact?): String? {
-        val saved = Select().from(Contact::class.java).where(QUEUE_UID_WHERE, contact?.uid).executeSingle<Contact>()
 
-        if (saved != null) {
-            saved!!.delete()
-        }
+        Select().from(Contact::class.java).where(QUEUE_UID_WHERE, contact?.uid).executeSingle<Contact>()?.delete()
 
         contact?.save()
         return contact?.uid

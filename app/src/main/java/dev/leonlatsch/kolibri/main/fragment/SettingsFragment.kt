@@ -15,7 +15,7 @@ import dev.leonlatsch.kolibri.settings.Config
  */
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
         findPreference<Preference>(Config.KEY_BACKEND_HTTP_BASEURL)?.summary = Config.getSharedPreferences(activity as MainActivity).getString(Config.KEY_BACKEND_HTTP_BASEURL, "")

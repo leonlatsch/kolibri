@@ -30,14 +30,14 @@ class CheckUserAsyncJob(context: Context) : AsyncJob(context) {
 
     private val userService: UserService = RestServiceFactory.getUserService()
 
-    override fun execute(asyncJobCallback: AsyncJobCallback) {
+    override fun execute(asyncJobCallback: AsyncJobCallback?) {
         run {
             UserInterface.loadUser()
 
             val savedUser = UserInterface.user
 
             if (savedUser != null) {
-                asyncJobCallback.onResult(JobResult(true, null))
+                asyncJobCallback?.onResult(JobResult(true, null))
 
                 val call = userService.get(UserInterface.accessToken!!)
                 call.enqueue(object : Callback<Container<UserDTO>> {
@@ -62,7 +62,7 @@ class CheckUserAsyncJob(context: Context) : AsyncJob(context) {
                     }
                 })
             } else {
-                asyncJobCallback.onResult(JobResult(false, null))
+                asyncJobCallback?.onResult(JobResult(false, null))
             }
         }
     }

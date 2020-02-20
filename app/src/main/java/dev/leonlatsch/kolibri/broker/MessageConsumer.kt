@@ -56,18 +56,8 @@ class MessageConsumer private constructor(context: Context) {
         connectionFactory!!.username = UserInterface.user?.uid!!
         connectionFactory!!.password = UserInterface.accessToken!!
         connectionFactory!!.isAutomaticRecoveryEnabled = true
-        connectionFactory!!.run {
-
-            // Initialize config
-            connectionFactory = ConnectionFactory()
-            host = preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null)
-            port = preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0)
-            username = UserInterface.user?.uid!!
-            password = UserInterface.accessToken!!
-            isAutomaticRecoveryEnabled = true
-            setNetworkRecoveryInterval(1000)
-            connectionTimeout = 5000
-        }
+        connectionFactory!!.setNetworkRecoveryInterval(1000)
+        connectionFactory!!.connectionTimeout = 5000
 
         deliverCallback = DeliverCallback { _, message ->
             val messageDTO = ObjectMapper().readValue(String(message.body, StandardCharsets.UTF_8), MessageDTO::class.java)

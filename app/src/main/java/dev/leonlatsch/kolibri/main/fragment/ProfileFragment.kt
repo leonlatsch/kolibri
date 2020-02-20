@@ -77,7 +77,7 @@ class ProfileFragment : Fragment(), EntityChangedListener<User> {
         val passwordEditText = view.findViewById<EditText>(R.id.profile_password_editText)
         val changeProfilePicFab = view.findViewById<FloatingActionButton>(R.id.profile_profile_pic_change)
         val saveBtn = view.findViewById<Button>(R.id.profile_saveBtn)
-        val deleteAccount = view.findViewById<Button>(R.id.profile_deleteBtn)
+        val deleteAccount = view.findViewById<TextView>(R.id.profile_deleteBtn)
         statusMessage = view.findViewById(R.id.profile_status_message)
 
         changeProfilePicFab.setOnClickListener { changeProfilePic() }
@@ -376,7 +376,7 @@ class ProfileFragment : Fragment(), EntityChangedListener<User> {
             profilePicImageView!!.setImageBitmap(ImageUtil.createBitmap(user.profilePicTn))
         }
         usernameEditText!!.setText(user.username)
-        emailEditText!!.setText(user.username)
+        emailEditText!!.setText(user.email)
         isReloadMode = false
     }
 

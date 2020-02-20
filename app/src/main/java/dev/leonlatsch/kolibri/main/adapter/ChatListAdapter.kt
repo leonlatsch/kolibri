@@ -107,13 +107,13 @@ class ChatListAdapter(@NonNull private val mContext: Context, private val datase
 
         val contact = ContactInterface.getContact(chat?.uid!!)
 
-        if (contact.profilePicTn != null) {
+        if (contact?.profilePicTn != null) {
             viewHolder.imageView!!.setImageBitmap(ImageUtil.createBitmap(contact.profilePicTn))
         } else {
             viewHolder.imageView!!.setImageDrawable(ImageUtil.getDefaultProfilePicTn(mContext))
         }
 
-        viewHolder.usernameTextView!!.text = contact.username
+        viewHolder.usernameTextView!!.text = contact?.username
         viewHolder.lastMessageTextView!!.text = chat.lastMessage
         viewHolder.lastDateTextView!!.text = chat.lastTimestamp?.substring(11, 16)
 

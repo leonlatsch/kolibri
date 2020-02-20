@@ -1,7 +1,10 @@
 package dev.leonlatsch.kolibri.database.interfaces
 
 import com.activeandroid.Model
+import com.activeandroid.query.Delete
 import dev.leonlatsch.kolibri.database.EntityChangedListener
+import dev.leonlatsch.kolibri.database.model.User
+import java.lang.Exception
 
 /**
  * Class to store a cached model in memory and database
@@ -37,7 +40,7 @@ abstract class CacheInterface<T : Model> {
      *
      * @param model
      */
-    protected fun notifyListeners(model: T?) {
+    private fun notifyListeners(model: T?) {
         for (listener in listeners) {
             listener.entityChanged(model)
         }
@@ -45,17 +48,19 @@ abstract class CacheInterface<T : Model> {
 
     fun save(model: T?) {
         if (model != null) {
-            if (model != null) {
-                delete(model)
-            }
+            deleteAll()
             model.save()
             this.model = model
             notifyListeners(model)
         }
     }
 
-    fun delete(model: T) {
-        model.delete()
+    private fun deleteAll() = Delete().from(User::class.java).execute<User>()
+
+    fun delete(model: T?) {
+        try {
+            model?.delete()
+        } catch (e: Exception) {}
         this.model = null
         notifyListeners(null)
     }

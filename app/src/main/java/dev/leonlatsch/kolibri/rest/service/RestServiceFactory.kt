@@ -74,8 +74,8 @@ object RestServiceFactory {
     // Constrict the Retrofit object
     private fun provideRetrofit() {
         retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(OliviaHttpClient.getOliviaHttpClient())
+                .baseUrl(BASE_URL!!)
+                .client(OliviaHttpClient.oliviaHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build()
@@ -85,21 +85,21 @@ object RestServiceFactory {
         if (userService == null) {
             userService = retrofit!!.create(UserService::class.java)
         }
-        return userService
+        return userService!!
     }
 
     fun getAuthService(): AuthService {
         if (authService == null) {
             authService = retrofit!!.create(AuthService::class.java)
         }
-        return authService
+        return authService!!
     }
 
     fun getChatService(): ChatService {
         if (chatService == null) {
             chatService = retrofit!!.create(ChatService::class.java)
         }
-        return chatService
+        return chatService!!
     }
 
     fun getCommonService(): CommonService {
@@ -107,7 +107,7 @@ object RestServiceFactory {
             commonService = retrofit!!.create(CommonService::class.java)
         }
 
-        return commonService
+        return commonService!!
     }
 
     fun getConfigService(): ConfigService {
@@ -115,6 +115,6 @@ object RestServiceFactory {
             configService = retrofit!!.create(ConfigService::class.java)
         }
 
-        return configService
+        return configService!!
     }
 }

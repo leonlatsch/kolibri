@@ -36,6 +36,7 @@ import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.IllegalArgumentException
 import java.sql.Timestamp
 
 /**
@@ -99,9 +100,11 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
         }
 
         val contact = ContactInterface.getContact(chat!!.uid!!)
-        usernameTextView.text = contact.username
-        if (this.contact!!.profilePicTn != null) {
-            profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.profilePicTn))
+        if (contact != null) {
+            usernameTextView.text = contact.username
+            if (this.contact!!.profilePicTn != null) {
+                profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.profilePicTn))
+            }
         }
     }
 
@@ -190,24 +193,32 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
      * Initialize the data
      */
     private fun initData() {
-        val uid = intent.extras?.get(Values.INTENT_KEY_CHAT_UID) as String
-        val username = intent.extras?.get(Values.INTENT_KEY_CHAT_USERNAME) as String
-        val profilePic = intent.extras?.get(Values.INTENT_KEY_CHAT_PROFILE_PIC) as String
-        val publicKey = intent.extras?.get(Values.INTENT_KEY_CHAT_PUBLIC_KEY) as String
+        val uid = intent.extras?.get(Values.INTENT_KEY_CHAT_UID) as String?
+        val username = intent.extras?.get(Values.INTENT_KEY_CHAT_USERNAME) as String?
+        val profilePic = intent.extras?.get(Values.INTENT_KEY_CHAT_PROFILE_PIC) as String?
+        val publicKey = intent.extras?.get(Values.INTENT_KEY_CHAT_PUBLIC_KEY) as String?
+
+        requireNotNull(uid) { "ChatActivity must be initialized with a uid" }
 
         val contact = ContactInterface.getContact(uid)
-        this.contact = contact
-        this.chat = ChatInterface.getChatForContact(uid)
-        isTemp = false
+        if (contact != null) {
+            this.contact = contact
+            this.chat = ChatInterface.getChatForContact(uid)
+            isTemp = false
+        } else {
+            this.contact = Contact(uid, username, profilePic, publicKey)
+            this.chat = Chat(Generator.genUUid(), this.contact!!.uid, 0, null, null)
+            isTemp = true
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+        return if (item.itemId == android.R.id.home) {
             onBackPressed()
             finish()
-            return true
+            true
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 
