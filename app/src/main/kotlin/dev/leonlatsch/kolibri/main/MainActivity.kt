@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView!!.setNavigationItemSelectedListener(this)
 
         val logout = navigationView!!.findViewById<TextView>(R.id.nav_logout)
-        logout.setOnClickListener { v -> logout() }
+        logout.setOnClickListener { logout() }
 
         val actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.nav_drawer_open, R.string.nav_drawer_close)

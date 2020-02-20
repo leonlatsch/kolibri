@@ -110,17 +110,17 @@ object MessageConsumer {
         message.content = content
         if (!ChatInterface.messageExists(message)) {
             var chat = ChatInterface.getChatFromMessage(message)
-            message.cid = chat?.cid
 
             if (chat == null) {
                 try {
                     val userResponse = userService!!.get(UserInterface.accessToken!!, message.from!!).execute()
                     val publicKeyResponse = userService!!.getPublicKey(UserInterface.accessToken!!, message.from!!).execute()
 
-                    if (userResponse.isSuccessful) {
+                    if (userResponse.isSuccessful && publicKeyResponse.isSuccessful) {
                         ContactInterface.save(userResponse.body()?.content!!, publicKeyResponse.body()?.content!!)
                         val unreadMessages = if (ChatActivity.isActive) 0 else 1
                         chat = Chat(Generator.genUUid(), message.from, unreadMessages, message.content, message.timestamp)
+                        message.cid = chat.cid
                         ChatInterface.saveChat(chat)
                         notifyChatListChanged(chat)
                     }
