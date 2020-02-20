@@ -3,16 +3,12 @@ package dev.leonlatsch.kolibri.boot
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-
 import androidx.appcompat.app.AppCompatActivity
-
 import com.activeandroid.ActiveAndroid
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.boot.jobs.CheckUserAsyncJob
 import dev.leonlatsch.kolibri.boot.jobs.UpdateContactsAsyncJob
 import dev.leonlatsch.kolibri.boot.jobs.ValidateBackendJob
-import dev.leonlatsch.kolibri.boot.jobs.base.JobResult
 import dev.leonlatsch.kolibri.main.MainActivity
 import dev.leonlatsch.kolibri.main.login.LoginActivity
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory

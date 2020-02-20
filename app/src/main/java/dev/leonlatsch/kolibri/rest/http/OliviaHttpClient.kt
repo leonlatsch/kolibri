@@ -1,15 +1,11 @@
 package dev.leonlatsch.kolibri.rest.http
 
+import okhttp3.OkHttpClient
 import java.security.cert.CertificateException
-
+import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
-
-import okhttp3.OkHttpClient
-import java.lang.reflect.Array.get
-import java.security.cert.X509Certificate
 
 /**
  * @author Leon Latsch

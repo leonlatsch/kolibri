@@ -3,7 +3,6 @@ package dev.leonlatsch.kolibri.boot.jobs
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
-
 import dev.leonlatsch.kolibri.boot.BootActivity
 import dev.leonlatsch.kolibri.boot.jobs.base.AsyncJob
 import dev.leonlatsch.kolibri.boot.jobs.base.AsyncJobCallback
@@ -12,7 +11,6 @@ import dev.leonlatsch.kolibri.constants.Responses
 import dev.leonlatsch.kolibri.database.interfaces.ChatInterface
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface
-import dev.leonlatsch.kolibri.database.model.User
 import dev.leonlatsch.kolibri.rest.dto.Container
 import dev.leonlatsch.kolibri.rest.dto.UserDTO
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory

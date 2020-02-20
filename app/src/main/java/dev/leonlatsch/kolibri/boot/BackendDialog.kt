@@ -2,8 +2,6 @@ package dev.leonlatsch.kolibri.boot
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.view.View
@@ -11,13 +9,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-
-import java.util.regex.Pattern
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.constants.Regex
 import dev.leonlatsch.kolibri.constants.Responses
-import dev.leonlatsch.kolibri.constants.Values
 import dev.leonlatsch.kolibri.rest.dto.Container
 import dev.leonlatsch.kolibri.rest.service.CommonService
 import dev.leonlatsch.kolibri.rest.service.ConfigService
@@ -27,6 +21,7 @@ import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.regex.Pattern
 
 /**
  * A [AlertDialog] to configure the backend

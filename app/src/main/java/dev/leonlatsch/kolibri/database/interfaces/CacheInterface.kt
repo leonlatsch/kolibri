@@ -1,9 +1,6 @@
 package dev.leonlatsch.kolibri.database.interfaces
 
 import com.activeandroid.Model
-
-import java.util.ArrayList
-
 import dev.leonlatsch.kolibri.database.EntityChangedListener
 
 /**

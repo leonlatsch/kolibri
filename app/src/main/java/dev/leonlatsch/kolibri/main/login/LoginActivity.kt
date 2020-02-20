@@ -2,19 +2,14 @@ package dev.leonlatsch.kolibri.main.login
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
-import java.util.regex.Pattern
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.boot.BootActivity
 import dev.leonlatsch.kolibri.constants.Regex
@@ -22,7 +17,6 @@ import dev.leonlatsch.kolibri.constants.Responses
 import dev.leonlatsch.kolibri.constants.Values
 import dev.leonlatsch.kolibri.database.interfaces.KeyPairInterface
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface
-import dev.leonlatsch.kolibri.database.model.KeyPair
 import dev.leonlatsch.kolibri.main.MainActivity
 import dev.leonlatsch.kolibri.rest.dto.Container
 import dev.leonlatsch.kolibri.rest.dto.UserDTO
@@ -37,6 +31,7 @@ import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.regex.Pattern
 
 /**
  * This Activity is used for logging in and directing to the Registration

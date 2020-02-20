@@ -1,17 +1,11 @@
 package dev.leonlatsch.kolibri.main.fragment
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.ActionMode
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ListView
@@ -20,7 +14,6 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.broker.ChatListChangeListener
 import dev.leonlatsch.kolibri.broker.MessageConsumer

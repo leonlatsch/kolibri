@@ -11,18 +11,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
-
-import java.text.ParseException
-import java.util.ArrayList
-import java.util.Collections
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.constants.Formats
-import dev.leonlatsch.kolibri.constants.Values
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
 import dev.leonlatsch.kolibri.database.model.Chat
 import dev.leonlatsch.kolibri.util.ImageUtil
 import dev.leonlatsch.kolibri.util.empty
+import java.text.ParseException
+import java.util.Collections
+import kotlin.Boolean
+import kotlin.Comparator
+import kotlin.Int
+import kotlin.String
 
 /**
  * This Adapter is used to display the chat list in the [dev.leonlatsch.kolibri.main.fragment.ChatFragment]

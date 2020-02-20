@@ -4,12 +4,7 @@ import dev.leonlatsch.kolibri.rest.dto.Container
 import dev.leonlatsch.kolibri.rest.dto.UserDTO
 import dev.leonlatsch.kolibri.rest.http.Headers
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.PATCH
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  * This service is used for all user related requests

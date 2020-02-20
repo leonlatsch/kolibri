@@ -1,16 +1,12 @@
 package dev.leonlatsch.kolibri.broker.queue
 
-import java.io.IOException
-
 import dev.leonlatsch.kolibri.broker.MessageConsumer
 import dev.leonlatsch.kolibri.database.DatabaseMapper
 import dev.leonlatsch.kolibri.database.interfaces.ChatInterface
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface
-import dev.leonlatsch.kolibri.database.model.Message
-import dev.leonlatsch.kolibri.rest.dto.Container
 import dev.leonlatsch.kolibri.rest.service.ChatService
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
-import retrofit2.Response
+import java.io.IOException
 
 /**
  * @author Leon Latsch

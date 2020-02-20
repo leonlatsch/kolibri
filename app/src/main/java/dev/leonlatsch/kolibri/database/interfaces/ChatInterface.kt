@@ -72,7 +72,7 @@ object ChatInterface {
         return Select().from(Chat::class.java).where(QUEUE_UID_WHERE, uid).executeSingle()
     }
 
-    fun getMessagesForChat(cid: String): List<Message> {
+    fun getMessagesForChat(cid: String): MutableList<Message> {
         return Select().from(Message::class.java).where(QUEUE_CID_WHERE, cid).execute()
     }
 

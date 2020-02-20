@@ -1,7 +1,6 @@
 package dev.leonlatsch.kolibri.main.fragment
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -12,21 +11,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.theartofdev.edmodo.cropper.CropImage
-
-import java.util.regex.Pattern
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.constants.Regex
 import dev.leonlatsch.kolibri.constants.Responses
@@ -49,6 +40,7 @@ import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.regex.Pattern
 
 /**
  * Fragment for displaying and changing the logged in user

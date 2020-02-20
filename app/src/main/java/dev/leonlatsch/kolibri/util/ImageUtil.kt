@@ -4,10 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-
-import java.io.ByteArrayOutputStream
-
 import dev.leonlatsch.kolibri.R
+import java.io.ByteArrayOutputStream
 
 /**
  * A util class to load and convert images, drawables and bitmaps

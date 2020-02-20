@@ -1,6 +1,5 @@
 package dev.leonlatsch.kolibri.main.chat
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
@@ -9,15 +8,10 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import java.sql.Timestamp
-import java.util.ArrayList
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.broker.MessageConsumer
 import dev.leonlatsch.kolibri.broker.MessageRecyclerChangeListener
@@ -32,7 +26,6 @@ import dev.leonlatsch.kolibri.database.model.Contact
 import dev.leonlatsch.kolibri.database.model.Message
 import dev.leonlatsch.kolibri.database.model.MessageType
 import dev.leonlatsch.kolibri.rest.dto.Container
-import dev.leonlatsch.kolibri.rest.dto.MessageDTO
 import dev.leonlatsch.kolibri.rest.service.ChatService
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
 import dev.leonlatsch.kolibri.security.CryptoManager
@@ -43,6 +36,7 @@ import dev.leonlatsch.kolibri.util.empty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.sql.Timestamp
 
 /**
  * The Chat Activity which mainly displays messages and sends messages to the api
@@ -61,73 +55,53 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
 
     private var messageListAdapter: MessageListAdapter? = null
 
-    private var contactInterface: ContactInterface? = null
-    private var userInterface: UserInterface? = null
-    private var chatInterface: ChatInterface? = null
-
     private var chatService: ChatService? = null
 
-    @Override
-    protected fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        val toolbar = findViewById(R.id.chat_toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.chat_toolbar)
         setSupportActionBar(toolbar)
-        getSupportActionBar().setDisplayShowTitleEnabled(false)
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         MessageConsumer.setMessageRecyclerChangeListener(this)
-        contactInterface = ContactInterface.getInstance()
-        userInterface = UserInterface.getInstance()
-        chatInterface = ChatInterface.getInstance()
         chatService = RestServiceFactory.getChatService()
 
         initData()
         val preferences = Config.getSharedPreferences(this)
         messageRecycler = findViewById(R.id.chat_recycler_view)
 
-        val messageList: List<Message>
-        if (!isTemp) {
-            messageList = chatInterface!!.getMessagesForChat(chat!!.getCid())
+        val messageList: MutableList<Message> = if (!isTemp) {
+            ChatInterface.getMessagesForChat(chat!!.cid!!)
         } else {
-            messageList = ArrayList()
+            mutableListOf()
         }
         messageListAdapter = MessageListAdapter(this, messageList)
-        messageRecycler!!.setLayoutManager(LinearLayoutManager(this))
-        messageRecycler!!.setAdapter(messageListAdapter)
+        messageRecycler!!.layoutManager = LinearLayoutManager(this)
+        messageRecycler!!.adapter = messageListAdapter
 
         messageEditText = findViewById(R.id.chat_edit_text)
-        val usernameTextView = findViewById(R.id.chat_username_textview)
-        val profilePicImageView = findViewById(R.id.chat_profile_pic_image_view)
-        val sendButton = findViewById(R.id.chat_button_send)
-        sendButton.setOnClickListener({ v -> onSendPressed() })
+        val usernameTextView = findViewById<TextView>(R.id.chat_username_textview)
+        val profilePicImageView = findViewById<ImageView>(R.id.chat_profile_pic_image_view)
+        val sendButton = findViewById<ImageButton>(R.id.chat_button_send)
+        sendButton.setOnClickListener { onSendPressed() }
 
         if (preferences.getBoolean(Config.KEY_APP_SEND_WITH_ENTER, false)) {
-            messageEditText!!.setImeOptions(EditorInfo.IME_ACTION_SEND)
-            messageEditText!!.setOnEditorActionListener({ v, actionId, event ->
+            messageEditText!!.imeOptions = EditorInfo.IME_ACTION_SEND
+            messageEditText!!.setOnEditorActionListener { _, _, _ ->
                 onSendPressed()
                 true
-            })
+            }
         } else {
-            messageEditText!!.setImeOptions(EditorInfo.IME_ACTION_NONE)
+            messageEditText!!.imeOptions = EditorInfo.IME_ACTION_NONE
         }
 
-        val contact = contactInterface!!.getContact(chat!!.getUid())
-        if (contact != null) {
-            usernameTextView.setText(contact!!.getUsername())
-            if (this.contact!!.getProfilePicTn() != null) {
-                profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact!!.getProfilePicTn()))
-            }
-        } else {
-            val username = getIntent().getExtras().get(Values.INTENT_KEY_CHAT_USERNAME) as String
-            val profilePic = getIntent().getExtras().get(Values.INTENT_KEY_CHAT_PROFILE_PIC) as String
-            usernameTextView.setText(username)
-            if (profilePic != null) {
-                profilePicImageView.setImageBitmap(ImageUtil.createBitmap(profilePic))
-            } else {
-                profilePicImageView.setImageDrawable(ImageUtil.getDefaultProfilePic(this))
-            }
+        val contact = ContactInterface.getContact(chat!!.uid!!)
+        usernameTextView.text = contact.username
+        if (this.contact!!.profilePicTn != null) {
+            profilePicImageView.setImageBitmap(ImageUtil.createBitmap(contact.profilePicTn))
         }
     }
 
@@ -135,43 +109,41 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
      * Called when the send button is pressed
      */
     private fun onSendPressed() {
-        if (!messageEditText!!.getText().toString().isEmpty()) {
+        if (messageEditText!!.text.toString().isNotEmpty()) {
             val message = constructMessage()
 
-            if (isTemp) { // If this is the first message save the temo chat and contact
-                chat!!.setLastTimestamp(message.getTimestamp())
-                chat!!.setLastMessage(message.getContent())
-                chatInterface!!.saveChat(chat)
-                contactInterface!!.save(contact)
+            if (isTemp) { // If this is the first message save the item chat and contact
+                chat!!.lastTimestamp = message.timestamp
+                chat!!.lastMessage = message.content
+                ChatInterface.saveChat(chat!!)
+                ContactInterface.save(contact)
                 isTemp = false
             }
 
-            chat!!.setLastMessage(message.getContent())
-            chat!!.setLastTimestamp(message.getTimestamp())
-            chatInterface!!.updateChat(chat)
-            MessageConsumer.notifyChatListChangedFromExternal(chat)
+            chat!!.lastMessage = message.content
+            chat!!.lastTimestamp = message.timestamp
+            ChatInterface.updateChat(chat!!)
+            MessageConsumer.notifyChatListChangedFromExternal(chat!!)
 
             // Clean up view
             messageListAdapter!!.add(message)
             messageEditText!!.setText(String.empty())
-            messageRecycler!!.scrollToPosition(messageListAdapter!!.getLastPosition())
+            messageRecycler!!.scrollToPosition(messageListAdapter!!.lastPosition)
             messageEditText!!.requestFocus()
 
-            val encryptedMessage = DatabaseMapper.getInstance().toDto(message)
-            encryptedMessage.setContent(CryptoManager.encryptAndEncode(encryptedMessage.getContent().getBytes(), contact!!.getPublicKey()))
-            val call = chatService!!.send(userInterface!!.getAccessToken(), encryptedMessage)
-            call.enqueue(object : Callback<Container<String>>() {
-                @Override
-                fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
-                    message.setSent(true)
-                    chatInterface!!.saveMessage(message)
+            val encryptedMessage = DatabaseMapper.toDto(message)
+            encryptedMessage?.content = (CryptoManager.encryptAndEncode(encryptedMessage?.content!!.toByteArray(), contact!!.publicKey!!))
+            val call = chatService!!.send(UserInterface.accessToken!!, encryptedMessage)
+            call.enqueue(object : Callback<Container<String>> {
+                override fun onResponse(call: Call<Container<String>>, response: Response<Container<String>>) {
+                    message.isSent = true
+                    ChatInterface.saveMessage(message)
                     messageListAdapter!!.updateMessageStatus(message)
                 }
 
-                @Override
-                fun onFailure(call: Call<Container<String>>, t: Throwable) {
-                    message.setSent(false)
-                    chatInterface!!.saveMessage(message)
+                override fun onFailure(call: Call<Container<String>>, t: Throwable) {
+                    message.isSent = false
+                    ChatInterface.saveChat(chat!!)
                 }
             })
         }
@@ -182,17 +154,16 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
      *
      * @param message
      */
-    @Override
-    fun receive(message: Message) {
-        if (isActive && message.getCid().equals(chat!!.getCid()) && !isTemp) {
-            Handler(getApplicationContext().getMainLooper()).post({
+    override fun receive(message: Message) {
+        if (isActive && message.cid.equals(chat!!.cid) && !isTemp) {
+            Handler(applicationContext.mainLooper).post {
                 if (messageListAdapter!!.isMessagePresent(message)) {
                     messageListAdapter!!.updateMessageStatus(message)
                 } else {
                     messageListAdapter!!.add(message)
-                    messageRecycler!!.scrollToPosition(messageListAdapter!!.getLastPosition())
+                    messageRecycler!!.scrollToPosition(messageListAdapter!!.lastPosition)
                 }
-            }) // Invoke on main thread
+            } // Invoke on main thread
         }
     }
 
@@ -202,16 +173,16 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
      * @return
      */
     private fun constructMessage(): Message {
-        val messageText = messageEditText!!.getText().toString()
+        val messageText = messageEditText!!.text.toString()
 
         val message = Message()
-        message.setCid(chat!!.getCid())
-        message.setFrom(userInterface!!.getUser().getUid())
-        message.setTo(contact!!.getUid())
-        message.setMid(Generator.genUUid())
-        message.setType(MessageType.TEXT)
-        message.setTimestamp(Formats.DATE_FORMAT.format(Timestamp(System.currentTimeMillis())))
-        message.setContent(messageText)
+        message.cid = chat!!.cid
+        message.from = UserInterface.user?.uid
+        message.to = contact!!.uid
+        message.mid = Generator.genUUid()
+        message.type = MessageType.TEXT
+        message.timestamp = Formats.DATE_FORMAT.format(Timestamp(System.currentTimeMillis()))
+        message.content = messageText
         return message
     }
 
@@ -219,34 +190,19 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
      * Initialize the data
      */
     private fun initData() {
-        val uid = getIntent().getExtras().get(Values.INTENT_KEY_CHAT_UID) as String
-        val username = getIntent().getExtras().get(Values.INTENT_KEY_CHAT_USERNAME) as String
-        val profilePic = getIntent().getExtras().get(Values.INTENT_KEY_CHAT_PROFILE_PIC) as String
-        val publicKey = getIntent().getExtras().get(Values.INTENT_KEY_CHAT_PUBLIC_KEY) as String
+        val uid = intent.extras?.get(Values.INTENT_KEY_CHAT_UID) as String
+        val username = intent.extras?.get(Values.INTENT_KEY_CHAT_USERNAME) as String
+        val profilePic = intent.extras?.get(Values.INTENT_KEY_CHAT_PROFILE_PIC) as String
+        val publicKey = intent.extras?.get(Values.INTENT_KEY_CHAT_PUBLIC_KEY) as String
 
-        if (uid == null) {
-            throw IllegalArgumentException("Initializing ChatActivity with uid null")
-        }
-
-        val contact = contactInterface!!.getContact(uid)
-        if (contact != null) {
-            this.contact = contact
-            this.chat = chatInterface!!.getChatForContact(uid)
-            isTemp = false
-        } else {
-            this.contact = Contact()
-            this.contact!!.setUid(uid)
-            this.contact!!.setUsername(username)
-            this.contact!!.setProfilePicTn(profilePic)
-            this.contact!!.setPublicKey(publicKey)
-            chat = Chat(Generator.genUUid(), this.contact!!.getUid(), 0, null, null)
-            isTemp = true
-        }
+        val contact = ContactInterface.getContact(uid)
+        this.contact = contact
+        this.chat = ChatInterface.getChatForContact(uid)
+        isTemp = false
     }
 
-    @Override
-    fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.getItemId() === android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             onBackPressed()
             finish()
             return true
@@ -255,14 +211,12 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
         }
     }
 
-    @Override
-    fun onStart() {
+    override fun onStart() {
         super.onStart()
         isActive = true
     }
 
-    @Override
-    fun onStop() {
+    override fun onStop() {
         super.onStop()
         isActive = false
     }

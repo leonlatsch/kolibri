@@ -5,12 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-
-import java.util.ArrayList
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.constants.Values
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface
@@ -24,6 +20,7 @@ import dev.leonlatsch.kolibri.util.AndroidUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 /**
  * Activity to search for new users

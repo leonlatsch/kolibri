@@ -1,9 +1,6 @@
 package dev.leonlatsch.kolibri.boot.jobs
 
 import android.content.Context
-
-import java.io.IOException
-
 import dev.leonlatsch.kolibri.boot.jobs.base.AsyncJob
 import dev.leonlatsch.kolibri.boot.jobs.base.AsyncJobCallback
 import dev.leonlatsch.kolibri.boot.jobs.base.JobResult
@@ -11,12 +8,9 @@ import dev.leonlatsch.kolibri.broker.MessageConsumer
 import dev.leonlatsch.kolibri.database.interfaces.ChatInterface
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface
-import dev.leonlatsch.kolibri.database.model.Contact
-import dev.leonlatsch.kolibri.rest.dto.Container
-import dev.leonlatsch.kolibri.rest.dto.UserDTO
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
 import dev.leonlatsch.kolibri.rest.service.UserService
-import retrofit2.Response
+import java.io.IOException
 
 /**
  * Async job to update the saved contacts.

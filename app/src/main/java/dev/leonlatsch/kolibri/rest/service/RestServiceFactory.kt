@@ -1,15 +1,12 @@
 package dev.leonlatsch.kolibri.rest.service
 
 import android.content.Context
-import android.content.SharedPreferences
-
 import dev.leonlatsch.kolibri.rest.http.OliviaHttpClient
+import dev.leonlatsch.kolibri.settings.Config.KEY_BACKEND_HTTP_BASEURL
+import dev.leonlatsch.kolibri.settings.Config.getSharedPreferences
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-
-import dev.leonlatsch.kolibri.settings.Config.KEY_BACKEND_HTTP_BASEURL
-import dev.leonlatsch.kolibri.settings.Config.getSharedPreferences
 
 /**
  * @author Leon Latsch

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 
 import dev.leonlatsch.kolibri.R
@@ -18,26 +19,16 @@ import dev.leonlatsch.kolibri.database.model.Message
  * @author Leon Latsch
  * @since 1.0.0
  */
-class MessageListAdapter(private val mContext: Context, private val mMessageList: List<Message>) : RecyclerView.Adapter() {
+class MessageListAdapter(private val mContext: Context, private val mMessageList: MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val userInterface: UserInterface
+    override fun getItemCount(): Int = mMessageList.size
 
-    val itemCount: Int
-        @Override
-        get() = mMessageList.size()
+    val lastPosition: Int = mMessageList.size - 1
 
-    val lastPosition: Int
-        get() = mMessageList.size() - 1
-
-    init {
-        userInterface = UserInterface.getInstance()
-    }
-
-    @Override
-    fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int): Int {
         val message = mMessageList[position]
 
-        return if (message.getFrom().equals(userInterface.getUser().getUid())) {
+        return if (message.from.equals(UserInterface.user?.uid)) {
             VIEW_TYPE_MESSAGE_SENT // If the message from id is equal to the logged in user
         } else {
             VIEW_TYPE_MESSAGE_RECEIVED
@@ -45,9 +36,9 @@ class MessageListAdapter(private val mContext: Context, private val mMessageList
     }
 
     fun updateMessageStatus(message: Message) {
-        for (i in 0 until mMessageList.size()) {
-            if (mMessageList[i].getMid().equals(message.getMid())) {
-                mMessageList[i].setSent(message.isSent())
+        for (i in 0 until mMessageList.size) {
+            if (mMessageList[i].mid.equals(message.mid)) {
+                mMessageList[i].isSent = message.isSent
                 notifyDataSetChanged()
                 break
             }
@@ -56,7 +47,7 @@ class MessageListAdapter(private val mContext: Context, private val mMessageList
 
     fun isMessagePresent(message: Message): Boolean {
         for (data in mMessageList) {
-            if (data.getMid().equals(message.getMid())) {
+            if (data.mid.equals(message.mid)) {
                 return true
             }
         }
@@ -65,28 +56,24 @@ class MessageListAdapter(private val mContext: Context, private val mMessageList
     }
 
     @NonNull
-    @Override
-    fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? {
-        var view: View? = null
+    override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view: View?
 
-        if (viewType == VIEW_TYPE_MESSAGE_SENT) {
-            view = LayoutInflater.from(parent.getContext())
+        return if (viewType == VIEW_TYPE_MESSAGE_SENT) {
+            view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_message_sent, parent, false)
-            return SentMessageHolder(view)
-        } else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
-            view = LayoutInflater.from(parent.getContext())
+            SentMessageHolder(view)
+        } else {
+            view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_message_received, parent, false)
-            return ReceivedMessageHolder(view)
+            ReceivedMessageHolder(view)
         }
-
-        return null // should never happen case
     }
 
-    @Override
-    fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int) {
         val message = mMessageList[position]
 
-        when (holder.getItemViewType()) {
+        when (holder.itemViewType) {
             VIEW_TYPE_MESSAGE_SENT -> (holder as SentMessageHolder).bind(message)
             VIEW_TYPE_MESSAGE_RECEIVED -> (holder as ReceivedMessageHolder).bind(message)
         }
@@ -94,26 +81,19 @@ class MessageListAdapter(private val mContext: Context, private val mMessageList
 
     fun add(message: Message) {
         mMessageList.add(message)
-        notifyItemInserted(mMessageList.size() - 1)
+        notifyItemInserted(mMessageList.size - 1)
     }
 
     private inner class SentMessageHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        internal var messageBody: TextView
-        internal var messageTimestamp: TextView
-        internal var sentIndicator: ImageView
-
-        init {
-
-            messageBody = itemView.findViewById(R.id.sent_message_body)
-            messageTimestamp = itemView.findViewById(R.id.sent_message_timestamp)
-            sentIndicator = itemView.findViewById(R.id.sent_message_sent_indicator)
-        }
+        internal var messageBody: TextView = itemView.findViewById(R.id.sent_message_body)
+        internal var messageTimestamp: TextView = itemView.findViewById(R.id.sent_message_timestamp)
+        internal var sentIndicator: ImageView = itemView.findViewById(R.id.sent_message_sent_indicator)
 
         internal fun bind(message: Message) {
-            messageBody.setText(message.getContent())
-            messageTimestamp.setText(message.getTimestamp().substring(11, 16)) // Hard code for the moment
-            if (message.isSent()) {
+            messageBody.text = message.content
+            messageTimestamp.text = message.timestamp?.substring(11, 16) // Hard code for the moment
+            if (message.isSent) {
                 sentIndicator.setImageDrawable(mContext.getDrawable(R.drawable.ic_check))
             } else {
                 sentIndicator.setImageDrawable(mContext.getDrawable(R.drawable.ic_watch))
@@ -133,14 +113,14 @@ class MessageListAdapter(private val mContext: Context, private val mMessageList
         }
 
         internal fun bind(message: Message) {
-            messageBody.setText(message.getContent())
-            messageTimestamp.setText(message.getTimestamp().substring(11, 16)) // Hard code for the moment
+            messageBody.text = message.content
+            messageTimestamp.text = message.timestamp?.substring(11, 16) // Hard code for the moment
         }
     }
 
     companion object {
 
-        private val VIEW_TYPE_MESSAGE_SENT = 1
-        private val VIEW_TYPE_MESSAGE_RECEIVED = 2
+        private const val VIEW_TYPE_MESSAGE_SENT = 1
+        private const val VIEW_TYPE_MESSAGE_RECEIVED = 2
     }
 }

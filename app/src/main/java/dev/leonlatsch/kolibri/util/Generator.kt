@@ -1,6 +1,6 @@
 package dev.leonlatsch.kolibri.util
 
-import java.util.UUID
+import java.util.*
 
 /**
  * @author Leon Latsch

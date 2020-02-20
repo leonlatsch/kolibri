@@ -1,22 +1,11 @@
 package dev.leonlatsch.kolibri.broker
 
 import android.content.Context
-import android.content.SharedPreferences
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.AlreadyClosedException
-import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import java.io.IOException
-import java.nio.charset.StandardCharsets
-import java.util.concurrent.TimeoutException
-
 import dev.leonlatsch.kolibri.database.DatabaseMapper
 import dev.leonlatsch.kolibri.database.interfaces.ChatInterface
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
@@ -25,14 +14,15 @@ import dev.leonlatsch.kolibri.database.interfaces.UserInterface
 import dev.leonlatsch.kolibri.database.model.Chat
 import dev.leonlatsch.kolibri.database.model.Message
 import dev.leonlatsch.kolibri.main.chat.ChatActivity
-import dev.leonlatsch.kolibri.rest.dto.Container
 import dev.leonlatsch.kolibri.rest.dto.MessageDTO
-import dev.leonlatsch.kolibri.rest.dto.UserDTO
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
 import dev.leonlatsch.kolibri.rest.service.UserService
 import dev.leonlatsch.kolibri.security.CryptoManager
 import dev.leonlatsch.kolibri.settings.Config
-import retrofit2.Response
+import org.slf4j.LoggerFactory
+import java.io.IOException
+import java.nio.charset.StandardCharsets
+import java.util.concurrent.TimeoutException
 
 /**
  * This class controls the receiving of messages.

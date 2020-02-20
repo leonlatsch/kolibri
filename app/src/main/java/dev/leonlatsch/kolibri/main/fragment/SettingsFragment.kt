@@ -1,12 +1,8 @@
 package dev.leonlatsch.kolibri.main.fragment
 
-import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
-
 import androidx.preference.PreferenceFragmentCompat
-
 import dev.leonlatsch.kolibri.R
 import dev.leonlatsch.kolibri.main.MainActivity
 import dev.leonlatsch.kolibri.settings.Config
