@@ -13,7 +13,7 @@ abstract class AsyncJob(context: Context) : BaseJob(context) {
     private var thread: Thread? = null
 
     private val threadName: String
-        get() = this.getClass().getName() + "-THREAD"
+        get() = this.javaClass.name + "-THREAD"
 
     abstract fun execute(asyncJobCallback: AsyncJobCallback)
 

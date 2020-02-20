@@ -19,7 +19,7 @@ object ChatInterface {
     private const val QUEUE_MID_WHERE = "mid = ?"
     private const val QUEUE_UID_WHERE = "uid = ?"
 
-    val all: List<Chat> = Select().from(Chat::class.java).execute()
+    val all: MutableList<Chat> = Select().from(Chat::class.java).execute()
 
     val allUnsentMessages: List<Message> = Select().from(Message::class.java).where("sent = ?", false).execute()
 
@@ -64,7 +64,7 @@ object ChatInterface {
 
     fun getChat(cid: String): Chat = Select().from(Chat::class.java).where(QUEUE_CID_WHERE, cid).executeSingle()
 
-    fun getChatFromMessage(message: Message): Chat {
+    fun getChatFromMessage(message: Message): Chat? {
         return Select().from(Chat::class.java).where(QUEUE_UID_WHERE, message.from).executeSingle()
     }
 

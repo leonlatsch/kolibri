@@ -18,6 +18,7 @@ import dev.leonlatsch.kolibri.rest.service.UserService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.AccessController.getContext
 
 /**
  * Async job to check and update the logged in user
@@ -27,54 +28,41 @@ import retrofit2.Response
  */
 class CheckUserAsyncJob(context: Context) : AsyncJob(context) {
 
-    private val userService: UserService
-    private val userInterface: UserInterface
-    private val contactInterface: ContactInterface
-    private val chatInterface: ChatInterface
+    private val userService: UserService = RestServiceFactory.getUserService()
 
-    init {
-        userInterface = UserInterface.getInstance()
-        userService = RestServiceFactory.getUserService()
-        contactInterface = ContactInterface.getInstance()
-        chatInterface = ChatInterface.getInstance()
-    }
-
-    @Override
-    fun execute(asyncJobCallback: AsyncJobCallback) {
+    override fun execute(asyncJobCallback: AsyncJobCallback) {
         run {
-            userInterface.loadUser()
+            UserInterface.loadUser()
 
-            val savedUser = userInterface.getUser()
+            val savedUser = UserInterface.user
 
             if (savedUser != null) {
-                asyncJobCallback.onResult(JobResult<Void>(true, null))
+                asyncJobCallback.onResult(JobResult(true, null))
 
-                val call = userService.get(userInterface.getAccessToken())
-                call.enqueue(object : Callback<Container<UserDTO>>() {
-                    @Override
-                    fun onResponse(call: Call<Container<UserDTO>>, response: Response<Container<UserDTO>>) {
-                        if (response.code() === Responses.CODE_OK) { // Update saved user
-                            userInterface.save(response.body().getContent(), savedUser!!.getAccessToken())
+                val call = userService.get(UserInterface.accessToken!!)
+                call.enqueue(object : Callback<Container<UserDTO>> {
+                    override fun onResponse(call: Call<Container<UserDTO>>, response: Response<Container<UserDTO>>) {
+                        if (response.code() == Responses.CODE_OK) { // Update saved user
+                            UserInterface.save(response.body()?.content!!, savedUser.accessToken!!)
                         } else {
                             // if the saved user is not in the backend
-                            userInterface.delete(savedUser)
-                            contactInterface.deleteAll()
-                            chatInterface.deleteAll()
-                            Handler(getContext().getMainLooper()).post({
-                                val intent = Intent(getContext(), BootActivity::class.java)
+                            UserInterface.delete(savedUser)
+                            ContactInterface.deleteAll()
+                            ChatInterface.deleteAll()
+                            Handler(context.mainLooper).post {
+                                val intent = Intent(context, BootActivity::class.java)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                getContext().startActivity(intent)
-                            })
+                                context.startActivity(intent)
+                            }
                         }
                     }
 
-                    @Override
-                    fun onFailure(call: Call<Container<UserDTO>>, t: Throwable) {
+                    override fun onFailure(call: Call<Container<UserDTO>>, t: Throwable) {
 
                     }
                 })
             } else {
-                asyncJobCallback.onResult(JobResult<Void>(false, null))
+                asyncJobCallback.onResult(JobResult(false, null))
             }
         }
     }

@@ -19,57 +19,45 @@ import java.io.IOException
  * @since 1.0.0
  */
 class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
+    private val userService: UserService = RestServiceFactory.getUserService()
 
-    private val userInterface: UserInterface
-    private val contactInterface: ContactInterface
-    private val chatInterface: ChatInterface
-    private val userService: UserService
-
-    init {
-        userInterface = UserInterface.getInstance()
-        contactInterface = ContactInterface.getInstance()
-        chatInterface = ChatInterface.getInstance()
-        userService = RestServiceFactory.getUserService()
-    }
-
-    @Override
-    fun execute(asyncJobCallback: AsyncJobCallback?) { //TODO: create backend function to get a list of contacts in one request
+    override fun execute(asyncJobCallback: AsyncJobCallback) { //TODO: create backend function to get a list of contacts in one request
         run {
-            val contacts = contactInterface.getALl()
+            val contacts = ContactInterface.all
 
             var success = true
             var contactsUpdated = 0
 
             for (contact in contacts) {
                 try {
-                    val contactResponse = userService.get(userInterface.getAccessToken(), contact.getUid()).execute()
-                    val publicKeyResponse = userService.getPublicKey(userInterface.getAccessToken(), contact.getUid()).execute()
+                    val contactResponse = userService.get(UserInterface.accessToken!!, contact.uid!!).execute()
+                    val publicKeyResponse = userService.getPublicKey(UserInterface.accessToken!!, contact.uid!!).execute()
 
-                    if (contactResponse.isSuccessful() && publicKeyResponse.isSuccessful()) {
-                        val userDTO = contactResponse.body().getContent()
-                        val publicKey = publicKeyResponse.body().getContent()
+                    if (contactResponse.isSuccessful && publicKeyResponse.isSuccessful) {
+                        val userDTO = contactResponse.body()?.content!!
+                        val publicKey = publicKeyResponse.body()?.content!!
 
                         var changed = false
 
-                        if (contact.getProfilePicTn() == null) {
-                            if (userDTO.getProfilePicTn() != null) {
-                                contact.setProfilePicTn(userDTO.getProfilePicTn())
+                        if (contact.profilePicTn == null) {
+                            if (userDTO.profilePicTn != null) {
+                                contact.profilePicTn = userDTO.profilePicTn
                                 changed = true
                             }
-                        } else if (!contact.getProfilePicTn().equals(userDTO.getProfilePicTn())) {
-                            contact.setProfilePicTn(userDTO.getProfilePicTn())
+                        } else if (!contact.profilePicTn.equals(userDTO.profilePicTn)) {
+                            contact.profilePicTn = userDTO.profilePicTn
                             changed = true
                         }
 
-                        if (!contact.getPublicKey().equals(publicKey)) {
-                            contact.setPublicKey(publicKey)
+                        if (!contact.publicKey.equals(publicKey)) {
+                            contact.publicKey = publicKey
                             changed = true
                         }
 
                         if (changed) {
-                            contactInterface.updateContact(contact)
+                            ContactInterface.updateContact(contact)
                             // Notify the chat list if it is already displayed
-                            MessageConsumer.notifyChatListChangedFromExternal(chatInterface.getChatForContact(contact.getUid()))
+                            MessageConsumer.notifyChatListChangedFromExternal(ChatInterface.getChatForContact(contact.uid!!))
                             contactsUpdated++
                         }
                     }
@@ -79,9 +67,7 @@ class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
 
             }
 
-            if (asyncJobCallback != null) {
-                asyncJobCallback!!.onResult(JobResult(success, contactsUpdated))
-            }
+            asyncJobCallback.onResult(JobResult(success, contactsUpdated))
         }
     }
 }

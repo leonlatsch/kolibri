@@ -19,7 +19,7 @@ object ContactInterface {
 
     private const val QUEUE_UID_WHERE = "uid = ?"
 
-    val aLl: List<Contact>
+    val all: List<Contact>
         get() = Select().from(Contact::class.java).execute()
 
     fun getContact(uid: String): Contact {

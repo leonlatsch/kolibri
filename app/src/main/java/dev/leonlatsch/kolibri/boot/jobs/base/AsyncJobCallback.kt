@@ -8,5 +8,5 @@ package dev.leonlatsch.kolibri.boot.jobs.base
  */
 interface AsyncJobCallback {
 
-    fun onResult(jobResult: JobResult)
+    fun onResult(jobResult: JobResult<Any?>)
 }

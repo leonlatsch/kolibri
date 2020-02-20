@@ -2,10 +2,7 @@ package dev.leonlatsch.kolibri.broker
 
 import android.content.Context
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.rabbitmq.client.AlreadyClosedException
-import com.rabbitmq.client.Connection
-import com.rabbitmq.client.ConnectionFactory
-import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.*
 import dev.leonlatsch.kolibri.database.DatabaseMapper
 import dev.leonlatsch.kolibri.database.interfaces.ChatInterface
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface
@@ -13,6 +10,7 @@ import dev.leonlatsch.kolibri.database.interfaces.KeyPairInterface
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface
 import dev.leonlatsch.kolibri.database.model.Chat
 import dev.leonlatsch.kolibri.database.model.Message
+import dev.leonlatsch.kolibri.database.model.MessageType
 import dev.leonlatsch.kolibri.main.chat.ChatActivity
 import dev.leonlatsch.kolibri.rest.dto.MessageDTO
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory
@@ -33,14 +31,10 @@ import java.util.concurrent.TimeoutException
  */
 class MessageConsumer private constructor(context: Context) {
     private var connectionFactory: ConnectionFactory? = null
-    private var callback: DeliverCallback? = null
+    private var deliverCallback: DeliverCallback? = null
+    private var cancelCallback: CancelCallback? = null
     private var connection: Connection? = null
-    private var userInterface: UserInterface? = null
-    private var contactInterface: ContactInterface? = null
-    private var chatInterface: ChatInterface? = null
-    private var keyPairInterface: KeyPairInterface? = null
     private var userService: UserService? = null
-    private var databaseMapper: DatabaseMapper? = null
 
     init {
         initialize(context)
@@ -52,41 +46,43 @@ class MessageConsumer private constructor(context: Context) {
      * @param context
      */
     private fun initialize(context: Context) {
-        userInterface = UserInterface.getInstance()
-        contactInterface = ContactInterface.getInstance()
-        chatInterface = ChatInterface.getInstance()
-        keyPairInterface = KeyPairInterface.getInstance()
         userService = RestServiceFactory.getUserService()
-        databaseMapper = DatabaseMapper.getInstance()
         val preferences = Config.getSharedPreferences(context)
 
         // Initialize config
         connectionFactory = ConnectionFactory()
-        connectionFactory!!.setHost(preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null))
-        connectionFactory!!.setPort(preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0))
-        connectionFactory!!.setUsername(userInterface!!.getUser().getUid())
-        connectionFactory!!.setPassword(userInterface!!.getAccessToken())
-        connectionFactory!!.setAutomaticRecoveryEnabled(true)
-        connectionFactory!!.setNetworkRecoveryInterval(1000)
-        connectionFactory!!.setConnectionTimeout(5000)
+        connectionFactory!!.host = preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null)
+        connectionFactory!!.port = preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0)
+        connectionFactory!!.username = UserInterface.user?.uid!!
+        connectionFactory!!.password = UserInterface.accessToken!!
+        connectionFactory!!.isAutomaticRecoveryEnabled = true
+        connectionFactory!!.run {
 
-        callback = { consumerTag, message ->
-            val messageDTO = ObjectMapper().readValue(String(message.getBody(), StandardCharsets.UTF_8), MessageDTO::class.java)
+            // Initialize config
+            connectionFactory = ConnectionFactory()
+            host = preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null)
+            port = preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0)
+            username = UserInterface.user?.uid!!
+            password = UserInterface.accessToken!!
+            isAutomaticRecoveryEnabled = true
+            setNetworkRecoveryInterval(1000)
+            connectionTimeout = 5000
+        }
+
+        deliverCallback = DeliverCallback { _, message ->
+            val messageDTO = ObjectMapper().readValue(String(message.body, StandardCharsets.UTF_8), MessageDTO::class.java)
             if (messageDTO != null) {
-                when (messageDTO!!.getType()) {
-                    TEXT -> processTextMessage(databaseMapper!!.toModel(messageDTO))
-                    IMAGE -> {
-                    }
-                    AUDIO -> {
-                    }
-                    VIDEO -> {
-                    }
-                    else -> log.warn("Received message with type: " + messageDTO!!.getType())
-                }//TODO: Process Image
-                //TODO: Process Audio
-                //TODO Process Video
+                when (messageDTO.type) {
+                    MessageType.TEXT -> processTextMessage(DatabaseMapper.toModel(messageDTO)!!)
+                    MessageType.IMAGE -> TODO("Implement Image messages")
+                    MessageType.AUDIO -> TODO("Implement Audio messages")
+                    MessageType.VIDEO -> TODO("Implement Video messages")
+                    else -> log.warn("Cloud not process message with type: ${messageDTO.type}")
+                }
             }
         }
+
+        cancelCallback = CancelCallback {} // Do nothing on cancel
     }
 
     /**
@@ -97,7 +93,7 @@ class MessageConsumer private constructor(context: Context) {
             try {
                 connection = connectionFactory!!.newConnection()
                 val channel = connection!!.createChannel()
-                channel.basicConsume(USER_QUEUE_PREFIX + userInterface!!.getUser().getUid(), true, callback, { consumerTag -> })
+                channel!!.basicConsume(USER_QUEUE_PREFIX + UserInterface.user?.uid!!, deliverCallback, cancelCallback)
                 isRunning = true
             } catch (e: IOException) {
                 try {
@@ -125,25 +121,23 @@ class MessageConsumer private constructor(context: Context) {
      * @param message
      */
     private fun processTextMessage(message: Message) {
-        val decryptedData = CryptoManager.decryptAndDecode(message.getContent(), keyPairInterface!!.get(userInterface!!.getUser().getUid()).getPrivateKey())
-        val content = String(decryptedData, StandardCharsets.UTF_8)
-        message.setContent(content)
-        if (!chatInterface!!.messageExists(message)) {
-            var chat = chatInterface!!.getChatFromMessage(message)
-            if (chat != null) {
-                message.setCid(chat!!.getCid())
-            }
+        val decryptedData = CryptoManager.decryptAndDecode(message.content!!, KeyPairInterface.get(UserInterface.user?.uid!!).privateKey!!)
+        val content = String(decryptedData!!, StandardCharsets.UTF_8)
+        message.content = content
+        if (!ChatInterface.messageExists(message)) {
+            var chat = ChatInterface.getChatFromMessage(message)
+            message.cid = chat?.cid
 
             if (chat == null) {
                 try {
-                    val userResponse = userService!!.get(userInterface!!.getAccessToken(), message.getFrom()).execute()
-                    val publicKeyResponse = userService!!.getPublicKey(userInterface!!.getAccessToken(), message.getFrom()).execute()
+                    val userResponse = userService!!.get(UserInterface.accessToken!!, message.from!!).execute()
+                    val publicKeyResponse = userService!!.getPublicKey(UserInterface.accessToken!!, message.from!!).execute()
 
-                    if (userResponse.isSuccessful()) {
-                        contactInterface!!.save(userResponse.body().getContent(), publicKeyResponse.body().getContent())
+                    if (userResponse.isSuccessful) {
+                        ContactInterface.save(userResponse.body()?.content!!, publicKeyResponse.body()?.content!!)
                         val unreadMessages = if (ChatActivity.isActive) 0 else 1
-                        chat = Chat(message.getCid(), message.getFrom(), unreadMessages, message.getContent(), message.getTimestamp())
-                        chatInterface!!.saveChat(chat)
+                        chat = Chat(message.cid, message.from, unreadMessages, message.content, message.timestamp)
+                        ChatInterface.saveChat(chat)
                         notifyChatListChangeListener(chat)
                     }
                 } catch (e: IOException) {
@@ -151,17 +145,17 @@ class MessageConsumer private constructor(context: Context) {
                 }
 
             } else {
-                chat!!.setLastMessage(message.getContent())
-                chat!!.setLastTimestamp(message.getTimestamp())
+                chat.lastMessage = message.content
+                chat.lastTimestamp = message.timestamp
                 if (ChatActivity.isActive) {
                     notifyMessageRecyclerChangeListener(message)
                 } else {
-                    chat!!.setUnreadMessages(chat!!.getUnreadMessages() + 1)
+                    chat.unreadMessages = chat.unreadMessages + 1
                 }
-                chatInterface!!.updateChat(chat)
+                ChatInterface.updateChat(chat)
                 notifyChatListChangeListener(chat)
             }
-            chatInterface!!.saveMessage(message)
+            ChatInterface.saveMessage(message)
         }
     }
 
@@ -191,8 +185,8 @@ class MessageConsumer private constructor(context: Context) {
 
         private val log = LoggerFactory.getLogger(MessageConsumer::class.java)
 
-        private val USER_QUEUE_PREFIX = "queue.user."
-        private val THREAD_NAME = "BROKER-NET-THREAD"
+        private const val USER_QUEUE_PREFIX = "queue.user."
+        private const val THREAD_NAME = "BROKER-NET-THREAD"
 
         private var consumer: MessageConsumer? = null // Singleton
         private var messageRecyclerChangeListener: MessageRecyclerChangeListener? = null

@@ -19,14 +19,9 @@ import dev.leonlatsch.kolibri.settings.Config.KEY_BACKEND_HTTP_BASEURL
  */
 class ValidateBackendJob(context: Context) : Job(context) {
 
-    private val preferences: SharedPreferences
+    private val preferences: SharedPreferences = Config.getSharedPreferences(context)
 
-    init {
-        preferences = Config.getSharedPreferences(context)
-    }
-
-    @Override
-    fun execute(): JobResult<Void> {
+    override fun execute(): JobResult<Any?> {
         val baseUrl = preferences.getString(KEY_BACKEND_HTTP_BASEURL, null)
         val brokerHost = preferences.getString(KEY_BACKEND_BROKER_HOST, null)
         val brokerPort = preferences.getInt(KEY_BACKEND_BROKER_PORT, 0)

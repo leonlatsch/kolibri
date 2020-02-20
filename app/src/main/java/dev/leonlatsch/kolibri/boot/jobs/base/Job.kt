@@ -10,5 +10,5 @@ import android.content.Context
  */
 abstract class Job protected constructor(context: Context) : BaseJob(context) {
 
-    abstract fun execute(): JobResult
+    abstract fun execute(): JobResult<Any?>
 }

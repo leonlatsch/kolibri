@@ -14,10 +14,7 @@ import java.io.IOException
  */
 class MessageQueue private constructor() {
 
-    private val chatService: ChatService
-    private val chatInterface: ChatInterface
-    private val userInterface: UserInterface
-    private val databaseMapper: DatabaseMapper
+    private val chatService: ChatService = RestServiceFactory.getChatService()
 
     private val thread: Thread
     private val runnable = {
@@ -25,13 +22,13 @@ class MessageQueue private constructor() {
             try {
                 Thread.sleep(2000)
 
-                val messages = chatInterface.getAllUnsentMessages()
+                val messages = ChatInterface.allUnsentMessages
 
                 for (message in messages) {
-                    val response = chatService.send(userInterface.getAccessToken(), databaseMapper.toDto(message)).execute()
-                    if (response.isSuccessful()) {
-                        message.setSent(true)
-                        chatInterface.setMessageSent(message)
+                    val response = chatService.send(UserInterface.accessToken!!, DatabaseMapper.toDto(message)!!).execute()
+                    if (response.isSuccessful) {
+                        message.isSent = true
+                        ChatInterface.setMessageSent(message)
                         MessageConsumer.notifyMessageRecyclerChangedFromExternal(message)
                     }
                 }
@@ -43,17 +40,12 @@ class MessageQueue private constructor() {
     }
 
     init {
-        chatService = RestServiceFactory.getChatService()
-        chatInterface = ChatInterface.getInstance()
-        userInterface = UserInterface.getInstance()
-        databaseMapper = DatabaseMapper.getInstance()
-
         thread = Thread(runnable, THREAD_NAME)
     }
 
     companion object {
 
-        private val THREAD_NAME = "MESSAGE-QUEUE-THREAD"
+        private const val THREAD_NAME = "MESSAGE-QUEUE-THREAD"
 
         private var running = false
         private var messageQueue: MessageQueue? = null // Singleton
