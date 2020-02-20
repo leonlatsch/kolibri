@@ -29,7 +29,7 @@ class MessageQueue private constructor() {
                     if (response.isSuccessful) {
                         message.isSent = true
                         ChatInterface.setMessageSent(message)
-                        MessageConsumer.notifyMessageRecyclerChangedFromExternal(message)
+                        MessageConsumer.notifyMessageRecyclerChanged(message)
                     }
                 }
             } catch (e: InterruptedException) {

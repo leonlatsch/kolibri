@@ -29,16 +29,11 @@ import java.util.concurrent.TimeoutException
  * @author Leon Latsch
  * @since 1.0.0
  */
-class MessageConsumer private constructor(context: Context) {
+object MessageConsumer {
     private var connectionFactory: ConnectionFactory? = null
     private var deliverCallback: DeliverCallback? = null
-    private var cancelCallback: CancelCallback? = null
     private var connection: Connection? = null
     private var userService: UserService? = null
-
-    init {
-        initialize(context)
-    }
 
     /**
      * Initialize the consumer with services, interfaces and a connection factory from the shared preferences
@@ -71,8 +66,6 @@ class MessageConsumer private constructor(context: Context) {
                 }
             }
         }
-
-        cancelCallback = CancelCallback {} // Do nothing on cancel
     }
 
     /**
@@ -83,7 +76,7 @@ class MessageConsumer private constructor(context: Context) {
             try {
                 connection = connectionFactory!!.newConnection()
                 val channel = connection!!.createChannel()
-                channel!!.basicConsume(USER_QUEUE_PREFIX + UserInterface.user?.uid!!, deliverCallback, cancelCallback)
+                channel!!.basicConsume(USER_QUEUE_PREFIX + UserInterface.user?.uid!!, true, deliverCallback, ConsumerShutdownSignalCallback { _, _ -> })
                 isRunning = true
             } catch (e: IOException) {
                 try {
@@ -128,7 +121,7 @@ class MessageConsumer private constructor(context: Context) {
                         val unreadMessages = if (ChatActivity.isActive) 0 else 1
                         chat = Chat(message.cid, message.from, unreadMessages, message.content, message.timestamp)
                         ChatInterface.saveChat(chat)
-                        notifyChatListChangeListener(chat)
+                        notifyChatListChanged(chat)
                     }
                 } catch (e: IOException) {
                     return
@@ -138,12 +131,12 @@ class MessageConsumer private constructor(context: Context) {
                 chat.lastMessage = message.content
                 chat.lastTimestamp = message.timestamp
                 if (ChatActivity.isActive) {
-                    notifyMessageRecyclerChangeListener(message)
+                    notifyMessageRecyclerChanged(message)
                 } else {
                     chat.unreadMessages = chat.unreadMessages + 1
                 }
                 ChatInterface.updateChat(chat)
-                notifyChatListChangeListener(chat)
+                notifyChatListChanged(chat)
             }
             ChatInterface.saveMessage(message)
         }
@@ -159,77 +152,49 @@ class MessageConsumer private constructor(context: Context) {
         }, THREAD_NAME).start()
     }
 
-    private fun notifyMessageRecyclerChangeListener(message: Message) {
+    fun notifyMessageRecyclerChanged(message: Message) {
         if (messageRecyclerChangeListener != null) {
             messageRecyclerChangeListener!!.receive(message)
         }
     }
 
-    private fun notifyChatListChangeListener(chat: Chat) {
+    fun notifyChatListChanged(chat: Chat) {
         if (chatListChangeListener != null) {
             chatListChangeListener!!.chatChanged(chat)
         }
     }
 
-    companion object {
+    private val log = LoggerFactory.getLogger(MessageConsumer::class.java)
 
-        private val log = LoggerFactory.getLogger(MessageConsumer::class.java)
+    private const val USER_QUEUE_PREFIX = "queue.user."
+    private const val THREAD_NAME = "BROKER-NET-THREAD"
 
-        private const val USER_QUEUE_PREFIX = "queue.user."
-        private const val THREAD_NAME = "BROKER-NET-THREAD"
+    private var messageRecyclerChangeListener: MessageRecyclerChangeListener? = null
+    private var chatListChangeListener: ChatListChangeListener? = null
+    var isRunning = false
+        private set
 
-        private var consumer: MessageConsumer? = null // Singleton
-        private var messageRecyclerChangeListener: MessageRecyclerChangeListener? = null
-        private var chatListChangeListener: ChatListChangeListener? = null
-        var isRunning = false
-            private set
 
-        /**
-         * Notify if a chat has changed from external components
-         *
-         * @param chat
-         */
-        fun notifyChatListChangedFromExternal(chat: Chat) {
-            if (consumer != null) {
-                consumer!!.notifyChatListChangeListener(chat)
-            }
+    fun setMessageRecyclerChangeListener(listener: MessageRecyclerChangeListener) {
+        messageRecyclerChangeListener = listener
+    }
+
+    fun setChatListChangeListener(listener: ChatListChangeListener) {
+        chatListChangeListener = listener
+    }
+
+    fun start(context: Context) {
+        if (!isRunning) {
+            initialize(context)
+
+            run()
         }
+    }
 
-        /**
-         * Notify if a message has changed from external components
-         *
-         * @param message
-         */
-        fun notifyMessageRecyclerChangedFromExternal(message: Message) {
-            if (messageRecyclerChangeListener != null) {
-                messageRecyclerChangeListener!!.receive(message)
-            }
-        }
-
-        fun setMessageRecyclerChangeListener(listener: MessageRecyclerChangeListener) {
-            messageRecyclerChangeListener = listener
-        }
-
-        fun setChatListChangeListener(listener: ChatListChangeListener) {
-            chatListChangeListener = listener
-        }
-
-        fun start(context: Context) {
-            if (!isRunning) {
-                if (consumer == null) {
-                    consumer = MessageConsumer(context)
-                }
-
-                consumer!!.run()
-            }
-        }
-
-        fun stop() {
-            if (isRunning) {
-                consumer!!.disconnect()
-                consumer = null
-                isRunning = false
-            }
+    fun stop() {
+        if (isRunning) {
+            disconnect()
+            isRunning = false
         }
     }
 }

@@ -57,7 +57,7 @@ class UpdateContactsAsyncJob(context: Context) : AsyncJob(context) {
                         if (changed) {
                             ContactInterface.updateContact(contact)
                             // Notify the chat list if it is already displayed
-                            MessageConsumer.notifyChatListChangedFromExternal(ChatInterface.getChatForContact(contact.uid!!))
+                            MessageConsumer.notifyChatListChanged(ChatInterface.getChatForContact(contact.uid!!))
                             contactsUpdated++
                         }
                     }

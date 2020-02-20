@@ -126,7 +126,7 @@ class ChatActivity : AppCompatActivity(), MessageRecyclerChangeListener {
             chat!!.lastMessage = message.content
             chat!!.lastTimestamp = message.timestamp
             ChatInterface.updateChat(chat!!)
-            MessageConsumer.notifyChatListChangedFromExternal(chat!!)
+            MessageConsumer.notifyChatListChanged(chat!!)
 
             // Clean up view
             messageListAdapter!!.add(message)
