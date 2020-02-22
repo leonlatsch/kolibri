@@ -49,6 +49,7 @@ class BootActivity : AppCompatActivity() {
                                 startActivity(Intent(applicationContext, LoginActivity::class.java))
                             }
                         }
+                        finish()
                     }
                 })
             } else { // If there is no backend config show the BackendDialog
