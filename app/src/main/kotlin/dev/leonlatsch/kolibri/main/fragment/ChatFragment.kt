@@ -40,7 +40,7 @@ class ChatFragment : Fragment(), ChatListChangeListener {
     private var chatListAdapter: ChatListAdapter? = null
     private var chatList: List<Chat>? = null
 
-    private val itemClickListener = AdapterView.OnItemClickListener{ _, _, position, _ ->
+    private val itemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
         val chat = listView!!.getItemAtPosition(position)
         if (chat is Chat) {
             val intent = Intent(this.parent!!.applicationContext, ChatActivity::class.java)
@@ -135,11 +135,11 @@ class ChatFragment : Fragment(), ChatListChangeListener {
 
         override fun onActionItemClicked(actionMode: ActionMode, menuItem: MenuItem): Boolean {
             if (menuItem.itemId == R.id.menu_chats_delete) {
-                val onClickListener = DialogInterface.OnClickListener{ _, which ->
+                val onClickListener = DialogInterface.OnClickListener { _, which ->
                     if (which == DialogInterface.BUTTON_POSITIVE) {
                         for (i in chatListAdapter!!.getSelectedItems()) {
                             ContactInterface.delete(chatListAdapter!!.getItem(i)?.uid!!)
-                            ChatInterface.deleteChat(chatListAdapter!!.getItem(i)?.uid!!)
+                            ChatInterface.deleteChat(chatListAdapter!!.getItem(i)?.cid!!)
                         }
                         chatListAdapter!!.deleteSelectedItems()
 
