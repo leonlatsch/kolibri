@@ -199,7 +199,7 @@ class ProfileFragment : Fragment(), EntityChangedListener<User> {
             val confirmPasswordEditText = view.findViewById<EditText>(R.id.password_confirm_password_EditText)
 
             val userDTO = UserDTO()
-            userDTO.email = UserInterface.user?.email
+            userDTO.username = UserInterface.user?.username
             userDTO.password = Hash.createHexHash(oldPasswordEditText.text.toString())
             val call = authService!!.login(userDTO)
             call.enqueue(object : Callback<Container<String>> {
@@ -357,7 +357,7 @@ class ProfileFragment : Fragment(), EntityChangedListener<User> {
     }
 
     private fun extractBase64(): String? {
-        val bitmapDrawable = profilePicImageView!!.getDrawable() as BitmapDrawable
+        val bitmapDrawable = profilePicImageView!!.drawable as BitmapDrawable
         return ImageUtil.createBase64(bitmapDrawable.bitmap!!)
     }
 
