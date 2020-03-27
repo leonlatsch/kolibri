@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.adapter;
+package dev.leonlatsch.kolibri.ui.usersearch;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,12 +20,12 @@ import dev.leonlatsch.kolibri.util.ImageUtil;
  * @author Leon Latsch
  * @since 1.0.0
  */
-public class UserAdapter extends ArrayAdapter<UserDTO> {
+public class UserSearchAdapter extends ArrayAdapter<UserDTO> {
 
     private List<UserDTO> dataset;
     private Context mContext;
 
-    public UserAdapter(Context context, List<UserDTO> users) {
+    public UserSearchAdapter(Context context, List<UserDTO> users) {
         super(context, 0, users);
         this.dataset = users;
         this.mContext = context;
