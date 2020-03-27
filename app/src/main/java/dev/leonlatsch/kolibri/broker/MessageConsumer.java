@@ -35,6 +35,7 @@ import dev.leonlatsch.kolibri.rest.service.RestServiceFactory;
 import dev.leonlatsch.kolibri.rest.service.UserService;
 import dev.leonlatsch.kolibri.security.CryptoManager;
 import dev.leonlatsch.kolibri.settings.Config;
+import dev.leonlatsch.kolibri.util.Generator;
 import retrofit2.Response;
 
 /**
@@ -216,10 +217,11 @@ public class MessageConsumer {
                     Response<Container<UserDTO>> userResponse = userService.get(userInterface.getAccessToken(), message.getFrom()).execute();
                     Response<Container<String>> publicKeyResponse = userService.getPublicKey(userInterface.getAccessToken(), message.getFrom()).execute();
 
-                    if (userResponse.isSuccessful()) {
+                    if (userResponse.isSuccessful() && publicKeyResponse.isSuccessful()) {
                         contactInterface.save(userResponse.body().getContent(), publicKeyResponse.body().getContent());
                         int unreadMessages = ChatActivity.isActive ? 0 : 1;
-                        chat = new Chat(message.getCid(), message.getFrom(), unreadMessages, message.getContent(), message.getTimestamp());
+                        chat = new Chat(Generator.genUUid(), message.getFrom(), unreadMessages, message.getContent(), message.getTimestamp());
+                        message.setCid(chat.getCid());
                         chatInterface.saveChat(chat);
                         notifyChatListChangeListener(chat);
                     }
