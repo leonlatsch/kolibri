@@ -3,7 +3,7 @@ package dev.leonlatsch.kolibri.rest.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import dev.leonlatsch.kolibri.rest.http.OliviaHttpClient;
+import dev.leonlatsch.kolibri.rest.http.SSLHelper;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -78,7 +78,7 @@ public class RestServiceFactory {
     private static void provideRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(OliviaHttpClient.getOliviaHttpClient())
+                .client(SSLHelper.getTrustAllCertHttpClient())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();

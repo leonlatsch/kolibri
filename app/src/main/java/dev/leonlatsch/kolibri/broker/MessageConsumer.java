@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 import dev.leonlatsch.kolibri.database.DatabaseMapper;
@@ -28,6 +30,7 @@ import dev.leonlatsch.kolibri.main.chat.ChatActivity;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.dto.MessageDTO;
 import dev.leonlatsch.kolibri.rest.dto.UserDTO;
+import dev.leonlatsch.kolibri.rest.http.SSLHelper;
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory;
 import dev.leonlatsch.kolibri.rest.service.UserService;
 import dev.leonlatsch.kolibri.security.CryptoManager;
@@ -133,14 +136,19 @@ public class MessageConsumer {
         SharedPreferences preferences = Config.getSharedPreferences(context);
 
         // Initialize config
-        connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null));
-        connectionFactory.setPort(preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0));
-        connectionFactory.setUsername(userInterface.getUser().getUid());
-        connectionFactory.setPassword(userInterface.getAccessToken());
-        connectionFactory.setAutomaticRecoveryEnabled(true);
-        connectionFactory.setNetworkRecoveryInterval(1000);
-        connectionFactory.setConnectionTimeout(5000);
+        try {
+            connectionFactory = new ConnectionFactory();
+            connectionFactory.setHost(preferences.getString(Config.KEY_BACKEND_BROKER_HOST, null));
+            connectionFactory.setPort(preferences.getInt(Config.KEY_BACKEND_BROKER_PORT, 0));
+            connectionFactory.setUsername(userInterface.getUser().getUid());
+            connectionFactory.setPassword(userInterface.getAccessToken());
+            connectionFactory.setAutomaticRecoveryEnabled(true);
+            connectionFactory.setNetworkRecoveryInterval(1000);
+            connectionFactory.setConnectionTimeout(5000);
+            connectionFactory.useSslProtocol(SSLHelper.SSL_VERSION, SSLHelper.trustAllCertsManager);
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            log.error("" + e); // Should never happen
+        }
 
         callback = ((consumerTag, message) -> {
             MessageDTO messageDTO = new ObjectMapper().readValue(new String(message.getBody(), StandardCharsets.UTF_8), MessageDTO.class);
