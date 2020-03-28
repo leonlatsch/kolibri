@@ -15,9 +15,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.contactpage.ContactActivity"
-            android:label="@string/title_activity_contact"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".ui.contactpage.ContactActivity" />
         <activity android:name=".ui.InfoActivity" />
         <activity android:name=".ui.chat.ChatActivity">
             <meta-data
