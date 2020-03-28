@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main;
+package dev.leonlatsch.kolibri.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,10 +26,10 @@ import dev.leonlatsch.kolibri.database.interfaces.ChatInterface;
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface;
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface;
 import dev.leonlatsch.kolibri.database.model.User;
-import dev.leonlatsch.kolibri.main.fragment.ChatFragment;
-import dev.leonlatsch.kolibri.main.fragment.ProfileFragment;
-import dev.leonlatsch.kolibri.main.fragment.SettingsFragment;
-import dev.leonlatsch.kolibri.main.login.LoginActivity;
+import dev.leonlatsch.kolibri.ui.chatlist.ChatFragment;
+import dev.leonlatsch.kolibri.ui.profile.ProfileFragment;
+import dev.leonlatsch.kolibri.ui.settings.SettingsFragment;
+import dev.leonlatsch.kolibri.ui.login.LoginActivity;
 import dev.leonlatsch.kolibri.util.ImageUtil;
 
 /**

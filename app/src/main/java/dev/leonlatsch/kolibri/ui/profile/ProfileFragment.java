@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.fragment;
+package dev.leonlatsch.kolibri.ui.profile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,8 +35,8 @@ import dev.leonlatsch.kolibri.database.DatabaseMapper;
 import dev.leonlatsch.kolibri.database.EntityChangedListener;
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface;
 import dev.leonlatsch.kolibri.database.model.User;
-import dev.leonlatsch.kolibri.main.MainActivity;
-import dev.leonlatsch.kolibri.main.ProfilePicActivity;
+import dev.leonlatsch.kolibri.ui.MainActivity;
+import dev.leonlatsch.kolibri.ui.ProfilePicActivity;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.dto.UserDTO;
 import dev.leonlatsch.kolibri.rest.service.AuthService;

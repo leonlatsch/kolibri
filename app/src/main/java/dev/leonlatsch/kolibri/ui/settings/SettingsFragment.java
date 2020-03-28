@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.fragment;
+package dev.leonlatsch.kolibri.ui.settings;
 
 import android.os.Bundle;
 

@@ -1,5 +1,6 @@
-package dev.leonlatsch.kolibri.main.chat;
+package dev.leonlatsch.kolibri.ui.chat;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import dev.leonlatsch.kolibri.rest.service.ChatService;
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory;
 import dev.leonlatsch.kolibri.security.CryptoManager;
 import dev.leonlatsch.kolibri.settings.Config;
+import dev.leonlatsch.kolibri.ui.contactpage.ContactActivity;
 import dev.leonlatsch.kolibri.util.Generator;
 import dev.leonlatsch.kolibri.util.ImageUtil;
 import retrofit2.Call;
@@ -107,6 +109,12 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
         ImageView profilePicImageView = findViewById(R.id.chat_profile_pic_image_view);
         ImageButton sendButton = findViewById(R.id.chat_button_send);
         sendButton.setOnClickListener(v -> onSendPressed());
+
+        toolbar.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ContactActivity.class);
+            intent.putExtra(Values.INTENT_KEY_CONTACT_UID, contact.getUid());
+            startActivity(intent);
+        });
 
         if (preferences.getBoolean(Config.KEY_APP_SEND_WITH_ENTER, false)) {
             messageEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);

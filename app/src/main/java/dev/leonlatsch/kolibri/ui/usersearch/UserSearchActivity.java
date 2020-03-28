@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main;
+package dev.leonlatsch.kolibri.ui.usersearch;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +19,7 @@ import java.util.List;
 import dev.leonlatsch.kolibri.R;
 import dev.leonlatsch.kolibri.constants.Values;
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface;
-import dev.leonlatsch.kolibri.main.adapter.UserAdapter;
-import dev.leonlatsch.kolibri.main.chat.ChatActivity;
+import dev.leonlatsch.kolibri.ui.chat.ChatActivity;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.dto.UserDTO;
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory;
@@ -41,7 +40,7 @@ public class UserSearchActivity extends AppCompatActivity {
     private ImageView searchBtn;
     private EditText searchBar;
     private ListView listView;
-    private UserAdapter userAdapter;
+    private UserSearchAdapter userSearchAdapter;
     private TextView searchHint;
 
     private View progressOverlay;
@@ -75,7 +74,7 @@ public class UserSearchActivity extends AppCompatActivity {
         searchHint = findViewById(R.id.user_search_hint);
         progressOverlay = findViewById(R.id.progressOverlay);
 
-        userAdapter = new UserAdapter(this, new ArrayList<>());
+        userSearchAdapter = new UserSearchAdapter(this, new ArrayList<>());
 
         searchBtn.setOnClickListener(v -> search());
         searchBar.setOnEditorActionListener((v, actionId, event) -> {
@@ -84,14 +83,14 @@ public class UserSearchActivity extends AppCompatActivity {
         });
         setUserListVisibility();
 
-        listView.setAdapter(userAdapter);
+        listView.setAdapter(userSearchAdapter);
         listView.setOnItemClickListener(itemClickListener);
 
         searchBar.requestFocus();
     }
 
     private void setUserListVisibility() {
-        if (!userAdapter.isEmpty()) {
+        if (!userSearchAdapter.isEmpty()) {
             listView.setVisibility(View.VISIBLE);
             searchHint.setVisibility(View.GONE);
         } else {
@@ -139,9 +138,9 @@ public class UserSearchActivity extends AppCompatActivity {
                 public void onResponse(Call<Container<List<UserDTO>>> call, Response<Container<List<UserDTO>>> response) {
                     if (response.isSuccessful()) {
                         Container<List<UserDTO>> container = response.body();
-                        userAdapter.clear();
+                        userSearchAdapter.clear();
                         if (container.getContent() != null && !container.getContent().isEmpty()) {
-                            userAdapter.addAll(container.getContent());
+                            userSearchAdapter.addAll(container.getContent());
                         }
                         setUserListVisibility();
                         searchHint.setText(R.string.user_search_no_results);

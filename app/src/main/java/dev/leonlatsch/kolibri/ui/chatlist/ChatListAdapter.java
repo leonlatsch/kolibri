@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.adapter;
+package dev.leonlatsch.kolibri.ui.chatlist;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -28,7 +28,7 @@ import dev.leonlatsch.kolibri.database.model.Contact;
 import dev.leonlatsch.kolibri.util.ImageUtil;
 
 /**
- * This Adapter is used to display the chat list in the {@link dev.leonlatsch.kolibri.main.fragment.ChatFragment}
+ * This Adapter is used to display the chat list in the {@link ChatFragment}
  *
  * @author Leon Latsch
  * @since 1.0.0

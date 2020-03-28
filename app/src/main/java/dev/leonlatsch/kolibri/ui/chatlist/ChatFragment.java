@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.fragment;
+package dev.leonlatsch.kolibri.ui.chatlist;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,10 +31,9 @@ import dev.leonlatsch.kolibri.constants.Values;
 import dev.leonlatsch.kolibri.database.interfaces.ChatInterface;
 import dev.leonlatsch.kolibri.database.interfaces.ContactInterface;
 import dev.leonlatsch.kolibri.database.model.Chat;
-import dev.leonlatsch.kolibri.main.MainActivity;
-import dev.leonlatsch.kolibri.main.UserSearchActivity;
-import dev.leonlatsch.kolibri.main.adapter.ChatListAdapter;
-import dev.leonlatsch.kolibri.main.chat.ChatActivity;
+import dev.leonlatsch.kolibri.ui.MainActivity;
+import dev.leonlatsch.kolibri.ui.usersearch.UserSearchActivity;
+import dev.leonlatsch.kolibri.ui.chat.ChatActivity;
 
 /**
  * Fragment to show a list of chats

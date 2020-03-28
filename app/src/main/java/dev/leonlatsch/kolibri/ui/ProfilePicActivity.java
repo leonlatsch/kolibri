@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main;
+package dev.leonlatsch.kolibri.ui;
 
 import android.content.Context;
 import android.os.Bundle;

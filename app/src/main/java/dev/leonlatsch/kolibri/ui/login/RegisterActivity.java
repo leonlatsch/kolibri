@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.login;
+package dev.leonlatsch.kolibri.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import dev.leonlatsch.kolibri.constants.Values;
 import dev.leonlatsch.kolibri.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface;
 import dev.leonlatsch.kolibri.database.model.KeyPair;
-import dev.leonlatsch.kolibri.main.MainActivity;
+import dev.leonlatsch.kolibri.ui.MainActivity;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.dto.UserDTO;
 import dev.leonlatsch.kolibri.rest.service.AuthService;

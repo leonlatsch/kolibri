@@ -26,7 +26,7 @@ import dev.leonlatsch.kolibri.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface;
 import dev.leonlatsch.kolibri.database.model.Chat;
 import dev.leonlatsch.kolibri.database.model.Message;
-import dev.leonlatsch.kolibri.main.chat.ChatActivity;
+import dev.leonlatsch.kolibri.ui.chat.ChatActivity;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.dto.MessageDTO;
 import dev.leonlatsch.kolibri.rest.dto.UserDTO;

@@ -1,4 +1,4 @@
-package dev.leonlatsch.kolibri.main.chat;
+package dev.leonlatsch.kolibri.ui.chat;
 
 import android.content.Context;
 import android.view.LayoutInflater;
