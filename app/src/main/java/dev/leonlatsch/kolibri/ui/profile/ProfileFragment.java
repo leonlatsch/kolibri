@@ -274,7 +274,7 @@ public class ProfileFragment extends Fragment implements EntityChangedListener<U
                         public void onResponse(Call<Container<String>> call, Response<Container<String>> response) {
                             if (response.isSuccessful()) {
                                 if (Responses.MSG_OK.equals(response.body().getMessage())) {
-                                    parent.logout();
+                                    parent.logout(false);
                                 } else {
                                     parent.showDialog(getString(R.string.error), getString(R.string.error_common));
                                 }

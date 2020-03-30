@@ -156,32 +156,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
+    public void logout(boolean withDialog) {
+        if (withDialog) {
+            DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    doLogout();
+                }
+            };
+
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.AlertDialogCustom);
+            builder.setMessage(getString(R.string.logout_confirm))
+                    .setPositiveButton(getString(R.string.yes), onClickListener)
+                    .setNegativeButton(getString(R.string.no), onClickListener)
+                    .show();
+        } else {
+            doLogout();
+        }
+    }
+
     /**
      * Called when the logout button is pressed
      * <p>
      * Delete the logged in user, all chats and contacts
      */
     public void logout() {
-        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
-            if (which == DialogInterface.BUTTON_POSITIVE) {
-                User user = userInterface.getUser();
-                if (user != null) {
-                    userInterface.delete(user);
-                }
-                contactInterface.deleteAll();
-                chatInterface.deleteAll();
-                MessageConsumer.stop();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
-            }
-        };
+        logout(true);
+    }
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.AlertDialogCustom);
-        builder.setMessage(getString(R.string.logout_confirm))
-                .setPositiveButton(getString(R.string.yes), onClickListener)
-                .setNegativeButton(getString(R.string.no), onClickListener)
-                .show();
-
+    private void doLogout() {
+        User user = userInterface.getUser();
+        if (user != null) {
+            userInterface.delete(user);
+        }
+        contactInterface.deleteAll();
+        chatInterface.deleteAll();
+        MessageConsumer.stop();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
     }
 
     /**

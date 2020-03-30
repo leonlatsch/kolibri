@@ -286,6 +286,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userInterface.save(response.body().getContent(), accessToken);
                     isLoading(false);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }
