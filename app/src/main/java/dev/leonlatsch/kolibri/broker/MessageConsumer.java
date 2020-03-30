@@ -219,7 +219,7 @@ public class MessageConsumer {
 
                     if (userResponse.isSuccessful() && publicKeyResponse.isSuccessful()) {
                         contactInterface.save(userResponse.body().getContent(), publicKeyResponse.body().getContent());
-                        int unreadMessages = ChatActivity.isActive ? 0 : 1;
+                        int unreadMessages = ChatActivity.isActive && message.getFrom().equals(ChatActivity.activeContact) ? 0 : 1;
                         chat = new Chat(Generator.genUUid(), message.getFrom(), unreadMessages, message.getContent(), message.getTimestamp());
                         message.setCid(chat.getCid());
                         chatInterface.saveChat(chat);

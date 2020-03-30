@@ -59,6 +59,11 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
      */
     public static boolean isActive;
 
+    /**
+     * Indicates the active contact in the view
+     */
+    public static String activeContact;
+
     private Chat chat;
     private Contact contact;
     private boolean isTemp; // Indicates if this is called from the chat list or the user search
@@ -116,8 +121,8 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             startActivity(intent);
         });
 
-        messageEditText.setOnFocusChangeListener((v, b) -> {
-            if (b) {
+        messageEditText.setOnFocusChangeListener((v, focused) -> {
+            if (focused) {
                 messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
             }
         });
@@ -148,6 +153,8 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
                 profilePicImageView.setImageDrawable(ImageUtil.getDefaultProfilePic(this));
             }
         }
+
+        messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
     }
 
     /**
