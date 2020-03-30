@@ -32,7 +32,6 @@
             android:layout_gravity="bottom"
             android:maxWidth="24dp"
             android:minWidth="30dp"
-            android:paddingRight="2dp"
             android:text="00:00"
             android:textSize="11dp" />
 
