@@ -17,7 +17,7 @@ import okhttp3.OkHttpClient;
  */
 public class SSLHelper {
 
-    public static final String SSL_VERSION = "TLSv1.2";
+    public static final String SSL_VERSION = "TLSv1.3";
 
     // Create a trust manager that does not validate certificate chains
     public static final TrustManager trustAllCertsManager = new X509TrustManager() {
