@@ -21,18 +21,18 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:maxWidth="240dp"
-            android:minWidth="50dp"
+            android:minWidth="25dp"
+            android:textColor="@android:color/background_dark"
             android:text="PLACEHOLDER" />
 
         <TextView
             android:id="@+id/received_message_timestamp"
-            android:layout_width="wrap_content"
+            android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:maxWidth="26dp"
-            android:minWidth="30dp"
             android:text="00:00"
-            android:textSize="11sp" />
+            android:maxLines="1"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
