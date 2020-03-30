@@ -1,4 +1,4 @@
-# kolibri
+# Kolibri
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/leonlatsch/kolibri?include_prereleases&label=version)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/leonlatsch/kolibri/Android%20CI)
