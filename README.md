@@ -15,7 +15,8 @@
 ## About
 
 Kolibri is a completely private Android Messenger.
-"Completely private" means it needs a [Server](https://github.com/leonlatsch/kolibri-server) in order to run.
+"Completely private" means it needs a [Server](https://github.com/leonlatsch/kolibri-server) in order to run.</br>
+The App connects to the server and uses no other services.
 
 ## Features
 
