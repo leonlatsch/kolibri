@@ -116,6 +116,12 @@ public class ChatActivity extends AppCompatActivity implements MessageRecyclerCh
             startActivity(intent);
         });
 
+        messageEditText.setOnFocusChangeListener((v, b) -> {
+            if (b) {
+                messageRecycler.scrollToPosition(messageListAdapter.getLastPosition());
+            }
+        });
+
         if (preferences.getBoolean(Config.KEY_APP_SEND_WITH_ENTER, false)) {
             messageEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
             messageEditText.setOnEditorActionListener((v, actionId, event) -> {

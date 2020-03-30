@@ -61,7 +61,8 @@
             app:layout_constraintBottom_toTopOf="@+id/layout_chat"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chat_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/chat_toolbar"
+            android:layout_marginBottom="5dp"/>
 
         <LinearLayout
             android:id="@+id/layout_chat"
