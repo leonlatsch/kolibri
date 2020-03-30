@@ -117,6 +117,10 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
         Contact contact = contactInterface.getContact(chat.getUid());
 
+        if (contact == null) {
+            return null;
+        }
+
         if (contact.getProfilePicTn() != null) {
             viewHolder.imageView.setImageBitmap(ImageUtil.createBitmap(contact.getProfilePicTn()));
         } else {
@@ -145,11 +149,14 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     }
 
     public void deleteSelectedItems() {
+        List<Chat> selectedChats = new ArrayList<>();
         for (int i = 0; i < dataset.size(); i++) {
             if (selectedItems.get(i)) {
-                dataset.remove(i);
+                selectedChats.add(dataset.get(i));
             }
         }
+
+        dataset.removeAll(selectedChats);
         notifyDataSetChanged();
     }
 
