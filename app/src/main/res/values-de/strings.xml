@@ -72,4 +72,5 @@
     <string name="url_github">https://github.com/leonlatsch/kolibri</string>
     <string name="user_search_placeholder">Suche nach Nutzern</string>
     <string name="user_search_no_results">Kein Suchergebnisse</string>
+    <string name="logout_confirm">Willst du dich wirklich ausloggen?</string>
 </resources>

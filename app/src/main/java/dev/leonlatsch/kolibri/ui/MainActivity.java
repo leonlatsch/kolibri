@@ -1,5 +1,6 @@
 package dev.leonlatsch.kolibri.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -161,15 +162,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Delete the logged in user, all chats and contacts
      */
     public void logout() {
-        User user = userInterface.getUser();
-        if (user != null) {
-            userInterface.delete(user);
-        }
-        contactInterface.deleteAll();
-        chatInterface.deleteAll();
-        MessageConsumer.stop();
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        finish();
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                User user = userInterface.getUser();
+                if (user != null) {
+                    userInterface.delete(user);
+                }
+                contactInterface.deleteAll();
+                chatInterface.deleteAll();
+                MessageConsumer.stop();
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
+            }
+        };
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, R.style.AlertDialogCustom);
+        builder.setMessage(getString(R.string.logout_confirm))
+                .setPositiveButton(getString(R.string.yes), onClickListener)
+                .setNegativeButton(getString(R.string.no), onClickListener)
+                .show();
+
     }
 
     /**
