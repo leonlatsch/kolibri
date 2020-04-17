@@ -11,7 +11,7 @@ import dev.leonlatsch.kolibri.boot.jobs.base.JobResult;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.service.ConfigService;
 import dev.leonlatsch.kolibri.rest.service.RestServiceFactory;
-import dev.leonlatsch.kolibri.settings.RemoteConfig;
+import dev.leonlatsch.kolibri.settings.Config;
 import retrofit2.Response;
 
 /**
@@ -33,7 +33,7 @@ public class LoadRemoteConfigAsyncJob extends AsyncJob {
         try {
             Response<Container<HashMap<String, Object>>> res = configService.get().execute();
             if (res.isSuccessful()) {
-                RemoteConfig.getInstance().setConfig(res.body().getContent());
+                Config.setRemoteConfigValues(res.body().getContent(), getContext());
                 result.setSuccessful(true);
             } else {
                 result.setSuccessful(false);

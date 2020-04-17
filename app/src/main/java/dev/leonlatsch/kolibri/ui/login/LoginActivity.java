@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         progressOverlay = findViewById(R.id.progressOverlay);
         errorText = findViewById(R.id.loginErrorTextView);
         disconnectButton = findViewById(R.id.disconnectButton);
+        ImageView loginSeperator = findViewById(R.id.loginSeperator);
 
         registerBtn.setOnClickListener(v -> register());
         disconnectButton.setOnClickListener(v -> disconnect());
@@ -84,6 +85,11 @@ public class LoginActivity extends AppCompatActivity {
             login();
             return true;
         });
+
+        if (!Config.getSharedPreferences(this).getBoolean(Config.ENABLE_REGISTRATION, true)) {
+            loginSeperator.setVisibility(View.GONE);
+            registerBtn.setVisibility(View.GONE);
+        }
     }
 
     /**

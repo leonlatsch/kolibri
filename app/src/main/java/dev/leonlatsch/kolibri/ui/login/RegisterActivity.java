@@ -20,7 +20,6 @@ import dev.leonlatsch.kolibri.constants.Values;
 import dev.leonlatsch.kolibri.database.interfaces.KeyPairInterface;
 import dev.leonlatsch.kolibri.database.interfaces.UserInterface;
 import dev.leonlatsch.kolibri.database.model.KeyPair;
-import dev.leonlatsch.kolibri.settings.RemoteConfig;
 import dev.leonlatsch.kolibri.ui.MainActivity;
 import dev.leonlatsch.kolibri.rest.dto.Container;
 import dev.leonlatsch.kolibri.rest.dto.UserDTO;
@@ -54,8 +53,6 @@ public class RegisterActivity extends AppCompatActivity {
     private UserInterface userInterface;
     private KeyPairInterface keyPairInterface;
 
-    private RemoteConfig remoteConfig;
-
     private boolean usernameValid;
     private boolean emailValid;
     private boolean passwordValid;
@@ -76,8 +73,6 @@ public class RegisterActivity extends AppCompatActivity {
         authService = RestServiceFactory.getAuthService();
         userInterface = UserInterface.getInstance();
         keyPairInterface = KeyPairInterface.getInstance();
-
-        remoteConfig = RemoteConfig.getInstance();
 
         registerBtn.setOnClickListener(v -> register());
 
@@ -128,8 +123,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         passwordEditText.addTextChangedListener(passwordTextWatcher);
         passwordConfirmEditText.addTextChangedListener(passwordTextWatcher);
-
-        registerBtn.setEnabled(remoteConfig.getBoolean(RemoteConfig.ENABLE_REGISTRATION, true));
 
         loadPassedData();
         usernameEditText.requestFocus();
