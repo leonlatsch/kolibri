@@ -41,54 +41,52 @@ public class UpdateContactsAsyncJob extends AsyncJob {
     }
 
     @Override
-    public void execute(AsyncJobCallback asyncJobCallback) { //TODO: create backend function to get a list of contacts in one request
-        run(() -> {
-            List<Contact> contacts = contactInterface.getALl();
+    protected void run(AsyncJobCallback asyncJobCallback) {
+        List<Contact> contacts = contactInterface.getALl();
 
-            boolean success = true;
-            int contactsUpdated = 0;
+        boolean success = true;
+        int contactsUpdated = 0;
 
-            for (Contact contact : contacts) {
-                try {
-                    Response<Container<UserDTO>> contactResponse = userService.get(userInterface.getAccessToken(), contact.getUid()).execute();
-                    Response<Container<String>> publicKeyResponse = userService.getPublicKey(userInterface.getAccessToken(), contact.getUid()).execute();
+        for (Contact contact : contacts) {
+            try {
+                Response<Container<UserDTO>> contactResponse = userService.get(userInterface.getAccessToken(), contact.getUid()).execute();
+                Response<Container<String>> publicKeyResponse = userService.getPublicKey(userInterface.getAccessToken(), contact.getUid()).execute();
 
-                    if (contactResponse.isSuccessful() && publicKeyResponse.isSuccessful()) {
-                        UserDTO userDTO = contactResponse.body().getContent();
-                        String publicKey = publicKeyResponse.body().getContent();
+                if (contactResponse.isSuccessful() && publicKeyResponse.isSuccessful()) {
+                    UserDTO userDTO = contactResponse.body().getContent();
+                    String publicKey = publicKeyResponse.body().getContent();
 
-                        boolean changed = false;
+                    boolean changed = false;
 
-                        if (contact.getProfilePicTn() == null) {
-                            if (userDTO.getProfilePicTn() != null) {
-                                contact.setProfilePicTn(userDTO.getProfilePicTn());
-                                changed = true;
-                            }
-                        } else if (!contact.getProfilePicTn().equals(userDTO.getProfilePicTn())) {
+                    if (contact.getProfilePicTn() == null) {
+                        if (userDTO.getProfilePicTn() != null) {
                             contact.setProfilePicTn(userDTO.getProfilePicTn());
                             changed = true;
                         }
-
-                        if (!contact.getPublicKey().equals(publicKey)) {
-                            contact.setPublicKey(publicKey);
-                            changed = true;
-                        }
-
-                        if (changed) {
-                            contactInterface.updateContact(contact);
-                            // Notify the chat list if it is already displayed
-                            MessageConsumer.notifyChatListChangedFromExternal(chatInterface.getChatForContact(contact.getUid()));
-                            contactsUpdated++;
-                        }
+                    } else if (!contact.getProfilePicTn().equals(userDTO.getProfilePicTn())) {
+                        contact.setProfilePicTn(userDTO.getProfilePicTn());
+                        changed = true;
                     }
-                } catch (IOException e) {
-                    success = false;
-                }
-            }
 
-            if (asyncJobCallback != null) {
-                asyncJobCallback.onResult(new JobResult<>(success, contactsUpdated));
+                    if (!contact.getPublicKey().equals(publicKey)) {
+                        contact.setPublicKey(publicKey);
+                        changed = true;
+                    }
+
+                    if (changed) {
+                        contactInterface.updateContact(contact);
+                        // Notify the chat list if it is already displayed
+                        MessageConsumer.notifyChatListChangedFromExternal(chatInterface.getChatForContact(contact.getUid()));
+                        contactsUpdated++;
+                    }
+                }
+            } catch (IOException e) {
+                success = false;
             }
-        });
+        }
+
+        if (asyncJobCallback != null) {
+            asyncJobCallback.onResult(new JobResult<>(success, contactsUpdated));
+        }
     }
 }

@@ -16,14 +16,15 @@ public abstract class AsyncJob extends BaseJob {
         super(context);
     }
 
-    public abstract void execute(AsyncJobCallback asyncJobCallback);
+    protected abstract void run(AsyncJobCallback asyncJobCallback);
+
+    public void execute(AsyncJobCallback asyncJobCallback) {
+        Runnable runnable = () -> run(asyncJobCallback);
+        thread = new Thread(runnable, getThreadName());
+        thread.start();
+    }
 
     private String getThreadName() {
         return this.getClass().getName() + "-THREAD";
-    }
-
-    protected void run(Runnable runnable) {
-        thread = new Thread(runnable, getThreadName());
-        thread.start();
     }
 }

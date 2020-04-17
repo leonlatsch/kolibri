@@ -10,6 +10,7 @@ import com.activeandroid.ActiveAndroid;
 
 import dev.leonlatsch.kolibri.R;
 import dev.leonlatsch.kolibri.boot.jobs.CheckUserAsyncJob;
+import dev.leonlatsch.kolibri.boot.jobs.LoadRemoteConfigAsyncJob;
 import dev.leonlatsch.kolibri.boot.jobs.UpdateContactsAsyncJob;
 import dev.leonlatsch.kolibri.boot.jobs.ValidateBackendJob;
 import dev.leonlatsch.kolibri.boot.jobs.base.JobResult;
@@ -37,6 +38,7 @@ public class BootActivity extends AppCompatActivity {
             JobResult<Void> result = new ValidateBackendJob(this).execute();
             if (result.isSuccessful()) {
                 RestServiceFactory.initialize(this);
+                new LoadRemoteConfigAsyncJob(this).execute(null);
                 CheckUserAsyncJob job = new CheckUserAsyncJob(this);
                 job.execute(userResult -> new Handler(getApplicationContext().getMainLooper()).post(() -> {
                     if (userResult.isSuccessful()) {
